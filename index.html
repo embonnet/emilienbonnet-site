@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emilien Bonnet</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- introduction -->
+    <div class="intro-overlay">
+        <div class="intro-content">
+            <img src="pictures/profil.jpg" alt="Photo de profil" class="intro-avatar">
+
+            <p class="intro-text">
+                Bienvenue sur mon espace personnel.<br>
+                Cette page rassemble, sous forme de cartes interactives,
+                les projets, passions et expériences qui me définissent.
+            </p>
+
+            <button class="intro-btn">Découvrir</button>
+        </div>
+    </div>
+
+    <!-- loader -->
+    <div class="loader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <div class="loader-text">Chargement…</div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="title">Emilien Bonnet</span>
+            </div>
+        </div>
+
+        <div class="filters">
+            <!-- filtres générés dynamiquement -->
+        </div>
+    </header>
+
+    <div class="overlay"></div>
+
+    <div class="wrapper">
+        <!-- Les cartes seront generees ici via JavaScript -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        const wrapper = document.querySelector('.wrapper');
+
+        // Definis ton ordre exact ici (200 elements)
+        const cardsOrder = [
+            { type: 'associatif', icon: 'groups', type2: 'logotype', icon2: 'draw', bg: 'pictures/kuwabara.jpg' },
+            { type: 'associatif', icon: 'groups', type2: 'logotype', icon2: 'draw', bg: 'pictures/marathon.jpg' },
+            { type: 'associatif', icon: 'groups', type2: 'logotype', icon2: 'draw', bg: 'pictures/tennislogo.jpg' },
+            { type: 'associatif', icon: 'groups', type2: 'logotype', icon2: 'draw', bg: 'pictures/ultimate.jpg' },
+            { type: 'associatif', icon: 'groups', type2: 'logotype', icon2: 'draw', bg: 'pictures/lucky.jpg' },
+            { type: 'associatif', icon: 'groups', type2: 'logotype', icon2: 'draw', bg: 'pictures/tt.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/dredge.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/cs2.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/lol.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/dragonage.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/darkestdongeon.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/dispatch.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/cuphead.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/balatro.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/artisantd.jpg' },
+            { type: 'jv', icon: 'sports_esports', type2: 'cinema', icon2: 'movie', bg: 'pictures/pokemon.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/forza.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/dontstarve.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/slay.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/tekken.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/hollow.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/dragonquest.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/lifeisstrange.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/cod.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/witcher.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/portal.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/oblivion.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/gta.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/ageof.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/baldur.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/hl2.jpg' },
+            { type: 'jv', icon: 'sports_esports', bg: 'pictures/sc2.jpg' },
+            { type: 'voyage', icon: 'explore', bg: 'pictures/thailande.jpg' },
+            { type: 'voyage', icon: 'explore', bg: 'pictures/japon.jpg' },
+            { type: 'voyage', icon: 'explore', bg: 'pictures/portugal.jpg' },
+            { type: 'voyage', icon: 'explore', bg: 'pictures/italie.jpg' },
+            { type: 'capgemini', icon: 'work', type2: 'conference', icon2: 'mic', bg: 'pictures/salonmaire.jpg' },
+            { type: 'capgemini', icon: 'work', bg: 'pictures/michelin.jpg', text: "Décembre 2024, <br> Hackathon PowerPlatform dans les locaux de Michelin. <br> J'ai produit et animé l'atelier d'idéation en phase de préparation et aidé les équipes sur place à la création de leur application." },
+            { type: 'sport', icon: 'directions_run', bg: 'pictures/tennis.jpg' },
+            { type: 'sport', icon: 'directions_run', bg: 'pictures/tennistable.jpg' },
+            { type: 'sport', icon: 'directions_run', bg: 'pictures/basket.jpg' },
+            { type: 'sport', icon: 'directions_run', bg: 'pictures/foot.jpg' },
+            { type: 'sport', icon: 'directions_run', bg: 'pictures/padel.jpg' },
+            { type: 'sport', icon: 'directions_run', bg: 'pictures/badminton.jpg' },
+            { type: 'sport', icon: 'directions_run', bg: 'pictures/parachute.jpg' },
+            { type: 'musique', icon: 'music_note', bg: 'pictures/orelsan.jpg' },
+            { type: 'musique', icon: 'music_note', bg: 'pictures/stromae.jpg' },
+            { type: 'musique', icon: 'music_note', bg: 'pictures/rammsteim.jpg' },
+            { type: 'musique', icon: 'music_note', bg: 'pictures/queen.jpg' },
+            { type: 'musique', icon: 'music_note', bg: 'pictures/john.jpg' },
+            { type: 'musique', icon: 'music_note', bg: 'pictures/hans.jpg' },
+            { type: 'musique', icon: 'music_note', bg: 'pictures/jameshorner.jpg' },
+            { type: 'musique', icon: 'music_note', bg: 'pictures/jeremysoule.jpg' },
+            { type: 'anime', icon: 'ramen_dining', bg: 'pictures/naruto.jpg' },
+            { type: 'anime', icon: 'ramen_dining', bg: 'pictures/hunter.jpg' },
+            { type: 'anime', icon: 'ramen_dining', bg: 'pictures/deathnote.jpg' },
+            { type: 'anime', icon: 'ramen_dining', bg: 'pictures/frieren.jpg' },
+            { type: 'anime', icon: 'ramen_dining', bg: 'pictures/dragonball.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/starwars.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/starwars.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/lotr.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/jurassicpark.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/dune.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/harrypotter.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/socialnetwork.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/shutter.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/grantorino.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/birdman.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/million.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/drive.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/django.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/catchme.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/bladerunner.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/gladiator.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/prestige.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/parasite.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/interstellar.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/titanic.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/avatar.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/batman.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/silence.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/inception.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/seven.jpg' },
+            { type: 'cinema', icon: 'movie', bg: 'pictures/asterix.jpg' }
+
+        ];
+
+        // melange aléatoire à chaque chargement
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        shuffleArray(cardsOrder);
+
+        cardsOrder.forEach((data, i) => {
+            const card = document.createElement('div');
+            card.className = `card card-${i}`;
+
+            // recuperer tous les couples type / icon
+            const meta = [
+                { type: data.type, icon: data.icon },
+                { type: data.type2, icon: data.icon2 },
+                { type: data.type3, icon: data.icon3 }
+            ].filter(m => m.type && m.icon);
+
+            // stocker les types pour le filtrage
+            card.dataset.types = meta.map(m => m.type).join(',');
+
+            // stocker le texte contextuel
+            if (data.text) {
+                card.dataset.text = data.text;
+            }
+            // lazy load
+            card.dataset.bg = data.bg;
+
+            // generer les pastilles correctement
+            card.innerHTML = `
+                            <div class="glare-container">
+                                <div class="container-metadata">
+                                    ${meta.map(m => `
+                                        <div class="metadata ${m.type}">
+                                            <i class="material-icons">${m.icon}</i>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="glare"></div>
+                            </div>
+                        `;
+
+            wrapper.appendChild(card);
+        });
+    </script>
+
+    <!-- appel script -->
+    <script src="script.js"></script>
+</body>
+</html>
