@@ -76,7 +76,7 @@ body {
 	border: none;
 	font-weight: 800;
 	text-transform: uppercase;
-	cursor: pointer;
+	/*cursor: pointer;*/
 	background: white;
 	color: black;
 	transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -144,7 +144,7 @@ body {
 	color: var(--filter-color, #666);
 	color: white;
 	font-size: 0.85rem;
-	cursor: pointer;
+	/*cursor: pointer;*/
 	white-space: nowrap;
 	transition: background 0.2s ease;
 	font-weight: 600;
@@ -291,7 +291,7 @@ body {
 	position: relative;
 	will-change: transform;
 	z-index: 1;
-	cursor: pointer;
+	/*cursor: pointer;*/
 	transition: transform 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.2s ease;
 	filter: grayscale(100%);
 	border-radius: 3%;
@@ -305,7 +305,7 @@ body {
 		max-height: 85vh;
 		z-index: 20;
 		box-shadow: 0 40px 120px rgba(0,0,0,0.5);
-		cursor: grab;
+		/*cursor: grab;*/
 		filter: grayscale(0%);
 	}
 
@@ -369,7 +369,7 @@ body {
 }
 
 	.card-clone:active {
-		cursor: grabbing;
+		/*cursor: grabbing;*/
 		animation: popIn 0.35s cubic-bezier(.2,.8,.2,1);
 	}
 
@@ -494,4 +494,52 @@ body {
 		padding: 12px;
 		gap: 10px;
 	}
+}
+
+/* =========================
+   CUSTOM CURSOR
+   ========================= */
+
+body {
+	cursor: none; /* cache le curseur natif */
+}
+
+.cursor-dot,
+.cursor-outline {
+	position: fixed;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: 9999;
+	transform: translate(-50%, -50%);
+	opacity: 0;
+}
+
+/* point central */
+.cursor-dot {
+	width: 8px;
+	height: 8px;
+	background: white;
+	border-radius: 50%;
+}
+
+/* cercle extérieur */
+.cursor-outline {
+	width: 36px;
+	height: 36px;
+	border: 3px solid rgba(255,255,255,0.6);
+	border-radius: 50%;
+	transition: transform 0.15s ease-out, opacity 0.25s ease-out;
+}
+
+/* hover interactif */
+.cursor-hover .cursor-outline {
+	transform: translate(-50%, -50%) scale(1.6);
+	opacity: 0.5;
+}
+
+.intro-overlay,
+.overlay,
+.loader {
+	cursor: none;
 }

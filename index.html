@@ -90,9 +90,9 @@
             { type: 'jv', icon: 'sports_esports', bg: 'pictures/sc2.jpg' },
             { type: 'voyage', icon: 'explore', bg: 'pictures/thailande.jpg' },
             { type: 'voyage', icon: 'explore', bg: 'pictures/japon.jpg' },
-            { type: 'voyage', icon: 'explore', bg: 'pictures/portugal.jpg' },
+            { type: 'voyage', icon: 'explore', bg: 'pictures/portugal.JPG' },
             { type: 'voyage', icon: 'explore', bg: 'pictures/italie.jpg' },
-            { type: 'capgemini', icon: 'work', type2: 'conference', icon2: 'mic', bg: 'pictures/salonmaire.jpg' },
+            { type: 'capgemini', icon: 'work', type2: 'conference', icon2: 'mic', bg: 'pictures/salonmaire.JPG', text: "Novembre 2024, <br> Sessions de démonstrations de Copilot au stand 'Capgemini' lors du Salon des Maires 2024 Porte de Versailles." },
             { type: 'capgemini', icon: 'work', bg: 'pictures/michelin.jpg', text: "Décembre 2024, <br> Hackathon PowerPlatform dans les locaux de Michelin. <br> J'ai produit et animé l'atelier d'idéation en phase de préparation et aidé les équipes sur place à la création de leur application." },
             { type: 'sport', icon: 'directions_run', bg: 'pictures/tennis.jpg' },
             { type: 'sport', icon: 'directions_run', bg: 'pictures/tennistable.jpg' },
@@ -176,17 +176,17 @@
 
             // generer les pastilles correctement
             card.innerHTML = `
-                            <div class="glare-container">
-                                <div class="container-metadata">
-                                    ${meta.map(m => `
-                                        <div class="metadata ${m.type}">
-                                            <i class="material-icons">${m.icon}</i>
-                                        </div>
-                                    `).join('')}
+                                <div class="glare-container">
+                                    <div class="container-metadata">
+                                        ${meta.map(m => `
+                                            <div class="metadata ${m.type}">
+                                                <i class="material-icons">${m.icon}</i>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                    <div class="glare"></div>
                                 </div>
-                                <div class="glare"></div>
-                            </div>
-                        `;
+                            `;
 
             wrapper.appendChild(card);
         });
@@ -194,5 +194,9 @@
 
     <!-- appel script -->
     <script src="script.js"></script>
+
+    <!-- custom cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 </body>
 </html>

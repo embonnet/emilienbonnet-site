@@ -503,3 +503,43 @@ $(document).ready(function () {
         }, 700);
     });
 });
+
+/* =========================
+   CUSTOM CURSOR
+   ========================= */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const dot = document.querySelector('.cursor-dot');
+    const outline = document.querySelector('.cursor-outline');
+
+    if (!dot || !outline) return;
+    if (!window.matchMedia('(hover: hover)').matches) return;
+
+    let x = window.innerWidth / 2;
+    let y = window.innerHeight / 2;
+    let ox = x;
+    let oy = y;
+
+    document.addEventListener('mousemove', e => {
+        x = e.clientX;
+        y = e.clientY;
+
+        dot.style.left = x + 'px';
+        dot.style.top = y + 'px';
+        dot.style.opacity = '1';
+        outline.style.opacity = '1';
+    });
+
+    function loop() {
+        ox += (x - ox) * 0.15;
+        oy += (y - oy) * 0.15;
+
+        outline.style.left = ox + 'px';
+        outline.style.top = oy + 'px';
+
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+});
