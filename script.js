@@ -162,7 +162,9 @@ function enableCloneLongPress($clone) {
     let active = false;
 
     $clone.on('pointerdown', function (e) {
-        e.preventDefault();
+
+        // On empêche uniquement le drag natif, sans casser le rendu
+        e.stopPropagation();
 
         timer = setTimeout(() => {
             active = true;
@@ -201,7 +203,7 @@ $(document).on('click', '.card:not(.card-clone)', function () {
     // clone DOM (sans events)
     const $clone = $original.clone(false, false)
         .removeClass('disabled')
-        .addClass('card-clone expanded');
+        .addClass('card-clone expanded pop-in');
 
     // conserve le background
     const bg = $original.css('background-image');
@@ -225,6 +227,8 @@ $(document).on('click', '.card:not(.card-clone)', function () {
 
     // référence globale
     $activeClone = $clone;
+
+
 
     // active le clic prolongé (mobile)
     enableCloneLongPress($clone);
