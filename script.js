@@ -159,98 +159,154 @@ if (supportsHover) {
    ===================================================== */
 
 function enableCloneLongPress($clone) {
+    // Nettoyage si déjà bindé
+    $clone.off('.cloneLP');
+    $(document).off('.cloneLP');
 
-    let timer = null;
+    let pointerId = null;
+    let isDown = false;
+
+    let pressTimer = null;
     let tiltActive = false;
-    let isPointerDown = false;
 
     let startX = 0;
     let startY = 0;
-    let flipped = false;
 
-    // RAF throttle
+    let flipped = $clone.hasClass('flipped');
+    let flipLocked = false;
+
+    // RAF throttle pour le tilt
     let rafPending = false;
     let lastEvent = null;
 
+    const LONG_PRESS_DELAY = 150; // ms
+    const FLIP_COOLDOWN = 220;    // ms
+    const FLIP_RATIO = 2.8;      // dx doit dominer dy
+
+    function shouldPrevent(e) {
+        return e.pointerType === 'touch' || e.pointerType === 'pen';
+    }
+
     function getPoint(e) {
+        const oe = e.originalEvent || e;
+        const t = oe.touches && oe.touches[0];
         return {
-            x: e.clientX ?? e.originalEvent.touches?.[0]?.clientX,
-            y: e.clientY ?? e.originalEvent.touches?.[0]?.clientY
+            x: e.clientX ?? t?.clientX ?? 0,
+            y: e.clientY ?? t?.clientY ?? 0
         };
     }
 
-    function getFlipThreshold() {
+    function flipThresholdPx() {
         const rect = $clone[0].getBoundingClientRect();
-        return rect.width * 0.35;
+        return Math.max(60, rect.width * 0.35);
     }
 
-    function endInteraction() {
-        clearTimeout(timer);
-        tiltActive = false;
-        isPointerDown = false;
-        rafPending = false;
-        lastEvent = null;
-
-        // IMPORTANT : on revient à la base (inclut translate(-50%, -50%) pour le clone)
-        resetCard($clone);
-    }
-
-    // Nettoyage d’éventuels handlers précédents sur CE clone
-    $clone.off('.cloneLP');
-    $(document).off('pointerup.cloneLP pointercancel.cloneLP pointerleave.cloneLP');
-
-    $clone.on('pointerdown.cloneLP', function (e) {
-        isPointerDown = true;
-
-        const p = getPoint(e);
-        startX = p.x;
-        startY = p.y;
-
-        timer = setTimeout(() => {
-            if (isPointerDown) tiltActive = true;
-        }, LONG_PRESS_DELAY);
-    });
-
-    $clone.on('pointermove.cloneLP', function (e) {
-        if (!isPointerDown) return;
-
-        const p = getPoint(e);
-        const dx = p.x - startX;
-        const dy = p.y - startY;
-
-        const flipThreshold = getFlipThreshold();
-
-        /* ===== FLIP (geste volontaire horizontal) ===== */
-        if (
-            Math.abs(dx) > flipThreshold &&
-            Math.abs(dx) > Math.abs(dy) * 2.5
-        ) {
-            flipped = !flipped;
-            $clone.toggleClass('flipped', flipped);
-
-            clearTimeout(timer);
-            tiltActive = false;
-            resetCard($clone);
-            return;
-        }
-
-        /* ===== TILT (uniquement après clic long) ===== */
-        if (!tiltActive) return;
-
+    function scheduleTilt(e) {
         lastEvent = e;
         if (rafPending) return;
 
         rafPending = true;
         requestAnimationFrame(() => {
             rafPending = false;
-            if (lastEvent && isPointerDown && tiltActive) {
-                apply3DEffect(lastEvent, $clone);
-            }
+            if (!isDown || !tiltActive || !lastEvent) return;
+            apply3DEffect(lastEvent, $clone);
         });
+    }
+
+    function startLongPress() {
+        clearTimeout(pressTimer);
+        pressTimer = setTimeout(() => {
+            if (!isDown) return;
+            tiltActive = true;
+            $clone.addClass('tilt-active');
+        }, LONG_PRESS_DELAY);
+    }
+
+    function doFlip(p) {
+        if (flipLocked) return;
+
+        flipped = !flipped;
+        $clone.toggleClass('flipped', flipped);
+
+        // recalage pour permettre un flip inverse fluide
+        startX = p.x;
+        startY = p.y;
+
+        // stop tilt + reset base
+        tiltActive = false;
+        resetCard($clone);
+        startLongPress();
+
+        flipLocked = true;
+        setTimeout(() => (flipLocked = false), FLIP_COOLDOWN);
+    }
+
+    function endInteraction() {
+        clearTimeout(pressTimer);
+
+        isDown = false;
+        tiltActive = false;
+        rafPending = false;
+        lastEvent = null;
+        pointerId = null;
+
+        resetCard($clone);
+        $clone.removeClass('tilt-active');
+    }
+
+    /* ================== EVENTS ================== */
+
+    $clone.on('pointerdown.cloneLP', function (e) {
+        if (shouldPrevent(e)) e.preventDefault();
+
+        isDown = true;
+        pointerId = e.pointerId;
+
+        const p = getPoint(e);
+        startX = p.x;
+        startY = p.y;
+
+        try {
+            this.setPointerCapture(pointerId);
+        } catch (_) { }
+
+        startLongPress();
     });
 
-    $(document).on('pointerup.cloneLP pointercancel.cloneLP pointerleave.cloneLP', endInteraction);
+    $(document).on('pointermove.cloneLP', function (e) {
+        if (!isDown) return;
+        if (pointerId !== null && e.pointerId !== pointerId) return;
+
+        if (shouldPrevent(e)) e.preventDefault();
+
+        const p = getPoint(e);
+        const dx = p.x - startX;
+        const dy = p.y - startY;
+
+        const threshold = flipThresholdPx();
+
+        // ----- FLIP (geste horizontal volontaire) -----
+        if (
+            Math.abs(dx) > threshold &&
+            Math.abs(dx) > Math.abs(dy) * FLIP_RATIO
+        ) {
+            doFlip(p);
+            return;
+        }
+
+        // ----- TILT (après long press) -----
+        if (tiltActive) scheduleTilt(e);
+    });
+
+    $(document).on('pointerup.cloneLP pointercancel.cloneLP', function (e) {
+        if (!isDown) return;
+        if (pointerId !== null && e.pointerId !== pointerId) return;
+
+        if (shouldPrevent(e)) e.preventDefault();
+        endInteraction();
+    });
 }
+
 
 
 /* =====================================================
