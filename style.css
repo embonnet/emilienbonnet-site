@@ -337,13 +337,13 @@ body {
 		}
 	}
 
-	@media (pointer: coarse) {
-		.card-clone {
-			touch-action: none;
-			-webkit-user-select: none;
-			user-select: none;
-		}
+@media (pointer: coarse) {
+	.card-clone {
+		touch-action: none;
+		-webkit-user-select: none;
+		user-select: none;
 	}
+}
 
 	.card.is-hiding {
 		opacity: 0;

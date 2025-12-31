@@ -501,6 +501,90 @@ $(document).ready(function () {
     });
 
     applyFilters();
+
+    // =========================
+    // DRAG-SCROLL DES FILTRES (clic prolongé) — mobile tactile
+    // =========================
+    (function enableFiltersDragScroll() {
+        const el = $filters[0];
+        if (!el) return;
+
+        let isDown = false;
+        let dragActive = false;
+        let pointerId = null;
+
+        let startX = 0;
+        let startScrollLeft = 0;
+        let pressTimer = null;
+
+        const DRAG_LONG_PRESS = 160; // ms (ajuste si besoin)
+
+        function isCoarsePointer(e) {
+            return e.pointerType === 'touch' || e.pointerType === 'pen';
+        }
+
+        function getClientX(e) {
+            const oe = e.originalEvent || e;
+            const t = oe.touches && oe.touches[0];
+            return e.clientX ?? t?.clientX ?? 0;
+        }
+
+        function end() {
+            clearTimeout(pressTimer);
+            isDown = false;
+            dragActive = false;
+            pointerId = null;
+            el.classList.remove('is-dragging');
+        }
+
+        $filters.on('pointerdown.filtersDrag', function (e) {
+            if (!isCoarsePointer(e)) return;
+
+            isDown = true;
+            dragActive = false;
+            pointerId = e.pointerId;
+
+            startX = getClientX(e);
+            startScrollLeft = el.scrollLeft;
+
+            try { el.setPointerCapture(pointerId); } catch (_) { }
+
+            clearTimeout(pressTimer);
+            pressTimer = setTimeout(() => {
+                if (!isDown) return;
+                dragActive = true;
+                el.classList.add('is-dragging');
+            }, DRAG_LONG_PRESS);
+        });
+
+        $(document).on('pointermove.filtersDrag', function (e) {
+            if (!isDown) return;
+            if (!isCoarsePointer(e)) return;
+            if (pointerId !== null && e.pointerId !== pointerId) return;
+
+            // Si on est en drag-scroll, on empêche le "tap" / scroll vertical
+            if (dragActive) {
+                e.preventDefault();
+                const x = getClientX(e);
+                const dx = x - startX;
+                el.scrollLeft = startScrollLeft - dx;
+            }
+        });
+
+        $(document).on('pointerup.filtersDrag pointercancel.filtersDrag', function (e) {
+            if (!isDown) return;
+            if (pointerId !== null && e.pointerId !== pointerId) return;
+            end();
+        });
+
+        // Empêche le click sur un bouton si on était en drag-scroll
+        $filters.on('click.filtersDrag', '.filter-btn', function (e) {
+            if (el.classList.contains('is-dragging')) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            }
+        });
+    })();
 });
 
 
@@ -516,7 +600,13 @@ function applyFilterColorsFromCSS() {
         const type = $btn.data('filter');
 
         if (type === 'all') {
-            $btn.css('--filter-color', '#fff').css('color', '#000');
+            $btn.css('--filter-color', '#fff');
+
+            if ($btn.hasClass('active')) {
+                $btn.css('color', '#000'); // fond blanc → texte noir
+            } else {
+                $btn.css('color', '#fff'); // outline → texte blanc
+            }
             return;
         }
 
