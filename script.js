@@ -84,6 +84,8 @@ function apply3DEffect(e, $card) {
     const x = clientX - rect.left;
     const y = clientY - rect.top;
 
+    //if ($card.hasClass('flipped')) return;
+
     // Si trop loin → reset
     if (isTooFar(x, y, rect)) {
         resetCard($card);
@@ -159,29 +161,75 @@ if (supportsHover) {
 function enableCloneLongPress($clone) {
 
     let timer = null;
-    let active = false;
+    let tiltActive = false;
+    let isPointerDown = false;
+
+    let startX = 0;
+    let startY = 0;
+    let flipped = false;
+
+    function getPoint(e) {
+        return {
+            x: e.clientX ?? e.originalEvent.touches?.[0].clientX,
+            y: e.clientY ?? e.originalEvent.touches?.[0].clientY
+        };
+    }
+
+    function getFlipThreshold() {
+        const rect = $clone[0].getBoundingClientRect();
+        return rect.width * 0.35;
+    }
 
     $clone.on('pointerdown', function (e) {
 
-        // On empêche uniquement le drag natif, sans casser le rendu
-        e.stopPropagation();
+        isPointerDown = true;
+
+        const p = getPoint(e);
+        startX = p.x;
+        startY = p.y;
 
         timer = setTimeout(() => {
-            active = true;
+            if (isPointerDown) {
+                tiltActive = true;
+            }
         }, LONG_PRESS_DELAY);
     });
 
     $clone.on('pointermove', function (e) {
-        if (active) apply3DEffect(e, $clone);
+
+        if (!isPointerDown) return;
+
+        const p = getPoint(e);
+        const dx = p.x - startX;
+        const dy = p.y - startY;
+
+        const flipThreshold = getFlipThreshold();
+
+        /* ===== FLIP (geste volontaire) ===== */
+        if (
+            Math.abs(dx) > flipThreshold &&
+            Math.abs(dx) > Math.abs(dy) * 2.5
+        ) {
+            flipped = !flipped;
+            $clone.toggleClass('flipped', flipped);
+
+            clearTimeout(timer);
+            tiltActive = false;
+            resetCard($clone);
+            return;
+        }
+
+        /* ===== TILT (uniquement clic prolongé + maintenu) ===== */
+        if (tiltActive) {
+            apply3DEffect(e, $clone);
+        }
     });
 
-    $(document).on('pointerup pointercancel', function () {
+    $(document).on('pointerup pointercancel pointerleave', function () {
         clearTimeout(timer);
-
-        if (active) {
-            active = false;
-            resetCard($clone);
-        }
+        tiltActive = false;
+        isPointerDown = false;
+        resetCard($clone);
     });
 }
 
@@ -192,52 +240,48 @@ function enableCloneLongPress($clone) {
 
 $(document).on('click', '.card:not(.card-clone)', function () {
 
-    // empêche plusieurs modales ouvertes
     if ($activeClone) return;
 
     const $original = $(this);
-
-    // désactive la carte originale
     $original.addClass('disabled');
 
-    // clone DOM (sans events)
     const $clone = $original.clone(false, false)
         .removeClass('disabled')
         .addClass('card-clone expanded pop-in');
 
-    // conserve le background
     const bg = $original.css('background-image');
-    $clone.css('background-image', bg);
+    const text = $original.data('text') ?? '';
+    const frontHTML = $clone.html();
 
-    const text = $original.data('text');
-    if (text) {
-        $clone.append(`
-        <div class="card-description">
-            ${text}
+    $clone.css('background-image', 'none');
+
+    $clone.html(`
+      <div class="card-inner">
+        <div class="card-face card-front">
+          ${frontHTML}
         </div>
+        <div class="card-face card-back">
+          <div class="card-back-overlay">
+            ${text}
+          </div>
+        </div>
+      </div>
     `);
-    }
 
-    // ajoute au DOM
+    // APPLIQUER LE BACKGROUND APRÈS
+    $clone.find('.card-front, .card-back').css('background-image', bg);
+
     $('body').append($clone);
-
-    // overlay actif + scroll bloqué
     $('.overlay').addClass('active');
     $('body').addClass('modal-open');
 
-    // référence globale
     $activeClone = $clone;
 
-
-
-    // active le clic prolongé (mobile)
     enableCloneLongPress($clone);
 
-    // reset 3D à l'ouverture (important)
     requestAnimationFrame(() => {
         resetCard($clone);
     });
-
 });
 
 $('.overlay').on('click', function () {
