@@ -168,10 +168,14 @@ function enableCloneLongPress($clone) {
     let startY = 0;
     let flipped = false;
 
+    // RAF throttle
+    let rafPending = false;
+    let lastEvent = null;
+
     function getPoint(e) {
         return {
-            x: e.clientX ?? e.originalEvent.touches?.[0].clientX,
-            y: e.clientY ?? e.originalEvent.touches?.[0].clientY
+            x: e.clientX ?? e.originalEvent.touches?.[0]?.clientX,
+            y: e.clientY ?? e.originalEvent.touches?.[0]?.clientY
         };
     }
 
@@ -180,8 +184,22 @@ function enableCloneLongPress($clone) {
         return rect.width * 0.35;
     }
 
-    $clone.on('pointerdown', function (e) {
+    function endInteraction() {
+        clearTimeout(timer);
+        tiltActive = false;
+        isPointerDown = false;
+        rafPending = false;
+        lastEvent = null;
 
+        // IMPORTANT : on revient à la base (inclut translate(-50%, -50%) pour le clone)
+        resetCard($clone);
+    }
+
+    // Nettoyage d’éventuels handlers précédents sur CE clone
+    $clone.off('.cloneLP');
+    $(document).off('pointerup.cloneLP pointercancel.cloneLP pointerleave.cloneLP');
+
+    $clone.on('pointerdown.cloneLP', function (e) {
         isPointerDown = true;
 
         const p = getPoint(e);
@@ -189,14 +207,11 @@ function enableCloneLongPress($clone) {
         startY = p.y;
 
         timer = setTimeout(() => {
-            if (isPointerDown) {
-                tiltActive = true;
-            }
+            if (isPointerDown) tiltActive = true;
         }, LONG_PRESS_DELAY);
     });
 
-    $clone.on('pointermove', function (e) {
-
+    $clone.on('pointermove.cloneLP', function (e) {
         if (!isPointerDown) return;
 
         const p = getPoint(e);
@@ -205,7 +220,7 @@ function enableCloneLongPress($clone) {
 
         const flipThreshold = getFlipThreshold();
 
-        /* ===== FLIP (geste volontaire) ===== */
+        /* ===== FLIP (geste volontaire horizontal) ===== */
         if (
             Math.abs(dx) > flipThreshold &&
             Math.abs(dx) > Math.abs(dy) * 2.5
@@ -219,18 +234,22 @@ function enableCloneLongPress($clone) {
             return;
         }
 
-        /* ===== TILT (uniquement clic prolongé + maintenu) ===== */
-        if (tiltActive) {
-            apply3DEffect(e, $clone);
-        }
+        /* ===== TILT (uniquement après clic long) ===== */
+        if (!tiltActive) return;
+
+        lastEvent = e;
+        if (rafPending) return;
+
+        rafPending = true;
+        requestAnimationFrame(() => {
+            rafPending = false;
+            if (lastEvent && isPointerDown && tiltActive) {
+                apply3DEffect(lastEvent, $clone);
+            }
+        });
     });
 
-    $(document).on('pointerup pointercancel pointerleave', function () {
-        clearTimeout(timer);
-        tiltActive = false;
-        isPointerDown = false;
-        resetCard($clone);
-    });
+    $(document).on('pointerup.cloneLP pointercancel.cloneLP pointerleave.cloneLP', endInteraction);
 }
 
 
