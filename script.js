@@ -737,7 +737,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const outline = document.querySelector('.cursor-outline');
 
     if (!dot || !outline) return;
-    if (!window.matchMedia('(hover: hover)').matches) return;
+    const canUseCustomCursor =
+        window.matchMedia('(any-pointer: fine)').matches ||
+        window.matchMedia('(pointer: fine)').matches;
+
+    if (!canUseCustomCursor) return;
 
     let x = window.innerWidth / 2;
     let y = window.innerHeight / 2;
