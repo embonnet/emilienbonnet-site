@@ -49,19 +49,14 @@
                         <i class="material-icons">contact_page</i>
                     </a>
 
-                    <!-- CV / Docs -->
+                    <!-- CV (modale) -->
                     <a href="#"
                        class="header-icon"
-                       aria-label="CV">
-                        <i class="material-icons">description</i>
+                       aria-label="Ouvrir le CV"
+                       id="cv-open">
+                        <i class="material-icons">contact_page</i>
                     </a>
 
-                    <!-- Icône libre (optionnelle) -->
-                    <a href="#"
-                       class="header-icon"
-                       aria-label="Contact">
-                        <i class="material-icons">mail</i>
-                    </a>
                 </div>
             </div>
 
@@ -203,17 +198,17 @@
 
             // generer les pastilles correctement
             card.innerHTML = `
-                                <div class="glare-container">
-                                    <div class="container-metadata">
-                                        ${meta.map(m => `
-                                            <div class="metadata ${m.type}">
-                                                <i class="material-icons">${m.icon}</i>
-                                            </div>
-                                        `).join('')}
+                                    <div class="glare-container">
+                                        <div class="container-metadata">
+                                            ${meta.map(m => `
+                                                <div class="metadata ${m.type}">
+                                                    <i class="material-icons">${m.icon}</i>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                        <div class="glare"></div>
                                     </div>
-                                    <div class="glare"></div>
-                                </div>
-                            `;
+                                `;
 
             wrapper.appendChild(card);
         });
@@ -225,5 +220,22 @@
     <!-- custom cursor -->
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
+
+    <!-- CV MODAL -->
+    <div class="cv-overlay" id="cv-overlay" aria-hidden="true"></div>
+
+    <div class="cv-modal" id="cv-modal" role="dialog" aria-modal="true" aria-label="CV">
+        <button class="cv-close" id="cv-close" aria-label="Fermer">
+            <i class="material-icons">close</i>
+        </button>
+
+        <div class="cv-frame-wrap">
+            <iframe class="cv-frame"
+                    src="pictures/CV2025EBT.pdf"
+                    title="CV"
+                    loading="lazy">
+            </iframe>
+        </div>
+    </div>
 </body>
 </html>

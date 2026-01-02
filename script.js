@@ -78,8 +78,16 @@ function apply3DEffect(e, $card) {
     const rect = $card[0].getBoundingClientRect();
 
     // Support souris + tactile
-    const clientX = e.clientX ?? e.originalEvent.touches?.[0].clientX;
-    const clientY = e.clientY ?? e.originalEvent.touches?.[0].clientY;
+    const oe = e.originalEvent || e;
+    const t = (oe.touches && oe.touches[0]) ? oe.touches[0] : null;
+
+    const clientX = (e.clientX !== undefined && e.clientX !== null)
+        ? e.clientX
+        : (t ? t.clientX : 0);
+
+    const clientY = (e.clientY !== undefined && e.clientY !== null)
+        ? e.clientY
+        : (t ? t.clientY : 0);
 
     const x = clientX - rect.left;
     const y = clientY - rect.top;
@@ -189,10 +197,10 @@ function enableCloneLongPress($clone) {
 
     function getPoint(e) {
         const oe = e.originalEvent || e;
-        const t = oe.touches && oe.touches[0];
+        const t = (oe.touches && oe.touches[0]) ? oe.touches[0] : null;
         return {
-            x: e.clientX ?? t?.clientX ?? 0,
-            y: e.clientY ?? t?.clientY ?? 0
+            x: (e.clientX !== undefined && e.clientX !== null) ? e.clientX : (t ? t.clientX : 0),
+            y: (e.clientY !== undefined && e.clientY !== null) ? e.clientY : (t ? t.clientY : 0)
         };
     }
 
@@ -325,7 +333,9 @@ $(document).on('click', '.card:not(.card-clone)', function () {
         .addClass('card-clone expanded pop-in');
 
     const bg = $original.css('background-image');
-    const text = $original.data('text') ?? '';
+    const text = ($original.data('text') !== undefined && $original.data('text') !== null)
+        ? $original.data('text')
+        : '';
     const frontHTML = $clone.html();
 
     $clone.css('background-image', 'none');
@@ -755,4 +765,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     loop();
+});
+
+/* =====================================================
+CV MODAL
+===================================================== */
+
+document.addEventListener('DOMContentLoaded', () => {
+    const openBtn = document.getElementById('cv-open');
+    const modal = document.getElementById('cv-modal');
+    const overlay = document.getElementById('cv-overlay');
+    const closeBtn = document.getElementById('cv-close');
+
+    if (!openBtn || !modal || !overlay || !closeBtn) return;
+
+    const openCV = (e) => {
+        if (e) e.preventDefault();
+        overlay.classList.add('active');
+        modal.classList.add('active');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+    };
+
+    const closeCV = () => {
+        modal.classList.remove('active');
+        overlay.classList.remove('active');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+    };
+
+    openBtn.addEventListener('click', openCV);
+    closeBtn.addEventListener('click', closeCV);
+    overlay.addEventListener('click', closeCV);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeCV();
+        }
+    });
 });

@@ -669,3 +669,108 @@ body {
 		background: rgba(255, 255, 255, 0.25);
 		transform: scale(1.1);
 	}
+
+/* =========================
+   CV MODAL
+   ========================= */
+
+body.modal-open {
+	overflow: hidden;
+}
+
+.cv-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.85);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.25s ease;
+	z-index: 9000; /* au-dessus du site */
+}
+
+	.cv-overlay.active {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+.cv-modal {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) scale(0.98);
+	/* Desktop / grand écran */
+	width: min(1200px, 96vw);
+	height: min(92vh, 980px);
+	background: rgba(20, 20, 20, 0.92);
+	backdrop-filter: blur(8px);
+	border-radius: 14px;
+	box-shadow: 0 40px 120px rgba(0,0,0,0.55);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.25s ease, transform 0.25s ease;
+	z-index: 9001;
+	overflow: hidden;
+}
+
+	.cv-modal.active {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translate(-50%, -50%) scale(1);
+	}
+
+@media (max-width: 768px) {
+
+	.cv-modal {
+		padding-top: env(safe-area-inset-top);
+		padding-bottom: env(safe-area-inset-bottom);
+		box-sizing: border-box;
+	}
+
+	.cv-frame-wrap {
+		inset: 0;
+	}
+
+	.cv-frame {
+		width: 100%;
+	}
+}
+
+.cv-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 38px;
+	height: 38px;
+	border: none;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.14);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: background 0.2s ease, transform 0.2s ease;
+	z-index: 2;
+}
+
+	.cv-close:hover {
+		background: rgba(255, 255, 255, 0.25);
+		transform: scale(1.05);
+	}
+
+	.cv-close .material-icons {
+		color: white;
+		font-size: 22px;
+	}
+
+.cv-frame-wrap {
+	position: absolute;
+	inset: 0;
+	padding-top: 0; /* si tu veux un header interne plus tard */
+}
+
+.cv-frame {
+	width: 100%;
+	height: 100%;
+	border: none;
+	background: #111;
+}
