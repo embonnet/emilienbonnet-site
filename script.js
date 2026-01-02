@@ -731,7 +731,7 @@ $(document).ready(function () {
    CUSTOM CURSOR
    ========================= */
 
-document.addEventListener('DOMContentLoaded', () => {
+/*document.addEventListener('DOMContentLoaded', () => {
 
     const dot = document.querySelector('.cursor-dot');
     const outline = document.querySelector('.cursor-outline');
@@ -769,7 +769,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     loop();
-});
+});*/
 
 /* =====================================================
 CV MODAL

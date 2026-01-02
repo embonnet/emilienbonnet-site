@@ -596,8 +596,8 @@ body {
    CUSTOM CURSOR
    ========================= */
 
-body {
-	cursor: none; /* cache le curseur natif */
+/*body {
+	cursor: none; 
 }
 
 .cursor-dot,
@@ -611,7 +611,6 @@ body {
 	opacity: 0;
 }
 
-/* point central */
 .cursor-dot {
 	width: 8px;
 	height: 8px;
@@ -619,7 +618,6 @@ body {
 	border-radius: 50%;
 }
 
-/* cercle extérieur */
 .cursor-outline {
 	width: 36px;
 	height: 36px;
@@ -628,7 +626,6 @@ body {
 	transition: transform 0.15s ease-out, opacity 0.25s ease-out;
 }
 
-/* hover interactif */
 .cursor-hover .cursor-outline {
 	transform: translate(-50%, -50%) scale(1.6);
 	opacity: 0.5;
@@ -638,7 +635,7 @@ body {
 .overlay,
 .loader {
 	cursor: none;
-}
+}*/
 
 /* ===== HEADER ICONS ===== */
 
