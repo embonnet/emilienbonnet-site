@@ -70,7 +70,7 @@ body {
 	border: none;
 	font-weight: 800;
 	text-transform: uppercase;
-	/*cursor: pointer;*/
+	cursor: pointer;
 	background: white;
 	color: black;
 	transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -165,7 +165,7 @@ body {
 	color: var(--filter-color, #666);
 	color: white;
 	font-size: 0.85rem;
-	/*cursor: pointer;*/
+	cursor: pointer;
 	white-space: nowrap;
 	transition: background 0.2s ease;
 	font-weight: 600;
@@ -365,6 +365,7 @@ body {
 
 	.card:hover {
 		filter: grayscale(0%);
+		cursor: pointer;
 	}
 
 .card-description {
@@ -667,6 +668,12 @@ body {
 		transform: scale(1.1);
 	}
 
+.social-icon {
+	width: 25px;
+	height: 25px;
+	filter: invert(1); /* si ton header est sombre */
+}
+
 /* =========================
    CV MODAL
    ========================= */
@@ -770,4 +777,91 @@ body.modal-open {
 	height: 100%;
 	border: none;
 	background: #111;
+}
+
+/* =========================
+   TOGGLE PRO / PERSO
+   ========================= */
+
+.scope-toggle {
+	--h: 30px; /* hauteur */
+	--w: calc(var(--h) * 4.5); /* largeur du toggle */
+	--thumbw: calc(var(--h) * 2.3); /* largeur capsule (couvre "PERSO") */
+	--bg: rgba(255,255,255,0.10);
+	--border: rgba(255,255,255,0.35);
+	position: relative;
+	display: inline-block;
+	width: var(--w);
+	height: var(--h);
+	border: 2px solid var(--border);
+	border-radius: var(--h);
+	background: var(--bg);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	user-select: none;
+	flex-shrink: 0;
+}
+
+	.scope-toggle input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.scope-toggle .slider {
+		position: absolute;
+		inset: 0;
+		cursor: pointer;
+		border-radius: var(--h);
+	}
+
+		/* Thumb capsule */
+		.scope-toggle .slider:before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0; /* PRO à gauche par défaut (unchecked) */
+			height: var(--h);
+			width: var(--thumbw);
+			border-radius: var(--h);
+			/* PRO = bleu par défaut */
+			background-color: #fff;
+			/* déplacement + couleur animés */
+			transition: transform 0.35s ease, background-color 0.35s ease;
+		}
+
+	/* Checked : PERSO à droite */
+	.scope-toggle input:checked + .slider:before {
+		transform: translateX(calc(var(--w) - var(--thumbw)));
+	}
+
+	/* Libellés */
+	.scope-toggle .select-left,
+	.scope-toggle .select-right {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		font-weight: 600;
+		font-size: 0.80rem;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+		color: #fff;
+		mix-blend-mode: difference;
+		pointer-events: none;
+		white-space: nowrap;
+	}
+
+	.scope-toggle .select-left {
+		left: calc(var(--h) * 0.55); /* PRO */
+	}
+
+	.scope-toggle .select-right {
+		right: calc(var(--h) * 0.55); /* PERSO */
+	}
+
+/* Hover desktop */
+@media (hover: hover) {
+	.scope-toggle:hover {
+		background: rgba(255,255,255,0.14);
+	}
 }

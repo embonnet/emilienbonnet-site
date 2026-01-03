@@ -1,32 +1,26 @@
 ﻿/* =====================================================
-   CONFIGURATION GLOBALE
+   SCRIPT PRINCIPAL — Cartes / Modale / Filtres / UI
+   - Réorganisé + commenté
+   - Ajout : Toggle Pro/Perso (style CodePen) + accessibilité
    ===================================================== */
-
-// Détection du hover réel (desktop vs mobile)
-const supportsHover = window.matchMedia('(hover: hover)').matches;
-
-// Intensité max de l'effet 3D (cartes normales)
-const TILT_LIMIT = 15;
-
-// Durée du clic long (clone)
-const LONG_PRESS_DELAY = 200;
-
-// Clone actuellement ouvert (modal)
-let $activeClone = null;
-
 
 /* =====================================================
-   OUTILS GÉNÉRAUX
+   CONFIG GLOBALE
    ===================================================== */
 
-/**
- * Réinitialise la transformation 3D d'une carte
- */
+const SUPPORTS_HOVER = window.matchMedia('(hover: hover)').matches;
+const TILT_LIMIT = 15;
+
+// Clone/modal actif
+let $activeClone = null;
+
+/* =====================================================
+   HELPERS — 3D / Reset / Tilt
+   ===================================================== */
+
 function resetCard($card) {
-
     const isClone = $card.hasClass('card-clone');
-
-    const baseTransform = isClone
+    const base = isClone
         ? 'translate(-50%, -50%) perspective(1000px)'
         : 'perspective(1000px)';
 
@@ -38,63 +32,33 @@ function resetCard($card) {
             "0px 0px 24.3px rgba(0,0,0,0.107), " +
             "0px 0px 45.5px rgba(0,0,0,0.129), " +
             "0px 0px 109px rgba(0,0,0,0.18)",
-
-        transform: `
-            ${baseTransform}
-            rotateX(0deg)
-            rotateY(0deg)
-        `
+        transform: `${base} rotateX(0deg) rotateY(0deg)`
     });
 
-    // Remet le glare hors écran
     $card.find('.glare').css('left', '100%');
 }
 
-
-/**
- * Vérifie si le curseur est trop loin du centre de la carte
- * (évite des rotations absurdes)
- */
 function isTooFar(x, y, rect, maxRatio = 0.9) {
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const dx = x - cx;
+    const dy = y - cy;
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const maxDist = Math.min(rect.width, rect.height) * maxRatio;
 
-    const dx = x - centerX;
-    const dy = y - centerY;
-
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    const maxDistance = Math.min(rect.width, rect.height) * maxRatio;
-
-    return distance > maxDistance;
+    return dist > maxDist;
 }
 
-
-/**
- * Applique l'effet 3D à une carte selon la position du curseur
- */
 function apply3DEffect(e, $card) {
-
     const rect = $card[0].getBoundingClientRect();
 
-    // Support souris + tactile
-    const oe = e.originalEvent || e;
-    const t = (oe.touches && oe.touches[0]) ? oe.touches[0] : null;
-
-    const clientX = (e.clientX !== undefined && e.clientX !== null)
-        ? e.clientX
-        : (t ? t.clientX : 0);
-
-    const clientY = (e.clientY !== undefined && e.clientY !== null)
-        ? e.clientY
-        : (t ? t.clientY : 0);
+    const clientX = e.clientX ?? e.originalEvent?.touches?.[0]?.clientX;
+    const clientY = e.clientY ?? e.originalEvent?.touches?.[0]?.clientY;
 
     const x = clientX - rect.left;
     const y = clientY - rect.top;
 
-    //if ($card.hasClass('flipped')) return;
-
-    // Si trop loin → reset
     if (isTooFar(x, y, rect)) {
         resetCard($card);
         return;
@@ -103,7 +67,6 @@ function apply3DEffect(e, $card) {
     const offsetX = x / rect.width;
     const offsetY = y / rect.height;
 
-    // Intensité différente grille / clone
     const strength = $card.hasClass('expanded') ? 6 : TILT_LIMIT;
     const shadowStrength = $card.hasClass('expanded') ? 0.4 : 1;
 
@@ -114,12 +77,10 @@ function apply3DEffect(e, $card) {
     const shadowOffsetY = offsetY * 32 - 16;
 
     const isClone = $card.hasClass('card-clone');
-
-    const baseTransform = isClone
+    const base = isClone
         ? 'translate(-50%, -50%) perspective(1000px)'
         : 'perspective(1000px)';
 
-    // Ombres dynamiques + rotation
     $card.css({
         boxShadow:
             (1 / 6) * -shadowOffsetX * shadowStrength + "px " +
@@ -134,25 +95,20 @@ function apply3DEffect(e, $card) {
             (5 / 6) * -shadowOffsetY * shadowStrength + "px 45.5px rgba(0,0,0,0.129), " +
             -shadowOffsetX * shadowStrength + "px " +
             -shadowOffsetY * shadowStrength + "px 109px rgba(0,0,0,0.18)",
-
-        transform: `
-            ${baseTransform}
-            rotateX(${-rotateX}deg)
-            rotateY(${rotateY}deg)
-        `
+        transform: `${base} rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`
     });
 
-    // Déplacement du glare
     const glarePos = rotateX + rotateY + 90;
     $card.find('.glare').css('left', glarePos + '%');
 }
 
-
 /* =====================================================
-   EFFET 3D — CARTES DE LA GRILLE
+   MODULE — 3D GRILLE (desktop)
    ===================================================== */
 
-if (supportsHover) {
+function initGrid3D() {
+    if (!SUPPORTS_HOVER) return;
+
     $(document).on('mousemove', '.card:not(.card-clone)', function (e) {
         apply3DEffect(e, $(this));
     });
@@ -163,11 +119,10 @@ if (supportsHover) {
 }
 
 /* =====================================================
-   CLIC LONG — EFFET 3D SUR LE CLONE
+   MODULE — GESTES CLONE (long-press tilt + swipe flip)
    ===================================================== */
 
-function enableCloneLongPress($clone) {
-    // Nettoyage si déjà bindé
+function enableCloneGestures($clone) {
     $clone.off('.cloneLP');
     $(document).off('.cloneLP');
 
@@ -183,24 +138,23 @@ function enableCloneLongPress($clone) {
     let flipped = $clone.hasClass('flipped');
     let flipLocked = false;
 
-    // RAF throttle pour le tilt
     let rafPending = false;
     let lastEvent = null;
 
-    const LONG_PRESS_DELAY = 150; // ms
-    const FLIP_COOLDOWN = 220;    // ms
-    const FLIP_RATIO = 2.8;      // dx doit dominer dy
+    const LONG_PRESS_DELAY = 150;
+    const FLIP_COOLDOWN = 220;
+    const FLIP_RATIO = 2.8;
 
-    function shouldPrevent(e) {
+    function isCoarsePointer(e) {
         return e.pointerType === 'touch' || e.pointerType === 'pen';
     }
 
     function getPoint(e) {
         const oe = e.originalEvent || e;
-        const t = (oe.touches && oe.touches[0]) ? oe.touches[0] : null;
+        const t = oe.touches && oe.touches[0];
         return {
-            x: (e.clientX !== undefined && e.clientX !== null) ? e.clientX : (t ? t.clientX : 0),
-            y: (e.clientY !== undefined && e.clientY !== null) ? e.clientY : (t ? t.clientY : 0)
+            x: e.clientX ?? t?.clientX ?? 0,
+            y: e.clientY ?? t?.clientY ?? 0
         };
     }
 
@@ -236,11 +190,9 @@ function enableCloneLongPress($clone) {
         flipped = !flipped;
         $clone.toggleClass('flipped', flipped);
 
-        // recalage pour permettre un flip inverse fluide
         startX = p.x;
         startY = p.y;
 
-        // stop tilt + reset base
         tiltActive = false;
         resetCard($clone);
         startLongPress();
@@ -262,10 +214,8 @@ function enableCloneLongPress($clone) {
         $clone.removeClass('tilt-active');
     }
 
-    /* ================== EVENTS ================== */
-
     $clone.on('pointerdown.cloneLP', function (e) {
-        if (shouldPrevent(e)) e.preventDefault();
+        if (isCoarsePointer(e)) e.preventDefault();
 
         isDown = true;
         pointerId = e.pointerId;
@@ -274,9 +224,7 @@ function enableCloneLongPress($clone) {
         startX = p.x;
         startY = p.y;
 
-        try {
-            this.setPointerCapture(pointerId);
-        } catch (_) { }
+        try { this.setPointerCapture(pointerId); } catch (_) { }
 
         startLongPress();
     });
@@ -285,7 +233,7 @@ function enableCloneLongPress($clone) {
         if (!isDown) return;
         if (pointerId !== null && e.pointerId !== pointerId) return;
 
-        if (shouldPrevent(e)) e.preventDefault();
+        if (isCoarsePointer(e)) e.preventDefault();
 
         const p = getPoint(e);
         const dx = p.x - startX;
@@ -293,16 +241,11 @@ function enableCloneLongPress($clone) {
 
         const threshold = flipThresholdPx();
 
-        // ----- FLIP (geste horizontal volontaire) -----
-        if (
-            Math.abs(dx) > threshold &&
-            Math.abs(dx) > Math.abs(dy) * FLIP_RATIO
-        ) {
+        if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy) * FLIP_RATIO) {
             doFlip(p);
             return;
         }
 
-        // ----- TILT (après long press) -----
         if (tiltActive) scheduleTilt(e);
     });
 
@@ -310,139 +253,296 @@ function enableCloneLongPress($clone) {
         if (!isDown) return;
         if (pointerId !== null && e.pointerId !== pointerId) return;
 
-        if (shouldPrevent(e)) e.preventDefault();
+        if (isCoarsePointer(e)) e.preventDefault();
         endInteraction();
     });
 }
 
-
-
 /* =====================================================
-   OUVERTURE / FERMETURE MODALE (CLONE)
+   MODULE — MODALE CLONE
    ===================================================== */
 
-$(document).on('click', '.card:not(.card-clone)', function () {
+function initModalClone() {
+    $(document).on('click', '.card:not(.card-clone)', function () {
+        if ($activeClone) return;
 
-    if ($activeClone) return;
+        const $original = $(this);
+        $original.addClass('disabled');
 
-    const $original = $(this);
-    $original.addClass('disabled');
+        const $clone = $original.clone(false, false)
+            .removeClass('disabled')
+            .addClass('card-clone expanded pop-in');
 
-    const $clone = $original.clone(false, false)
-        .removeClass('disabled')
-        .addClass('card-clone expanded pop-in');
+        const bg = $original.css('background-image');
+        const text = $original.data('text') ?? '';
+        const frontHTML = $clone.html();
 
-    const bg = $original.css('background-image');
-    const text = ($original.data('text') !== undefined && $original.data('text') !== null)
-        ? $original.data('text')
-        : '';
-    const frontHTML = $clone.html();
+        $clone.css('background-image', 'none');
 
-    $clone.css('background-image', 'none');
-
-    $clone.html(`
+        $clone.html(`
       <div class="card-inner">
-        <div class="card-face card-front">
-          ${frontHTML}
-        </div>
+        <div class="card-face card-front">${frontHTML}</div>
         <div class="card-face card-back">
-          <div class="card-back-overlay">
-            ${text}
-          </div>
+          <div class="card-back-overlay">${text}</div>
         </div>
       </div>
     `);
 
-    // APPLIQUER LE BACKGROUND APRÈS
-    $clone.find('.card-front, .card-back').css('background-image', bg);
+        $clone.find('.card-front, .card-back').css('background-image', bg);
 
-    $('body').append($clone);
-    $('.overlay').addClass('active');
-    $('body').addClass('modal-open');
+        $('body').append($clone);
+        $('.overlay').addClass('active');
+        $('body').addClass('modal-open');
 
-    $activeClone = $clone;
+        $activeClone = $clone;
 
-    enableCloneLongPress($clone);
-
-    requestAnimationFrame(() => {
-        resetCard($clone);
+        enableCloneGestures($clone);
+        requestAnimationFrame(() => resetCard($clone));
     });
-});
 
-$('.overlay').on('click', function () {
+    $('.overlay').on('click', function () {
+        if (!$activeClone) return;
 
-    if (!$activeClone) return;
+        $('.card.disabled').removeClass('disabled');
 
-    // réactive la carte originale
-    $('.card.disabled').removeClass('disabled');
+        resetCard($activeClone);
+        $activeClone.remove();
 
-    resetCard($activeClone);
-    $activeClone.remove();
+        $('.overlay').removeClass('active');
+        $('body').removeClass('modal-open');
 
-    $('.overlay').removeClass('active');
-    $('body').removeClass('modal-open');
-
-    $activeClone = null;
-});
-
+        $activeClone = null;
+    });
+}
 
 /* =====================================================
-   HEADER AUTO-HIDE AU SCROLL
+   MODULE — HEADER AUTO-HIDE
    ===================================================== */
 
-$(document).ready(function () {
-
+function initHeaderAutoHide() {
     const header = document.querySelector('.main-header');
+    if (!header) return;
+
     let lastScrollY = window.scrollY;
 
     $(window).on('scroll', function () {
         const current = window.scrollY;
-
-        header.classList.toggle(
-            'hidden',
-            current > lastScrollY && current > 80
-        );
-
+        header.classList.toggle('hidden', current > lastScrollY && current > 80);
         lastScrollY = current;
     });
-});
-
+}
 
 /* =====================================================
-   FILTRES AVANCÉS
+   COULEURS DES FILTRES (depuis CSS)
    ===================================================== */
 
-$(document).ready(function () {
+function applyFilterColorsFromCSS() {
+    $('.filter-btn').each(function () {
+        const $btn = $(this);
+        const type = $btn.data('filter');
 
+        if (type === 'all') {
+            $btn.css('--filter-color', '#fff').css('color', '#000');
+            return;
+        }
+
+        // Lecture couleur via classe CSS correspondante
+        const temp = document.createElement('div');
+        temp.className = type;
+        temp.style.visibility = 'hidden';
+        document.body.appendChild(temp);
+
+        const color = getComputedStyle(temp).backgroundColor;
+        document.body.removeChild(temp);
+
+        $btn.css('--filter-color', color);
+        $btn.css('color', $btn.hasClass('active') ? '#000' : color);
+    });
+}
+
+/* =====================================================
+   MODULE — FILTRES + TOGGLE PRO/PERSO (accessible)
+   ===================================================== */
+
+function initFiltersWithScopeSwitch() {
     const $filters = $('.filters');
     if (!$filters.length) return;
 
-    const getCards = () => $('.wrapper .card').not('.card-clone');
-    const getTypes = card => $(card).data('types').split(',');
-
-    const allTypes = [...new Set(
-        getCards().toArray().flatMap(card => getTypes(card))
-    )];
-
-    let activeFilters = new Set();
-
-    // Lecture URL
-    const params = new URLSearchParams(location.search);
-    if (params.has('filters')) {
-        params.get('filters').split(',').forEach(f => activeFilters.add(f));
+    const $scopeToggle = $('#scopeToggle');
+    if (!$scopeToggle.length) {
+        console.warn('scopeToggle introuvable : ajoute <input id="scopeToggle"> dans le HTML.');
     }
 
-    // Création UI
-    $filters.append(`<div class="filter-btn" data-filter="all">Tous <span class="filter-count"></span></div>`);
+    // --- Sources ---
+    const getCards = () => $('.wrapper .card').not('.card-clone');
 
-    allTypes.forEach(type => {
-        $filters.append(`<div class="filter-btn" data-filter="${type}">${type} <span class="filter-count"></span></div>`);
-    });
+    const getTypes = (cardEl) =>
+        String($(cardEl).data('types') || '')
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean);
 
-    function applyFilters() {
+    // --- Mapping types -> scope ---
+    // IMPORTANT : "associatif" est bien rattaché à PERSO.
+    const SCOPE_TYPES = {
+        pro: new Set(['capgemini', 'conference', 'logotype']),
+        perso: new Set(['jv', 'voyage', 'sport', 'musique', 'anime', 'cinema', 'associatif'])
+    };
+
+    /**
+     * Retourne l'ensemble des scopes d'une carte (pro/perso).
+     * - Si une carte contient des types des deux familles => elle appartient aux 2 scopes.
+     * - Si aucun type ne matche, on la range par défaut en "perso" (modifiable si tu veux).
+     */
+    function computeScopesFromTypes(types) {
+        const scopes = new Set();
+
+        for (const t of types) {
+            if (SCOPE_TYPES.pro.has(t)) scopes.add('pro');
+            if (SCOPE_TYPES.perso.has(t)) scopes.add('perso');
+        }
+
+        if (scopes.size === 0) scopes.add('perso');
+        return scopes;
+    }
+
+    function ensureCardScopes() {
+        getCards().each(function () {
+            const types = getTypes(this);
+            const scopes = computeScopesFromTypes(types);
+            // Stockage CSV pour simplicité: "pro" / "perso" / "pro,perso"
+            this.dataset.scopes = [...scopes].join(',');
+        });
+    }
+
+    function cardHasScope(cardEl, scope) {
+        const scopes = String(cardEl.dataset.scopes || '');
+        return scopes.split(',').map(s => s.trim()).includes(scope);
+    }
+
+    function buildTypesByScope() {
+        const acc = { pro: new Set(), perso: new Set() };
 
         getCards().each(function () {
+            const types = getTypes(this);
 
+            if (cardHasScope(this, 'pro')) types.forEach(t => acc.pro.add(t));
+            if (cardHasScope(this, 'perso')) types.forEach(t => acc.perso.add(t));
+        });
+
+        return { pro: [...acc.pro], perso: [...acc.perso] };
+    }
+
+    // --- Etat ---
+    // Par défaut : PRO (toggle à gauche = unchecked)
+    let activeScope = 'pro';
+    let activeFilters = new Set(); // multi-select
+
+    // --- URL restore (optionnel) ---
+    const params = new URLSearchParams(location.search);
+    if (params.has('scope')) {
+        const s = params.get('scope');
+        if (s === 'pro' || s === 'perso') activeScope = s;
+    }
+    if (params.has('filters')) {
+        params
+            .get('filters')
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean)
+            .forEach(f => activeFilters.add(f));
+    }
+
+    // --- Init cards scopes + types list ---
+    ensureCardScopes();
+    let allTypesByScope = buildTypesByScope();
+
+    function getCardsInScope() {
+        return getCards().filter(function () {
+            return cardHasScope(this, activeScope);
+        });
+    }
+
+    function pruneFiltersForScope() {
+        const allowed = new Set(allTypesByScope[activeScope] || []);
+        activeFilters = new Set([...activeFilters].filter(f => allowed.has(f)));
+    }
+    pruneFiltersForScope();
+
+    /**
+     * UI/ARIA du switch :
+     * - unchecked => PRO (gauche)
+     * - checked   => PERSO (droite)
+     */
+    function updateScopeToggleUI() {
+        const isPerso = activeScope === 'perso';
+
+        if ($scopeToggle.length) {
+            $scopeToggle.prop('checked', isPerso);
+            $scopeToggle.attr('aria-checked', String(isPerso));
+        }
+    }
+
+    function buildFiltersUI() {
+        $filters.empty();
+
+        $filters.append(
+            `<div class="filter-btn" data-filter="all">Tous <span class="filter-count"></span></div>`
+        );
+
+        (allTypesByScope[activeScope] || []).forEach(type => {
+            $filters.append(
+                `<div class="filter-btn" data-filter="${type}">${type} <span class="filter-count"></span></div>`
+            );
+        });
+    }
+
+    function updateUI() {
+        const $all = $filters.find('[data-filter="all"]');
+        const $cardsInScope = getCardsInScope();
+
+        $all
+            .toggleClass('active', activeFilters.size === 0)
+            .find('.filter-count')
+            .text($cardsInScope.length);
+
+        $filters.find('.filter-btn').not($all).each(function () {
+            const type = $(this).data('filter');
+            let count = 0;
+
+            $cardsInScope.each(function () {
+                const test = new Set(activeFilters);
+                test.add(type);
+
+                const types = getTypes(this);
+                if ([...test].every(f => types.includes(f))) count++;
+            });
+
+            $(this)
+                .toggleClass('active', activeFilters.has(type))
+                .toggleClass('disabled', count === 0)
+                .attr('data-disabled', count === 0)
+                .find('.filter-count')
+                .text(count);
+        });
+    }
+
+    function syncURL() {
+        const p = new URLSearchParams();
+        p.set('scope', activeScope);
+        if (activeFilters.size) p.set('filters', [...activeFilters].join(','));
+        history.replaceState(null, '', '?' + p.toString());
+    }
+
+    function applyFilters() {
+        getCards().each(function () {
+            // 1) Scope d'abord : la carte doit appartenir au scope actif (pro/perso)
+            if (!cardHasScope(this, activeScope)) {
+                $(this).hide().removeClass('is-hiding');
+                return;
+            }
+
+            // 2) Puis filtres (multi-select en AND)
             const cardTypes = getTypes(this);
             const match = [...activeFilters].every(f => cardTypes.includes(f));
 
@@ -459,42 +559,8 @@ $(document).ready(function () {
         applyFilterColorsFromCSS();
     }
 
-    function updateUI() {
-
-        const $all = $filters.find('[data-filter="all"]');
-        $all.toggleClass('active', activeFilters.size === 0)
-            .find('.filter-count').text(getCards().length);
-
-        $filters.find('.filter-btn').not($all).each(function () {
-
-            const type = $(this).data('filter');
-            let count = 0;
-
-            getCards().each(function () {
-                const test = new Set(activeFilters);
-                test.add(type);
-
-                if ([...test].every(f => getTypes(this).includes(f))) count++;
-            });
-
-            $(this)
-                .toggleClass('active', activeFilters.has(type))
-                .toggleClass('disabled', count === 0)
-                .attr('data-disabled', count === 0)
-                .find('.filter-count').text(count);
-        });
-    }
-
-    function syncURL() {
-        const p = new URLSearchParams();
-        if (activeFilters.size) {
-            p.set('filters', [...activeFilters].join(','));
-        }
-        history.replaceState(null, '', '?' + p.toString());
-    }
-
+    // ---- Events filtres ----
     $filters.on('click', '.filter-btn', function () {
-
         if ($(this).data('disabled')) return;
 
         const filter = $(this).data('filter');
@@ -502,19 +568,28 @@ $(document).ready(function () {
         if (filter === 'all') {
             activeFilters.clear();
         } else {
-            activeFilters.has(filter)
-                ? activeFilters.delete(filter)
-                : activeFilters.add(filter);
+            activeFilters.has(filter) ? activeFilters.delete(filter) : activeFilters.add(filter);
         }
 
         applyFilters();
     });
 
-    applyFilters();
+    // ---- Event toggle ----
+    if ($scopeToggle.length) {
+        $scopeToggle.on('change', function () {
+            // Aligné avec le visuel : checked => PERSO, unchecked => PRO
+            activeScope = this.checked ? 'perso' : 'pro';
 
-    // =========================
-    // DRAG-SCROLL DES FILTRES (clic prolongé) — mobile tactile
-    // =========================
+            allTypesByScope = buildTypesByScope();
+            pruneFiltersForScope();
+
+            buildFiltersUI();
+            updateScopeToggleUI();
+            applyFilters();
+        });
+    }
+
+    // ---- Drag-scroll filtres mobile (inchangé) ----
     (function enableFiltersDragScroll() {
         const el = $filters[0];
         if (!el) return;
@@ -527,7 +602,7 @@ $(document).ready(function () {
         let startScrollLeft = 0;
         let pressTimer = null;
 
-        const DRAG_LONG_PRESS = 160; // ms (ajuste si besoin)
+        const DRAG_LONG_PRESS = 160;
 
         function isCoarsePointer(e) {
             return e.pointerType === 'touch' || e.pointerType === 'pen';
@@ -572,7 +647,6 @@ $(document).ready(function () {
             if (!isCoarsePointer(e)) return;
             if (pointerId !== null && e.pointerId !== pointerId) return;
 
-            // Si on est en drag-scroll, on empêche le "tap" / scroll vertical
             if (dragActive) {
                 e.preventDefault();
                 const x = getClientX(e);
@@ -587,7 +661,6 @@ $(document).ready(function () {
             end();
         });
 
-        // Empêche le click sur un bouton si on était en drag-scroll
         $filters.on('click.filtersDrag', '.filter-btn', function (e) {
             if (el.classList.contains('is-dragging')) {
                 e.preventDefault();
@@ -595,51 +668,18 @@ $(document).ready(function () {
             }
         });
     })();
-});
 
-
-/* =====================================================
-   COULEURS DES FILTRES (depuis CSS)
-   ===================================================== */
-
-function applyFilterColorsFromCSS() {
-
-    $('.filter-btn').each(function () {
-
-        const $btn = $(this);
-        const type = $btn.data('filter');
-
-        if (type === 'all') {
-            $btn.css('--filter-color', '#fff');
-
-            if ($btn.hasClass('active')) {
-                $btn.css('color', '#000'); // fond blanc → texte noir
-            } else {
-                $btn.css('color', '#fff'); // outline → texte blanc
-            }
-            return;
-        }
-
-        const temp = document.createElement('div');
-        temp.className = type;
-        temp.style.visibility = 'hidden';
-        document.body.appendChild(temp);
-
-        const color = getComputedStyle(temp).backgroundColor;
-        document.body.removeChild(temp);
-
-        $btn.css('--filter-color', color);
-        $btn.css('color', $btn.hasClass('active') ? '#000' : color);
-    });
+    // ---- Initial render ----
+    buildFiltersUI();
+    updateScopeToggleUI();
+    applyFilters();
 }
 
-
 /* =====================================================
-   LOADER
+   MODULE — LOADER
    ===================================================== */
 
-$(document).ready(function () {
-
+function initLoader() {
     const $loader = $('.loader');
     if (!$loader.length) return;
 
@@ -647,16 +687,28 @@ $(document).ready(function () {
         $loader.addClass('hidden');
         setTimeout(() => $loader.remove(), 500);
     });
-});
-
+}
 
 /* =====================================================
-   LAZY LOAD DES BACKGROUNDS
+   MODULE — LAZY BACKGROUNDS
    ===================================================== */
 
-$(document).ready(function () {
-
+function initLazyBackgrounds() {
     const cards = document.querySelectorAll('.card');
+    if (!cards.length) return;
+
+    function loadCardImage(card) {
+        const src = card.dataset.bg;
+        if (!src) return;
+
+        const img = new Image();
+        img.onload = () => {
+            card.style.backgroundImage = `url("${src}")`;
+            card.classList.remove('loading');
+            card.classList.add('loaded');
+        };
+        img.src = src;
+    }
 
     if (!('IntersectionObserver' in window)) {
         cards.forEach(loadCardImage);
@@ -669,79 +721,49 @@ $(document).ready(function () {
             loadCardImage(entry.target);
             obs.unobserve(entry.target);
         });
-    }, {
-        rootMargin: '200px',
-        threshold: 0.1
-    });
+    }, { rootMargin: '200px', threshold: 0.1 });
 
     cards.forEach(card => {
         card.classList.add('loading');
         observer.observe(card);
     });
-
-    function loadCardImage(card) {
-
-        const src = card.dataset.bg;
-        if (!src) return;
-
-        const img = new Image();
-        img.onload = () => {
-            card.style.backgroundImage = `url("${src}")`;
-            card.classList.remove('loading');
-            card.classList.add('loaded');
-        };
-        img.src = src;
-    }
-});
+}
 
 /* =====================================================
-   INTRO OVERLAY
+   MODULE — INTRO OVERLAY (session)
    ===================================================== */
 
-$(document).ready(function () {
-
+function initIntroOverlay() {
     const $intro = $('.intro-overlay');
     if (!$intro.length) return;
 
-    // Optionnel : afficher une seule fois par session
     const alreadySeen = sessionStorage.getItem('introSeen');
-
     if (alreadySeen) {
         $intro.remove();
         return;
     }
 
-    // Bloque le scroll tant que l'intro est visible
     $('body').addClass('modal-open');
 
     $intro.find('.intro-btn').on('click', function () {
-
         $intro.addClass('hidden');
         $('body').removeClass('modal-open');
 
         sessionStorage.setItem('introSeen', 'true');
-
-        setTimeout(() => {
-            $intro.remove();
-        }, 700);
+        setTimeout(() => $intro.remove(), 700);
     });
-});
+}
 
-/* =========================
-   CUSTOM CURSOR
-   ========================= */
+/* =====================================================
+   MODULE — CUSTOM CURSOR (desktop)
+   ===================================================== */
 
-/*document.addEventListener('DOMContentLoaded', () => {
-
+function initCustomCursor() {
     const dot = document.querySelector('.cursor-dot');
     const outline = document.querySelector('.cursor-outline');
 
     if (!dot || !outline) return;
-    const canUseCustomCursor =
-        window.matchMedia('(any-pointer: fine)').matches ||
-        window.matchMedia('(pointer: fine)').matches;
-
-    if (!canUseCustomCursor) return;
+    if (!SUPPORTS_HOVER) return;
 
     let x = window.innerWidth / 2;
     let y = window.innerHeight / 2;
@@ -755,6 +777,7 @@ $(document).ready(function () {
         dot.style.left = x + 'px';
         dot.style.top = y + 'px';
         dot.style.opacity = '1';
+
         outline.style.opacity = '1';
     });
 
@@ -769,42 +792,25 @@ $(document).ready(function () {
     }
 
     loop();
-});*/
+}
 
 /* =====================================================
-CV MODAL
-===================================================== */
+   BOOTSTRAP
+   ===================================================== */
 
-document.addEventListener('DOMContentLoaded', () => {
-    const openBtn = document.getElementById('cv-open');
-    const modal = document.getElementById('cv-modal');
-    const overlay = document.getElementById('cv-overlay');
-    const closeBtn = document.getElementById('cv-close');
+$(document).ready(function () {
+    initGrid3D();
+    initModalClone();
+    initHeaderAutoHide();
 
-    if (!openBtn || !modal || !overlay || !closeBtn) return;
+    // Filtres + Toggle Pro/Perso
+    initFiltersWithScopeSwitch();
 
-    const openCV = (e) => {
-        if (e) e.preventDefault();
-        overlay.classList.add('active');
-        modal.classList.add('active');
-        overlay.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('modal-open');
-    };
+    // UI
+    initLoader();
+    initLazyBackgrounds();
+    initIntroOverlay();
 
-    const closeCV = () => {
-        modal.classList.remove('active');
-        overlay.classList.remove('active');
-        overlay.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('modal-open');
-    };
-
-    openBtn.addEventListener('click', openCV);
-    closeBtn.addEventListener('click', closeCV);
-    overlay.addEventListener('click', closeCV);
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeCV();
-        }
-    });
+    // Curseur custom
+    initCustomCursor();
 });
