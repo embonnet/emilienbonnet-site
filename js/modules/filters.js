@@ -28,7 +28,7 @@ function applyFilterColorsFromCSS(filtersRoot) {
     temp.remove();
 
     btn.style.setProperty("--filter-color", color);
-    btn.style.color = btn.classList.contains("active") ? "#000" : color;
+
   });
 }
 
