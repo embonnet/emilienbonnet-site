@@ -32,59 +32,61 @@
         </div>
     </div>
 
-    <header class="main-header">
-        <div class="logo-header"><img src="assets/images/profil.jpg" alt="Photo de profil" class="header-avatar"></div>
-        <div class="content-infos-header">
-            <div class="header-content">
-                <div class="logo">
-                    <span class="title">Emilien Bonnet</span>
+    <div class="page-content">
+        <header class="main-header">
+            <div class="logo-header"><img src="assets/images/profil.jpg" alt="Photo de profil" class="header-avatar"></div>
+            <div class="content-infos-header">
+                <div class="header-content">
+                    <div class="logo">
+                        <span class="title">Emilien Bonnet</span>
+                    </div>
+
+                    <!-- switch pro/perso -->
+                    <label class="scope-toggle">
+                        <input id="scopeToggle"
+                            type="checkbox"
+                            role="switch"
+                            aria-label="Basculer entre les catégories Perso et Pro"
+                            aria-checked="false" />
+                        <span class="slider round"></span>
+
+                        <span class="select-left">Pro</span>
+                        <span class="select-right">Perso</span>
+                    </label>
+
+                    <div class="header-icons">
+                        <!-- LinkedIn -->
+                        <a href="https://www.linkedin.com/in/emilien-bonnet-5b13a6b6/"
+                        target="_blank"
+                        class="header-icon social-icon">
+                            <img src="assets/icons/linkedin.svg"
+                                alt="LinkedIn"
+                                class="social-icon" 
+                            />
+                        </a>
+
+                        <!-- CV (modale) -->
+                        <a href="#"
+                        class="header-icon"
+                        aria-label="Ouvrir le CV"
+                        id="cv-open">
+                            <i class="material-icons">contact_page</i>
+                        </a>
+
+                    </div>
                 </div>
 
-                <!-- switch pro/perso -->
-                <label class="scope-toggle">
-                    <input id="scopeToggle"
-                           type="checkbox"
-                           role="switch"
-                           aria-label="Basculer entre les catégories Perso et Pro"
-                           aria-checked="false" />
-                    <span class="slider round"></span>
-
-                    <span class="select-left">Pro</span>
-                    <span class="select-right">Perso</span>
-                </label>
-
-                <div class="header-icons">
-                    <!-- LinkedIn -->
-                    <a href="https://www.linkedin.com/in/emilien-bonnet-5b13a6b6/"
-                       target="_blank"
-                       class="header-icon social-icon">
-                        <img src="assets/icons/linkedin.svg"
-                             alt="LinkedIn"
-                             class="social-icon" 
-                        />
-                    </a>
-
-                    <!-- CV (modale) -->
-                    <a href="#"
-                       class="header-icon"
-                       aria-label="Ouvrir le CV"
-                       id="cv-open">
-                        <i class="material-icons">contact_page</i>
-                    </a>
-
+                <div class="filters">
+                    <!-- filtres générés dynamiquement -->
                 </div>
             </div>
+        </header>
 
-            <div class="filters">
-                <!-- filtres générés dynamiquement -->
-            </div>
+        <div class="overlay"></div>
+
+        <div class="wrapper">
+            <!-- Les cartes seront generees ici via JavaScript -->
         </div>
-    </header>
-
-    <div class="overlay"></div>
-
-    <div class="wrapper">
-        <!-- Les cartes seront generees ici via JavaScript -->
     </div>
 
     <!--<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>-->
@@ -134,17 +136,17 @@
 
                     // generer les pastilles correctement
                     card.innerHTML = `
-              <div class="glare-container">
-                <div class="container-metadata">
-                  ${meta.map(m => `
-                    <div class="metadata ${m.type}">
-                      <i class="material-icons">${m.icon}</i>
-                    </div>
-                  `).join('')}
-                </div>
-                <div class="glare"></div>
-              </div>
-            `;
+                        <div class="glare-container">
+                            <div class="container-metadata">
+                            ${meta.map(m => `
+                                <div class="metadata ${m.type}">
+                                <i class="material-icons">${m.icon}</i>
+                                </div>
+                            `).join('')}
+                            </div>
+                            <div class="glare"></div>
+                        </div>
+                        `;
 
                     wrapper.appendChild(card);
                 });
@@ -184,5 +186,25 @@
             </iframe>
         </div>
     </div>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <nav class="footer-links" aria-label="Liens légaux">
+            <a href="legal/mentions-legales.html">Mentions légales</a>
+            <span class="footer-separator">•</span>
+            <a href="legal/politique-confidentialite.html">Politique de confidentialité</a>
+            </nav>
+
+            <div class="footer-copy">
+            © <span id="footer-year"></span> Emilien Bonnet
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // année auto (propre et sans dépendance)
+    document.getElementById("footer-year").textContent = new Date().getFullYear();
+    </script>
+
 </body>
 </html>
