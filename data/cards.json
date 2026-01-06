@@ -1,0 +1,442 @@
+[
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/kuwabara.jpg"
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/marathon.jpg"
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/tennislogo.jpg"
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/ultimate.jpg"
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/lucky.jpg"
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/tt.jpg"
+  },
+
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/dredge.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/cs2.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/lol.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/dragonage.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/darkestdongeon.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/dispatch.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/cuphead.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/balatro.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/artisantd.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "type2": "cinema",
+    "icon2": "movie",
+    "bg": "assets/images/cards/pokemon.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/forza.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/dontstarve.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/slay.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/tekken.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/hollow.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/dragonquest.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/lifeisstrange.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/cod.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/witcher.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/portal.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/oblivion.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/gta.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/ageof.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/baldur.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/hl2.jpg"
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/sc2.jpg"
+  },
+
+  {
+    "type": "voyage",
+    "icon": "explore",
+    "bg": "assets/images/cards/thailande.jpg"
+  },
+  {
+    "type": "voyage",
+    "icon": "explore",
+    "bg": "assets/images/cards/japon.jpg"
+  },
+  {
+    "type": "voyage",
+    "icon": "explore",
+    "bg": "assets/images/cards/portugal.JPG"
+  },
+  {
+    "type": "voyage",
+    "icon": "explore",
+    "bg": "assets/images/cards/italie.jpg"
+  },
+
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "type2": "conference",
+    "icon2": "mic",
+    "bg": "assets/images/cards/salonmaire.JPG",
+    "text": "Novembre 2024,<br>Sessions de démonstrations de Copilot au stand 'Capgemini' lors du Salon des Maires 2024 Porte de Versailles."
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/michelin.jpg",
+    "text": "Décembre 2024,<br>Hackathon PowerPlatform dans les locaux de Michelin.<br>Atelier d'idéation et accompagnement des équipes."
+  },
+
+  {
+    "type": "sport",
+    "icon": "directions_run",
+    "bg": "assets/images/cards/tennis.jpg"
+  },
+  {
+    "type": "sport",
+    "icon": "directions_run",
+    "bg": "assets/images/cards/tennistable.jpg"
+  },
+  {
+    "type": "sport",
+    "icon": "directions_run",
+    "bg": "assets/images/cards/basket.jpg"
+  },
+  {
+    "type": "sport",
+    "icon": "directions_run",
+    "bg": "assets/images/cards/foot.jpg"
+  },
+  {
+    "type": "sport",
+    "icon": "directions_run",
+    "bg": "assets/images/cards/padel.jpg"
+  },
+  {
+    "type": "sport",
+    "icon": "directions_run",
+    "bg": "assets/images/cards/badminton.jpg"
+  },
+  {
+    "type": "sport",
+    "icon": "directions_run",
+    "bg": "assets/images/cards/parachute.jpg"
+  },
+
+  {
+    "type": "musique",
+    "icon": "music_note",
+    "bg": "assets/images/cards/orelsan.jpg"
+  },
+  {
+    "type": "musique",
+    "icon": "music_note",
+    "bg": "assets/images/cards/stromae.jpg"
+  },
+  {
+    "type": "musique",
+    "icon": "music_note",
+    "bg": "assets/images/cards/rammsteim.jpg"
+  },
+  {
+    "type": "musique",
+    "icon": "music_note",
+    "bg": "assets/images/cards/queen.jpg"
+  },
+  {
+    "type": "musique",
+    "icon": "music_note",
+    "bg": "assets/images/cards/john.jpg"
+  },
+  {
+    "type": "musique",
+    "icon": "music_note",
+    "bg": "assets/images/cards/hans.jpg"
+  },
+  {
+    "type": "musique",
+    "icon": "music_note",
+    "bg": "assets/images/cards/jameshorner.jpg"
+  },
+  {
+    "type": "musique",
+    "icon": "music_note",
+    "bg": "assets/images/cards/jeremysoule.jpg"
+  },
+
+  {
+    "type": "anime",
+    "icon": "ramen_dining",
+    "bg": "assets/images/cards/naruto.jpg"
+  },
+  {
+    "type": "anime",
+    "icon": "ramen_dining",
+    "bg": "assets/images/cards/hunter.jpg"
+  },
+  {
+    "type": "anime",
+    "icon": "ramen_dining",
+    "bg": "assets/images/cards/deathnote.jpg"
+  },
+  {
+    "type": "anime",
+    "icon": "ramen_dining",
+    "bg": "assets/images/cards/frieren.jpg"
+  },
+  {
+    "type": "anime",
+    "icon": "ramen_dining",
+    "bg": "assets/images/cards/dragonball.jpg"
+  },
+
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/starwars.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/starwars.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/lotr.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/jurassicpark.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/dune.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/harrypotter.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/socialnetwork.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/shutter.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/grantorino.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/birdman.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/million.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/drive.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/django.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/catchme.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/bladerunner.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/gladiator.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/prestige.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/parasite.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/interstellar.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/titanic.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/avatar.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/batman.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/silence.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/inception.jpg"
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/seven.jpg"
+  }
+]

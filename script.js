@@ -1,261 +1,331 @@
 ﻿/* =====================================================
-   SCRIPT PRINCIPAL — Cartes / Modale / Filtres / UI
-   - Réorganisé + commenté
-   - Ajout : Toggle Pro/Perso (style CodePen) + accessibilité
+   SCRIPT PRINCIPAL — Vanilla JS
+   Cartes / Modale / Filtres / UI
+   - Réécrit sans jQuery
+   - Commenté + optimisé (delegation, RAF, data-attrs)
+   - Compatible avec ton bootstrapAfterCards appelé après fetch
    ===================================================== */
 
 /* =====================================================
    CONFIG GLOBALE
    ===================================================== */
 
-const SUPPORTS_HOVER = window.matchMedia('(hover: hover)').matches;
+const SUPPORTS_HOVER = window.matchMedia("(hover: hover)").matches;
 const TILT_LIMIT = 15;
 
 // Clone/modal actif
-let $activeClone = null;
+let activeClone = null;
+
+// Empêche les doubles inits si on relance après fetch
+let cardsBootstrapped = false;
 
 /* =====================================================
-   HELPERS — 3D / Reset / Tilt
+   HELPERS (DOM + utils)
    ===================================================== */
 
-function resetCard($card) {
-    const isClone = $card.hasClass('card-clone');
-    const base = isClone
-        ? 'translate(-50%, -50%) perspective(1000px)'
-        : 'perspective(1000px)';
+const qs = (sel, root = document) => root.querySelector(sel);
+const qsa = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-    $card.css({
-        boxShadow:
-            "0px 0px 3px rgba(0,0,0,0.051), " +
-            "0px 0px 7.2px rgba(0,0,0,0.073), " +
-            "0px 0px 13.6px rgba(0,0,0,0.09), " +
-            "0px 0px 24.3px rgba(0,0,0,0.107), " +
-            "0px 0px 45.5px rgba(0,0,0,0.129), " +
-            "0px 0px 109px rgba(0,0,0,0.18)",
-        transform: `${base} rotateX(0deg) rotateY(0deg)`
-    });
+function on(el, type, handler, options) {
+  el.addEventListener(type, handler, options);
+}
 
-    $card.find('.glare').css('left', '100%');
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n));
+}
+
+function getPointerPoint(e) {
+  // PointerEvent / MouseEvent
+  if (typeof e.clientX === "number" && typeof e.clientY === "number") {
+    return { x: e.clientX, y: e.clientY };
+  }
+  // TouchEvent fallback (rare si pointer events)
+  const t = e.touches && e.touches[0];
+  return { x: t?.clientX ?? 0, y: t?.clientY ?? 0 };
+}
+
+function isCoarsePointer(e) {
+  // PointerEvent fournit pointerType ; sinon, on infère
+  return e.pointerType === "touch" || e.pointerType === "pen";
+}
+
+/* =====================================================
+   3D EFFECT — reset / far check / apply
+   ===================================================== */
+
+function resetCard(cardEl) {
+  const isClone = cardEl.classList.contains("card-clone");
+  const base = isClone
+    ? "translate(-50%, -50%) perspective(1000px)"
+    : "perspective(1000px)";
+
+  // Box-shadow identique à ton thème (cf. CSS variables)
+  cardEl.style.boxShadow =
+    "0px 0px 3px rgba(0,0,0,0.051), " +
+    "0px 0px 7.2px rgba(0,0,0,0.073), " +
+    "0px 0px 13.6px rgba(0,0,0,0.09), " +
+    "0px 0px 24.3px rgba(0,0,0,0.107), " +
+    "0px 0px 45.5px rgba(0,0,0,0.129), " +
+    "0px 0px 109px rgba(0,0,0,0.18)";
+
+  cardEl.style.transform = `${base} rotateX(0deg) rotateY(0deg)`;
+
+  const glare = qs(".glare", cardEl);
+  if (glare) glare.style.left = "100%";
 }
 
 function isTooFar(x, y, rect, maxRatio = 0.9) {
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const dx = x - cx;
-    const dy = y - cy;
-
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const maxDist = Math.min(rect.width, rect.height) * maxRatio;
-
-    return dist > maxDist;
+  const cx = rect.width / 2;
+  const cy = rect.height / 2;
+  const dx = x - cx;
+  const dy = y - cy;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  const maxDist = Math.min(rect.width, rect.height) * maxRatio;
+  return dist > maxDist;
 }
 
-function apply3DEffect(e, $card) {
-    const rect = $card[0].getBoundingClientRect();
+function apply3DEffect(e, cardEl) {
+  const rect = cardEl.getBoundingClientRect();
+  const p = getPointerPoint(e);
 
-    const clientX = e.clientX ?? e.originalEvent?.touches?.[0]?.clientX;
-    const clientY = e.clientY ?? e.originalEvent?.touches?.[0]?.clientY;
+  const x = p.x - rect.left;
+  const y = p.y - rect.top;
 
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
+  if (isTooFar(x, y, rect)) {
+    resetCard(cardEl);
+    return;
+  }
 
-    if (isTooFar(x, y, rect)) {
-        resetCard($card);
-        return;
-    }
+  const offsetX = x / rect.width;
+  const offsetY = y / rect.height;
 
-    const offsetX = x / rect.width;
-    const offsetY = y / rect.height;
+  const isExpanded = cardEl.classList.contains("expanded");
+  const strength = isExpanded ? 6 : TILT_LIMIT;
+  const shadowStrength = isExpanded ? 0.4 : 1;
 
-    const strength = $card.hasClass('expanded') ? 6 : TILT_LIMIT;
-    const shadowStrength = $card.hasClass('expanded') ? 0.4 : 1;
+  const rotateY = offsetX * (strength * 2) - strength;
+  const rotateX = offsetY * (strength * 2) - strength;
 
-    const rotateY = offsetX * (strength * 2) - strength;
-    const rotateX = offsetY * (strength * 2) - strength;
+  const shadowOffsetX = offsetX * 32 - 16;
+  const shadowOffsetY = offsetY * 32 - 16;
 
-    const shadowOffsetX = offsetX * 32 - 16;
-    const shadowOffsetY = offsetY * 32 - 16;
+  const isClone = cardEl.classList.contains("card-clone");
+  const base = isClone
+    ? "translate(-50%, -50%) perspective(1000px)"
+    : "perspective(1000px)";
 
-    const isClone = $card.hasClass('card-clone');
-    const base = isClone
-        ? 'translate(-50%, -50%) perspective(1000px)'
-        : 'perspective(1000px)';
+  // Box-shadow dynamique (reprend ta logique)
+  cardEl.style.boxShadow =
+    (1 / 6) * -shadowOffsetX * shadowStrength +
+    "px " +
+    (1 / 6) * -shadowOffsetY * shadowStrength +
+    "px 3px rgba(0,0,0,0.051), " +
+    (2 / 6) * -shadowOffsetX * shadowStrength +
+    "px " +
+    (2 / 6) * -shadowOffsetY * shadowStrength +
+    "px 7.2px rgba(0,0,0,0.073), " +
+    (3 / 6) * -shadowOffsetX * shadowStrength +
+    "px " +
+    (3 / 6) * -shadowOffsetY * shadowStrength +
+    "px 13.6px rgba(0,0,0,0.09), " +
+    (4 / 6) * -shadowOffsetX * shadowStrength +
+    "px " +
+    (4 / 6) * -shadowOffsetY * shadowStrength +
+    "px 24.3px rgba(0,0,0,0.107), " +
+    (5 / 6) * -shadowOffsetX * shadowStrength +
+    "px " +
+    (5 / 6) * -shadowOffsetY * shadowStrength +
+    "px 45.5px rgba(0,0,0,0.129), " +
+    -shadowOffsetX * shadowStrength +
+    "px " +
+    -shadowOffsetY * shadowStrength +
+    "px 109px rgba(0,0,0,0.18)";
 
-    $card.css({
-        boxShadow:
-            (1 / 6) * -shadowOffsetX * shadowStrength + "px " +
-            (1 / 6) * -shadowOffsetY * shadowStrength + "px 3px rgba(0,0,0,0.051), " +
-            (2 / 6) * -shadowOffsetX * shadowStrength + "px " +
-            (2 / 6) * -shadowOffsetY * shadowStrength + "px 7.2px rgba(0,0,0,0.073), " +
-            (3 / 6) * -shadowOffsetX * shadowStrength + "px " +
-            (3 / 6) * -shadowOffsetY * shadowStrength + "px 13.6px rgba(0,0,0,0.09), " +
-            (4 / 6) * -shadowOffsetX * shadowStrength + "px " +
-            (4 / 6) * -shadowOffsetY * shadowStrength + "px 24.3px rgba(0,0,0,0.107), " +
-            (5 / 6) * -shadowOffsetX * shadowStrength + "px " +
-            (5 / 6) * -shadowOffsetY * shadowStrength + "px 45.5px rgba(0,0,0,0.129), " +
-            -shadowOffsetX * shadowStrength + "px " +
-            -shadowOffsetY * shadowStrength + "px 109px rgba(0,0,0,0.18)",
-        transform: `${base} rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`
-    });
+  cardEl.style.transform = `${base} rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`;
 
+  const glare = qs(".glare", cardEl);
+  if (glare) {
     const glarePos = rotateX + rotateY + 90;
-    $card.find('.glare').css('left', glarePos + '%');
+    glare.style.left = `${glarePos}%`;
+  }
 }
 
 /* =====================================================
    MODULE — 3D GRILLE (desktop)
+   - delegation sur document, pas de listeners par carte
    ===================================================== */
 
 function initGrid3D() {
-    if (!SUPPORTS_HOVER) return;
+  if (!SUPPORTS_HOVER) return;
 
-    $(document).on('mousemove', '.card:not(.card-clone)', function (e) {
-        apply3DEffect(e, $(this));
-    });
+  // RAF throttle pour réduire la charge
+  let rafId = null;
+  let lastEvent = null;
+  let lastTarget = null;
 
-    $(document).on('mouseleave', '.card:not(.card-clone):not(.expanded)', function () {
-        resetCard($(this));
+  function schedule(e, target) {
+    lastEvent = e;
+    lastTarget = target;
+    if (rafId) return;
+
+    rafId = requestAnimationFrame(() => {
+      rafId = null;
+      if (!lastTarget || !lastEvent) return;
+      apply3DEffect(lastEvent, lastTarget);
     });
+  }
+
+  on(document, "mousemove", (e) => {
+    const card = e.target.closest(".card:not(.card-clone)");
+    if (!card) return;
+    schedule(e, card);
+  });
+
+  on(document, "mouseleave", (e) => {
+    const card = e.target.closest(".card:not(.card-clone):not(.expanded)");
+    if (!card) return;
+    resetCard(card);
+  }, true);
 }
 
 /* =====================================================
    MODULE — GESTES CLONE (long-press tilt + swipe flip)
    ===================================================== */
 
-function enableCloneGestures($clone) {
-    $clone.off('.cloneLP');
-    $(document).off('.cloneLP');
+function enableCloneGestures(cloneEl) {
+  // Nettoyage simple : on retire les handlers en gardant des refs locales
+  let pointerId = null;
+  let isDown = false;
 
-    let pointerId = null;
-    let isDown = false;
+  let pressTimer = null;
+  let tiltActive = false;
 
-    let pressTimer = null;
-    let tiltActive = false;
+  let startX = 0;
+  let startY = 0;
 
-    let startX = 0;
-    let startY = 0;
+  let flipped = cloneEl.classList.contains("flipped");
+  let flipLocked = false;
 
-    let flipped = $clone.hasClass('flipped');
-    let flipLocked = false;
+  let rafPending = false;
+  let lastMoveEvent = null;
 
-    let rafPending = false;
-    let lastEvent = null;
+  const LONG_PRESS_DELAY = 150;
+  const FLIP_COOLDOWN = 220;
+  const FLIP_RATIO = 2.8;
 
-    const LONG_PRESS_DELAY = 150;
-    const FLIP_COOLDOWN = 220;
-    const FLIP_RATIO = 2.8;
+  function flipThresholdPx() {
+    const rect = cloneEl.getBoundingClientRect();
+    return Math.max(60, rect.width * 0.35);
+  }
 
-    function isCoarsePointer(e) {
-        return e.pointerType === 'touch' || e.pointerType === 'pen';
-    }
+  function scheduleTilt(e) {
+    lastMoveEvent = e;
+    if (rafPending) return;
 
-    function getPoint(e) {
-        const oe = e.originalEvent || e;
-        const t = oe.touches && oe.touches[0];
-        return {
-            x: e.clientX ?? t?.clientX ?? 0,
-            y: e.clientY ?? t?.clientY ?? 0
-        };
-    }
-
-    function flipThresholdPx() {
-        const rect = $clone[0].getBoundingClientRect();
-        return Math.max(60, rect.width * 0.35);
-    }
-
-    function scheduleTilt(e) {
-        lastEvent = e;
-        if (rafPending) return;
-
-        rafPending = true;
-        requestAnimationFrame(() => {
-            rafPending = false;
-            if (!isDown || !tiltActive || !lastEvent) return;
-            apply3DEffect(lastEvent, $clone);
-        });
-    }
-
-    function startLongPress() {
-        clearTimeout(pressTimer);
-        pressTimer = setTimeout(() => {
-            if (!isDown) return;
-            tiltActive = true;
-            $clone.addClass('tilt-active');
-        }, LONG_PRESS_DELAY);
-    }
-
-    function doFlip(p) {
-        if (flipLocked) return;
-
-        flipped = !flipped;
-        $clone.toggleClass('flipped', flipped);
-
-        startX = p.x;
-        startY = p.y;
-
-        tiltActive = false;
-        resetCard($clone);
-        startLongPress();
-
-        flipLocked = true;
-        setTimeout(() => (flipLocked = false), FLIP_COOLDOWN);
-    }
-
-    function endInteraction() {
-        clearTimeout(pressTimer);
-
-        isDown = false;
-        tiltActive = false;
-        rafPending = false;
-        lastEvent = null;
-        pointerId = null;
-
-        resetCard($clone);
-        $clone.removeClass('tilt-active');
-    }
-
-    $clone.on('pointerdown.cloneLP', function (e) {
-        if (isCoarsePointer(e)) e.preventDefault();
-
-        isDown = true;
-        pointerId = e.pointerId;
-
-        const p = getPoint(e);
-        startX = p.x;
-        startY = p.y;
-
-        try { this.setPointerCapture(pointerId); } catch (_) { }
-
-        startLongPress();
+    rafPending = true;
+    requestAnimationFrame(() => {
+      rafPending = false;
+      if (!isDown || !tiltActive || !lastMoveEvent) return;
+      apply3DEffect(lastMoveEvent, cloneEl);
     });
+  }
 
-    $(document).on('pointermove.cloneLP', function (e) {
-        if (!isDown) return;
-        if (pointerId !== null && e.pointerId !== pointerId) return;
+  function startLongPress() {
+    clearTimeout(pressTimer);
+    pressTimer = setTimeout(() => {
+      if (!isDown) return;
+      tiltActive = true;
+      cloneEl.classList.add("tilt-active");
+    }, LONG_PRESS_DELAY);
+  }
 
-        if (isCoarsePointer(e)) e.preventDefault();
+  function doFlip(p) {
+    if (flipLocked) return;
 
-        const p = getPoint(e);
-        const dx = p.x - startX;
-        const dy = p.y - startY;
+    flipped = !flipped;
+    cloneEl.classList.toggle("flipped", flipped);
 
-        const threshold = flipThresholdPx();
+    startX = p.x;
+    startY = p.y;
 
-        if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy) * FLIP_RATIO) {
-            doFlip(p);
-            return;
-        }
+    tiltActive = false;
+    resetCard(cloneEl);
+    startLongPress();
 
-        if (tiltActive) scheduleTilt(e);
-    });
+    flipLocked = true;
+    setTimeout(() => (flipLocked = false), FLIP_COOLDOWN);
+  }
 
-    $(document).on('pointerup.cloneLP pointercancel.cloneLP', function (e) {
-        if (!isDown) return;
-        if (pointerId !== null && e.pointerId !== pointerId) return;
+  function endInteraction() {
+    clearTimeout(pressTimer);
+    isDown = false;
+    tiltActive = false;
+    rafPending = false;
+    lastMoveEvent = null;
+    pointerId = null;
 
-        if (isCoarsePointer(e)) e.preventDefault();
-        endInteraction();
-    });
+    resetCard(cloneEl);
+    cloneEl.classList.remove("tilt-active");
+  }
+
+  function onPointerDown(e) {
+    if (isCoarsePointer(e)) e.preventDefault();
+
+    isDown = true;
+    pointerId = e.pointerId ?? null;
+
+    const p = getPointerPoint(e);
+    startX = p.x;
+    startY = p.y;
+
+    try {
+      cloneEl.setPointerCapture(pointerId);
+    } catch (_) {}
+
+    startLongPress();
+  }
+
+  function onPointerMove(e) {
+    if (!isDown) return;
+    if (pointerId !== null && e.pointerId !== pointerId) return;
+
+    if (isCoarsePointer(e)) e.preventDefault();
+
+    const p = getPointerPoint(e);
+    const dx = p.x - startX;
+    const dy = p.y - startY;
+
+    const threshold = flipThresholdPx();
+
+    if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy) * FLIP_RATIO) {
+      doFlip(p);
+      return;
+    }
+
+    if (tiltActive) scheduleTilt(e);
+  }
+
+  function onPointerUp(e) {
+    if (!isDown) return;
+    if (pointerId !== null && e.pointerId !== pointerId) return;
+    if (isCoarsePointer(e)) e.preventDefault();
+    endInteraction();
+  }
+
+  // On attache au clone + document (comme avant) mais vanilla
+  on(cloneEl, "pointerdown", onPointerDown, { passive: false });
+  on(document, "pointermove", onPointerMove, { passive: false });
+  on(document, "pointerup", onPointerUp, { passive: false });
+  on(document, "pointercancel", onPointerUp, { passive: false });
+
+  // Retourne une fonction de cleanup si tu veux aller plus loin
+  return () => {
+    cloneEl.removeEventListener("pointerdown", onPointerDown);
+    document.removeEventListener("pointermove", onPointerMove);
+    document.removeEventListener("pointerup", onPointerUp);
+    document.removeEventListener("pointercancel", onPointerUp);
+    endInteraction();
+  };
 }
 
 /* =====================================================
@@ -263,56 +333,75 @@ function enableCloneGestures($clone) {
    ===================================================== */
 
 function initModalClone() {
-    $(document).on('click', '.card:not(.card-clone)', function () {
-        if ($activeClone) return;
+  const overlay = qs(".overlay");
+  if (!overlay) return;
 
-        const $original = $(this);
-        $original.addClass('disabled');
+  // Ouvrir : click sur une carte (pas clone)
+  on(document, "click", (e) => {
+    const card = e.target.closest(".card:not(.card-clone)");
+    if (!card) return;
+    if (activeClone) return;
 
-        const $clone = $original.clone(false, false)
-            .removeClass('disabled')
-            .addClass('card-clone expanded pop-in');
+    card.classList.add("disabled");
 
-        const bg = $original.css('background-image');
-        const text = $original.data('text') ?? '';
-        const frontHTML = $clone.html();
+    const clone = card.cloneNode(true);
+    clone.classList.remove("disabled");
+    clone.classList.add("card-clone", "expanded", "pop-in");
 
-        $clone.css('background-image', 'none');
+    // Récupère le background-image calculé
+    const bg = getComputedStyle(card).backgroundImage;
 
-        $clone.html(`
+    // Texte contextuel (dataset.text) — fallback vide
+    const text = card.dataset.text ?? "";
+
+    // HTML front (contenu original)
+    const frontHTML = clone.innerHTML;
+
+    // Désactive background direct sur l’élément clone ; on l’applique sur les faces
+    clone.style.backgroundImage = "none";
+
+    // Construit un flip 3D: front = contenu original, back = texte
+    clone.innerHTML = `
       <div class="card-inner">
         <div class="card-face card-front">${frontHTML}</div>
         <div class="card-face card-back">
           <div class="card-back-overlay">${text}</div>
         </div>
       </div>
-    `);
+    `;
 
-        $clone.find('.card-front, .card-back').css('background-image', bg);
+    const frontFace = qs(".card-front", clone);
+    const backFace = qs(".card-back", clone);
+    if (frontFace) frontFace.style.backgroundImage = bg;
+    if (backFace) backFace.style.backgroundImage = bg;
 
-        $('body').append($clone);
-        $('.overlay').addClass('active');
-        $('body').addClass('modal-open');
+    document.body.appendChild(clone);
 
-        $activeClone = $clone;
+    overlay.classList.add("active");
+    document.body.classList.add("modal-open");
 
-        enableCloneGestures($clone);
-        requestAnimationFrame(() => resetCard($clone));
-    });
+    activeClone = clone;
 
-    $('.overlay').on('click', function () {
-        if (!$activeClone) return;
+    // Gestes clone (long press tilt + swipe flip)
+    enableCloneGestures(clone);
 
-        $('.card.disabled').removeClass('disabled');
+    requestAnimationFrame(() => resetCard(clone));
+  });
 
-        resetCard($activeClone);
-        $activeClone.remove();
+  // Fermer : click sur overlay
+  on(overlay, "click", () => {
+    if (!activeClone) return;
 
-        $('.overlay').removeClass('active');
-        $('body').removeClass('modal-open');
+    // Réactive la carte d'origine
+    qsa(".card.disabled").forEach((c) => c.classList.remove("disabled"));
 
-        $activeClone = null;
-    });
+    resetCard(activeClone);
+    activeClone.remove();
+    activeClone = null;
+
+    overlay.classList.remove("active");
+    document.body.classList.remove("modal-open");
+  });
 }
 
 /* =====================================================
@@ -320,44 +409,48 @@ function initModalClone() {
    ===================================================== */
 
 function initHeaderAutoHide() {
-    const header = document.querySelector('.main-header');
-    if (!header) return;
+  const header = qs(".main-header");
+  if (!header) return;
 
-    let lastScrollY = window.scrollY;
+  let lastScrollY = window.scrollY;
 
-    $(window).on('scroll', function () {
-        const current = window.scrollY;
-        header.classList.toggle('hidden', current > lastScrollY && current > 80);
-        lastScrollY = current;
-    });
+  on(window, "scroll", () => {
+    const current = window.scrollY;
+    header.classList.toggle("hidden", current > lastScrollY && current > 80);
+    lastScrollY = current;
+  }, { passive: true });
 }
 
 /* =====================================================
    COULEURS DES FILTRES (depuis CSS)
+   - Lit la couleur de la classe (.jv, .cinema, etc.)
    ===================================================== */
 
-function applyFilterColorsFromCSS() {
-    $('.filter-btn').each(function () {
-        const $btn = $(this);
-        const type = $btn.data('filter');
+function applyFilterColorsFromCSS(filtersRoot) {
+  const btns = qsa(".filter-btn", filtersRoot);
+  btns.forEach((btn) => {
+    const type = btn.dataset.filter;
 
-        if (type === 'all') {
-            $btn.css('--filter-color', '#fff').css('color', '#000');
-            return;
-        }
+    if (type === "all") {
+      btn.style.setProperty("--filter-color", "#fff");
+      btn.style.color = "#000";
+      return;
+    }
 
-        // Lecture couleur via classe CSS correspondante
-        const temp = document.createElement('div');
-        temp.className = type;
-        temp.style.visibility = 'hidden';
-        document.body.appendChild(temp);
+    // Lecture couleur via un élément temporaire de classe type
+    const temp = document.createElement("div");
+    temp.className = type;
+    temp.style.visibility = "hidden";
+    document.body.appendChild(temp);
 
-        const color = getComputedStyle(temp).backgroundColor;
-        document.body.removeChild(temp);
+    const color = getComputedStyle(temp).backgroundColor;
+    temp.remove();
 
-        $btn.css('--filter-color', color);
-        $btn.css('color', $btn.hasClass('active') ? '#000' : color);
-    });
+    btn.style.setProperty("--filter-color", color);
+
+    // Si active -> texte noir (sur fond couleur), sinon texte couleur
+    btn.style.color = btn.classList.contains("active") ? "#000" : color;
+  });
 }
 
 /* =====================================================
@@ -365,314 +458,313 @@ function applyFilterColorsFromCSS() {
    ===================================================== */
 
 function initFiltersWithScopeSwitch() {
-    const $filters = $('.filters');
-    if (!$filters.length) return;
+  const filters = qs(".filters");
+  if (!filters) return;
 
-    const $scopeToggle = $('#scopeToggle');
-    if (!$scopeToggle.length) {
-        console.warn('scopeToggle introuvable : ajoute <input id="scopeToggle"> dans le HTML.');
+  const scopeToggle = qs("#scopeToggle"); // unchecked => PRO, checked => PERSO
+  if (!scopeToggle) {
+    console.warn("scopeToggle introuvable : ajoute <input id='scopeToggle'> dans le HTML.");
+  }
+
+  const wrapper = qs(".wrapper");
+  if (!wrapper) return;
+
+  const getCards = () => qsa(".wrapper .card").filter((c) => !c.classList.contains("card-clone"));
+
+  const getTypes = (cardEl) =>
+    String(cardEl.dataset.types || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+  // Mapping types -> scope
+  const SCOPE_TYPES = {
+    pro: new Set(["capgemini", "conference", "logotype"]),
+    perso: new Set(["jv", "voyage", "sport", "musique", "anime", "cinema", "associatif"]),
+  };
+
+  function computeScopesFromTypes(types) {
+    const scopes = new Set();
+    for (const t of types) {
+      if (SCOPE_TYPES.pro.has(t)) scopes.add("pro");
+      if (SCOPE_TYPES.perso.has(t)) scopes.add("perso");
     }
+    if (scopes.size === 0) scopes.add("perso"); // défaut
+    return scopes;
+  }
 
-    // --- Sources ---
-    const getCards = () => $('.wrapper .card').not('.card-clone');
+  function ensureCardScopes() {
+    getCards().forEach((card) => {
+      const types = getTypes(card);
+      const scopes = computeScopesFromTypes(types);
+      card.dataset.scopes = [...scopes].join(","); // "pro" / "perso" / "pro,perso"
+    });
+  }
 
-    const getTypes = (cardEl) =>
-        String($(cardEl).data('types') || '')
-            .split(',')
-            .map(s => s.trim())
-            .filter(Boolean);
+  function cardHasScope(cardEl, scope) {
+    const scopes = String(cardEl.dataset.scopes || "");
+    return scopes.split(",").map((s) => s.trim()).includes(scope);
+  }
 
-    // --- Mapping types -> scope ---
-    // IMPORTANT : "associatif" est bien rattaché à PERSO.
-    const SCOPE_TYPES = {
-        pro: new Set(['capgemini', 'conference', 'logotype']),
-        perso: new Set(['jv', 'voyage', 'sport', 'musique', 'anime', 'cinema', 'associatif'])
-    };
+  function buildTypesByScope() {
+    const acc = { pro: new Set(), perso: new Set() };
 
-    /**
-     * Retourne l'ensemble des scopes d'une carte (pro/perso).
-     * - Si une carte contient des types des deux familles => elle appartient aux 2 scopes.
-     * - Si aucun type ne matche, on la range par défaut en "perso" (modifiable si tu veux).
-     */
-    function computeScopesFromTypes(types) {
-        const scopes = new Set();
-
-        for (const t of types) {
-            if (SCOPE_TYPES.pro.has(t)) scopes.add('pro');
-            if (SCOPE_TYPES.perso.has(t)) scopes.add('perso');
-        }
-
-        if (scopes.size === 0) scopes.add('perso');
-        return scopes;
-    }
-
-    function ensureCardScopes() {
-        getCards().each(function () {
-            const types = getTypes(this);
-            const scopes = computeScopesFromTypes(types);
-            // Stockage CSV pour simplicité: "pro" / "perso" / "pro,perso"
-            this.dataset.scopes = [...scopes].join(',');
-        });
-    }
-
-    function cardHasScope(cardEl, scope) {
-        const scopes = String(cardEl.dataset.scopes || '');
-        return scopes.split(',').map(s => s.trim()).includes(scope);
-    }
-
-    function buildTypesByScope() {
-        const acc = { pro: new Set(), perso: new Set() };
-
-        getCards().each(function () {
-            const types = getTypes(this);
-
-            if (cardHasScope(this, 'pro')) types.forEach(t => acc.pro.add(t));
-            if (cardHasScope(this, 'perso')) types.forEach(t => acc.perso.add(t));
-        });
-
-        return { pro: [...acc.pro], perso: [...acc.perso] };
-    }
-
-    // --- Etat ---
-    // Par défaut : PRO (toggle à gauche = unchecked)
-    let activeScope = 'pro';
-    let activeFilters = new Set(); // multi-select
-
-    // --- URL restore (optionnel) ---
-    const params = new URLSearchParams(location.search);
-    if (params.has('scope')) {
-        const s = params.get('scope');
-        if (s === 'pro' || s === 'perso') activeScope = s;
-    }
-    if (params.has('filters')) {
-        params
-            .get('filters')
-            .split(',')
-            .map(s => s.trim())
-            .filter(Boolean)
-            .forEach(f => activeFilters.add(f));
-    }
-
-    // --- Init cards scopes + types list ---
-    ensureCardScopes();
-    let allTypesByScope = buildTypesByScope();
-
-    function getCardsInScope() {
-        return getCards().filter(function () {
-            return cardHasScope(this, activeScope);
-        });
-    }
-
-    function pruneFiltersForScope() {
-        const allowed = new Set(allTypesByScope[activeScope] || []);
-        activeFilters = new Set([...activeFilters].filter(f => allowed.has(f)));
-    }
-    pruneFiltersForScope();
-
-    /**
-     * UI/ARIA du switch :
-     * - unchecked => PRO (gauche)
-     * - checked   => PERSO (droite)
-     */
-    function updateScopeToggleUI() {
-        const isPerso = activeScope === 'perso';
-
-        if ($scopeToggle.length) {
-            $scopeToggle.prop('checked', isPerso);
-            $scopeToggle.attr('aria-checked', String(isPerso));
-        }
-    }
-
-    function buildFiltersUI() {
-        $filters.empty();
-
-        $filters.append(
-            `<div class="filter-btn" data-filter="all">Tous <span class="filter-count"></span></div>`
-        );
-
-        (allTypesByScope[activeScope] || []).forEach(type => {
-            $filters.append(
-                `<div class="filter-btn" data-filter="${type}">${type} <span class="filter-count"></span></div>`
-            );
-        });
-    }
-
-    function updateUI() {
-        const $all = $filters.find('[data-filter="all"]');
-        const $cardsInScope = getCardsInScope();
-
-        $all
-            .toggleClass('active', activeFilters.size === 0)
-            .find('.filter-count')
-            .text($cardsInScope.length);
-
-        $filters.find('.filter-btn').not($all).each(function () {
-            const type = $(this).data('filter');
-            let count = 0;
-
-            $cardsInScope.each(function () {
-                const test = new Set(activeFilters);
-                test.add(type);
-
-                const types = getTypes(this);
-                if ([...test].every(f => types.includes(f))) count++;
-            });
-
-            $(this)
-                .toggleClass('active', activeFilters.has(type))
-                .toggleClass('disabled', count === 0)
-                .attr('data-disabled', count === 0)
-                .find('.filter-count')
-                .text(count);
-        });
-    }
-
-    function syncURL() {
-        const p = new URLSearchParams();
-        p.set('scope', activeScope);
-        if (activeFilters.size) p.set('filters', [...activeFilters].join(','));
-        history.replaceState(null, '', '?' + p.toString());
-    }
-
-    function applyFilters() {
-        getCards().each(function () {
-            // 1) Scope d'abord : la carte doit appartenir au scope actif (pro/perso)
-            if (!cardHasScope(this, activeScope)) {
-                $(this).hide().removeClass('is-hiding');
-                return;
-            }
-
-            // 2) Puis filtres (multi-select en AND)
-            const cardTypes = getTypes(this);
-            const match = [...activeFilters].every(f => cardTypes.includes(f));
-
-            if (match) {
-                $(this).show().removeClass('is-hiding');
-            } else {
-                $(this).addClass('is-hiding');
-                setTimeout(() => $(this).hide(), 200);
-            }
-        });
-
-        updateUI();
-        syncURL();
-        applyFilterColorsFromCSS();
-    }
-
-    // ---- Events filtres ----
-    $filters.on('click', '.filter-btn', function () {
-        if ($(this).data('disabled')) return;
-
-        const filter = $(this).data('filter');
-
-        if (filter === 'all') {
-            activeFilters.clear();
-        } else {
-            activeFilters.has(filter) ? activeFilters.delete(filter) : activeFilters.add(filter);
-        }
-
-        applyFilters();
+    getCards().forEach((card) => {
+      const types = getTypes(card);
+      if (cardHasScope(card, "pro")) types.forEach((t) => acc.pro.add(t));
+      if (cardHasScope(card, "perso")) types.forEach((t) => acc.perso.add(t));
     });
 
-    // ---- Event toggle ----
-    if ($scopeToggle.length) {
-        $scopeToggle.on('change', function () {
-            // Aligné avec le visuel : checked => PERSO, unchecked => PRO
-            activeScope = this.checked ? 'perso' : 'pro';
+    return { pro: [...acc.pro], perso: [...acc.perso] };
+  }
 
-            allTypesByScope = buildTypesByScope();
-            pruneFiltersForScope();
+  // Etat
+  let activeScope = "pro"; // par défaut : PRO
+  let activeFilters = new Set(); // multi-select AND
 
-            buildFiltersUI();
-            updateScopeToggleUI();
-            applyFilters();
-        });
+  // Restore depuis URL (optionnel)
+  const params = new URLSearchParams(location.search);
+  if (params.has("scope")) {
+    const s = params.get("scope");
+    if (s === "pro" || s === "perso") activeScope = s;
+  }
+  if (params.has("filters")) {
+    params
+      .get("filters")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .forEach((f) => activeFilters.add(f));
+  }
+
+  // Init scopes
+  ensureCardScopes();
+  let allTypesByScope = buildTypesByScope();
+
+  function getCardsInScope() {
+    return getCards().filter((card) => cardHasScope(card, activeScope));
+  }
+
+  function pruneFiltersForScope() {
+    const allowed = new Set(allTypesByScope[activeScope] || []);
+    activeFilters = new Set([...activeFilters].filter((f) => allowed.has(f)));
+  }
+  pruneFiltersForScope();
+
+  function updateScopeToggleUI() {
+    if (!scopeToggle) return;
+    const isPerso = activeScope === "perso";
+    scopeToggle.checked = isPerso;
+    scopeToggle.setAttribute("aria-checked", String(isPerso));
+  }
+
+  function buildFiltersUI() {
+    filters.innerHTML = "";
+
+    // Bouton Tous
+    const allBtn = document.createElement("div");
+    allBtn.className = "filter-btn";
+    allBtn.dataset.filter = "all";
+    allBtn.innerHTML = `Tous <span class="filter-count"></span>`;
+    filters.appendChild(allBtn);
+
+    // Types de scope
+    (allTypesByScope[activeScope] || []).forEach((type) => {
+      const btn = document.createElement("div");
+      btn.className = "filter-btn";
+      btn.dataset.filter = type;
+      btn.innerHTML = `${type} <span class="filter-count"></span>`;
+      filters.appendChild(btn);
+    });
+  }
+
+  function syncURL() {
+    const p = new URLSearchParams();
+    p.set("scope", activeScope);
+    if (activeFilters.size) p.set("filters", [...activeFilters].join(","));
+    history.replaceState(null, "", "?" + p.toString());
+  }
+
+  function updateUI() {
+    const allBtn = qs('[data-filter="all"]', filters);
+    const cardsInScope = getCardsInScope();
+
+    if (allBtn) {
+      allBtn.classList.toggle("active", activeFilters.size === 0);
+      const countEl = qs(".filter-count", allBtn);
+      if (countEl) countEl.textContent = String(cardsInScope.length);
     }
 
-    // ---- Drag-scroll filtres mobile (inchangé) ----
-    (function enableFiltersDragScroll() {
-        const el = $filters[0];
-        if (!el) return;
+    // Pour chaque type, calcule le count si on ajoute ce filtre
+    qsa(".filter-btn", filters)
+      .filter((b) => b.dataset.filter !== "all")
+      .forEach((btn) => {
+        const type = btn.dataset.filter;
+        let count = 0;
 
-        let isDown = false;
-        let dragActive = false;
-        let pointerId = null;
+        cardsInScope.forEach((card) => {
+          const test = new Set(activeFilters);
+          test.add(type);
 
-        let startX = 0;
-        let startScrollLeft = 0;
-        let pressTimer = null;
-
-        const DRAG_LONG_PRESS = 160;
-
-        function isCoarsePointer(e) {
-            return e.pointerType === 'touch' || e.pointerType === 'pen';
-        }
-
-        function getClientX(e) {
-            const oe = e.originalEvent || e;
-            const t = oe.touches && oe.touches[0];
-            return e.clientX ?? t?.clientX ?? 0;
-        }
-
-        function end() {
-            clearTimeout(pressTimer);
-            isDown = false;
-            dragActive = false;
-            pointerId = null;
-            el.classList.remove('is-dragging');
-        }
-
-        $filters.on('pointerdown.filtersDrag', function (e) {
-            if (!isCoarsePointer(e)) return;
-
-            isDown = true;
-            dragActive = false;
-            pointerId = e.pointerId;
-
-            startX = getClientX(e);
-            startScrollLeft = el.scrollLeft;
-
-            try { el.setPointerCapture(pointerId); } catch (_) { }
-
-            clearTimeout(pressTimer);
-            pressTimer = setTimeout(() => {
-                if (!isDown) return;
-                dragActive = true;
-                el.classList.add('is-dragging');
-            }, DRAG_LONG_PRESS);
+          const types = getTypes(card);
+          const ok = [...test].every((f) => types.includes(f));
+          if (ok) count++;
         });
 
-        $(document).on('pointermove.filtersDrag', function (e) {
-            if (!isDown) return;
-            if (!isCoarsePointer(e)) return;
-            if (pointerId !== null && e.pointerId !== pointerId) return;
+        btn.classList.toggle("active", activeFilters.has(type));
 
-            if (dragActive) {
-                e.preventDefault();
-                const x = getClientX(e);
-                const dx = x - startX;
-                el.scrollLeft = startScrollLeft - dx;
-            }
-        });
+        // Disabled si aucune carte possible avec ce filtre en plus
+        const disabled = count === 0;
+        btn.classList.toggle("disabled", disabled);
+        btn.dataset.disabled = disabled ? "true" : "false";
 
-        $(document).on('pointerup.filtersDrag pointercancel.filtersDrag', function (e) {
-            if (!isDown) return;
-            if (pointerId !== null && e.pointerId !== pointerId) return;
-            end();
-        });
+        const countEl = qs(".filter-count", btn);
+        if (countEl) countEl.textContent = String(count);
+      });
+  }
 
-        $filters.on('click.filtersDrag', '.filter-btn', function (e) {
-            if (el.classList.contains('is-dragging')) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-            }
-        });
-    })();
+  function applyFilters() {
+    // Cache/affiche cartes
+    getCards().forEach((card) => {
+      // 1) Scope
+      if (!cardHasScope(card, activeScope)) {
+        card.style.display = "none";
+        card.classList.remove("is-hiding");
+        return;
+      }
 
-    // ---- Initial render ----
-    buildFiltersUI();
-    updateScopeToggleUI();
+      // 2) Filtres AND
+      const cardTypes = getTypes(card);
+      const match = [...activeFilters].every((f) => cardTypes.includes(f));
+
+      if (match) {
+        card.style.display = "";
+        card.classList.remove("is-hiding");
+      } else {
+        card.classList.add("is-hiding");
+        // laisse le temps à l’anim d’opacité (cf CSS)
+        window.setTimeout(() => {
+          card.style.display = "none";
+        }, 200);
+      }
+    });
+
+    updateUI();
+    syncURL();
+    applyFilterColorsFromCSS(filters);
+  }
+
+  // Click filtres (delegation)
+  on(filters, "click", (e) => {
+    const btn = e.target.closest(".filter-btn");
+    if (!btn) return;
+
+    if (btn.dataset.disabled === "true") return;
+
+    const filter = btn.dataset.filter;
+    if (filter === "all") {
+      activeFilters.clear();
+    } else {
+      activeFilters.has(filter) ? activeFilters.delete(filter) : activeFilters.add(filter);
+    }
+
     applyFilters();
+  });
+
+  // Toggle scope (checked => perso, unchecked => pro)
+  if (scopeToggle) {
+    on(scopeToggle, "change", () => {
+      activeScope = scopeToggle.checked ? "perso" : "pro";
+
+      allTypesByScope = buildTypesByScope();
+      pruneFiltersForScope();
+
+      buildFiltersUI();
+      updateScopeToggleUI();
+      applyFilters();
+    });
+  }
+
+  /* ---- Drag-scroll filtres mobile (long-press) ---- */
+  (function enableFiltersDragScroll() {
+    let isDown = false;
+    let dragActive = false;
+    let pointerId = null;
+
+    let startX = 0;
+    let startScrollLeft = 0;
+    let pressTimer = null;
+
+    const DRAG_LONG_PRESS = 160;
+
+    function end() {
+      clearTimeout(pressTimer);
+      isDown = false;
+      dragActive = false;
+      pointerId = null;
+      filters.classList.remove("is-dragging");
+    }
+
+    on(filters, "pointerdown", (e) => {
+      if (!isCoarsePointer(e)) return;
+
+      isDown = true;
+      dragActive = false;
+      pointerId = e.pointerId ?? null;
+
+      startX = getPointerPoint(e).x;
+      startScrollLeft = filters.scrollLeft;
+
+      try {
+        filters.setPointerCapture(pointerId);
+      } catch (_) {}
+
+      clearTimeout(pressTimer);
+      pressTimer = setTimeout(() => {
+        if (!isDown) return;
+        dragActive = true;
+        filters.classList.add("is-dragging");
+      }, DRAG_LONG_PRESS);
+    }, { passive: true });
+
+    on(document, "pointermove", (e) => {
+      if (!isDown) return;
+      if (!isCoarsePointer(e)) return;
+      if (pointerId !== null && e.pointerId !== pointerId) return;
+
+      if (dragActive) {
+        e.preventDefault();
+        const x = getPointerPoint(e).x;
+        const dx = x - startX;
+        filters.scrollLeft = startScrollLeft - dx;
+      }
+    }, { passive: false });
+
+    on(document, "pointerup", (e) => {
+      if (!isDown) return;
+      if (pointerId !== null && e.pointerId !== pointerId) return;
+      end();
+    }, { passive: true });
+
+    on(document, "pointercancel", (e) => {
+      if (!isDown) return;
+      if (pointerId !== null && e.pointerId !== pointerId) return;
+      end();
+    }, { passive: true });
+
+    // Si on est en drag, on bloque le click des boutons
+    on(filters, "click", (e) => {
+      if (filters.classList.contains("is-dragging")) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    }, true);
+  })();
+
+  // Render initial
+  buildFiltersUI();
+  updateScopeToggleUI();
+  applyFilters();
 }
 
 /* =====================================================
@@ -680,13 +772,13 @@ function initFiltersWithScopeSwitch() {
    ===================================================== */
 
 function initLoader() {
-    const $loader = $('.loader');
-    if (!$loader.length) return;
+  const loader = qs(".loader");
+  if (!loader) return;
 
-    requestAnimationFrame(() => {
-        $loader.addClass('hidden');
-        setTimeout(() => $loader.remove(), 500);
-    });
+  requestAnimationFrame(() => {
+    loader.classList.add("hidden");
+    window.setTimeout(() => loader.remove(), 500);
+  });
 }
 
 /* =====================================================
@@ -694,39 +786,42 @@ function initLoader() {
    ===================================================== */
 
 function initLazyBackgrounds() {
-    const cards = document.querySelectorAll('.card');
-    if (!cards.length) return;
+  const cards = qsa(".card");
+  if (!cards.length) return;
 
-    function loadCardImage(card) {
-        const src = card.dataset.bg;
-        if (!src) return;
+  function loadCardImage(card) {
+    const src = card.dataset.bg;
+    if (!src) return;
 
-        const img = new Image();
-        img.onload = () => {
-            card.style.backgroundImage = `url("${src}")`;
-            card.classList.remove('loading');
-            card.classList.add('loaded');
-        };
-        img.src = src;
-    }
+    const img = new Image();
+    img.onload = () => {
+      card.style.backgroundImage = `url("${src}")`;
+      card.classList.remove("loading");
+      card.classList.add("loaded");
+    };
+    img.src = src;
+  }
 
-    if (!('IntersectionObserver' in window)) {
-        cards.forEach(loadCardImage);
-        return;
-    }
+  if (!("IntersectionObserver" in window)) {
+    cards.forEach(loadCardImage);
+    return;
+  }
 
-    const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            loadCardImage(entry.target);
-            obs.unobserve(entry.target);
-        });
-    }, { rootMargin: '200px', threshold: 0.1 });
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        loadCardImage(entry.target);
+        obs.unobserve(entry.target);
+      });
+    },
+    { rootMargin: "200px", threshold: 0.1 }
+  );
 
-    cards.forEach(card => {
-        card.classList.add('loading');
-        observer.observe(card);
-    });
+  cards.forEach((card) => {
+    card.classList.add("loading");
+    observer.observe(card);
+  });
 }
 
 /* =====================================================
@@ -734,24 +829,27 @@ function initLazyBackgrounds() {
    ===================================================== */
 
 function initIntroOverlay() {
-    const $intro = $('.intro-overlay');
-    if (!$intro.length) return;
+  const intro = qs(".intro-overlay");
+  if (!intro) return;
 
-    const alreadySeen = sessionStorage.getItem('introSeen');
-    if (alreadySeen) {
-        $intro.remove();
-        return;
-    }
+  const alreadySeen = sessionStorage.getItem("introSeen");
+  if (alreadySeen) {
+    intro.remove();
+    return;
+  }
 
-    $('body').addClass('modal-open');
+  document.body.classList.add("modal-open");
 
-    $intro.find('.intro-btn').on('click', function () {
-        $intro.addClass('hidden');
-        $('body').removeClass('modal-open');
+  const btn = qs(".intro-btn", intro);
+  if (!btn) return;
 
-        sessionStorage.setItem('introSeen', 'true');
-        setTimeout(() => $intro.remove(), 700);
-    });
+  on(btn, "click", () => {
+    intro.classList.add("hidden");
+    document.body.classList.remove("modal-open");
+
+    sessionStorage.setItem("introSeen", "true");
+    window.setTimeout(() => intro.remove(), 700);
+  });
 }
 
 /* =====================================================
@@ -759,58 +857,112 @@ function initIntroOverlay() {
    ===================================================== */
 
 function initCustomCursor() {
-    const dot = document.querySelector('.cursor-dot');
-    const outline = document.querySelector('.cursor-outline');
+  const dot = qs(".cursor-dot");
+  const outline = qs(".cursor-outline");
 
-    if (!dot || !outline) return;
-    if (!SUPPORTS_HOVER) return;
+  if (!dot || !outline) return;
+  if (!SUPPORTS_HOVER) return;
 
-    let x = window.innerWidth / 2;
-    let y = window.innerHeight / 2;
-    let ox = x;
-    let oy = y;
+  let x = window.innerWidth / 2;
+  let y = window.innerHeight / 2;
+  let ox = x;
+  let oy = y;
 
-    document.addEventListener('mousemove', e => {
-        x = e.clientX;
-        y = e.clientY;
+  on(document, "mousemove", (e) => {
+    x = e.clientX;
+    y = e.clientY;
 
-        dot.style.left = x + 'px';
-        dot.style.top = y + 'px';
-        dot.style.opacity = '1';
+    dot.style.left = x + "px";
+    dot.style.top = y + "px";
+    dot.style.opacity = "1";
 
-        outline.style.opacity = '1';
-    });
+    outline.style.opacity = "1";
+  });
 
-    function loop() {
-        ox += (x - ox) * 0.15;
-        oy += (y - oy) * 0.15;
+  (function loop() {
+    ox += (x - ox) * 0.15;
+    oy += (y - oy) * 0.15;
 
-        outline.style.left = ox + 'px';
-        outline.style.top = oy + 'px';
+    outline.style.left = ox + "px";
+    outline.style.top = oy + "px";
 
-        requestAnimationFrame(loop);
-    }
-
-    loop();
+    requestAnimationFrame(loop);
+  })();
 }
 
 /* =====================================================
-   BOOTSTRAP
+   BOOTSTRAP — appelé APRÈS création des cartes (fetch)
    ===================================================== */
 
-$(document).ready(function () {
-    initGrid3D();
-    initModalClone();
-    initHeaderAutoHide();
+window.bootstrapAfterCards = function bootstrapAfterCards() {
+  if (cardsBootstrapped) return;
+  cardsBootstrapped = true;
 
-    // Filtres + Toggle Pro/Perso
-    initFiltersWithScopeSwitch();
+  // Dépend des .card présentes
+  initFiltersWithScopeSwitch();
+  initLazyBackgrounds();
+};
 
-    // UI
-    initLoader();
-    initLazyBackgrounds();
-    initIntroOverlay();
+/* =====================================================
+   CV MODAL
+   ===================================================== */
 
-    // Curseur custom
-    initCustomCursor();
+function initCVModal() {
+  const openBtn = qs("#cv-open");
+  const modal = qs("#cv-modal");
+  const overlay = qs("#cv-overlay");
+  const closeBtn = qs("#cv-close");
+
+  if (!openBtn || !modal || !overlay || !closeBtn) return;
+
+  const openCV = (e) => {
+    if (e) e.preventDefault();
+    overlay.classList.add("active");
+    modal.classList.add("active");
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+  };
+
+  const closeCV = () => {
+    modal.classList.remove("active");
+    overlay.classList.remove("active");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+  };
+
+  on(openBtn, "click", openCV);
+  on(closeBtn, "click", closeCV);
+  on(overlay, "click", closeCV);
+
+  on(document, "keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("active")) {
+      closeCV();
+    }
+  });
+}
+
+/* =====================================================
+   INIT GLOBAL — DOM READY
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Modules indépendants des cartes (OK au DOMContentLoaded)
+  initGrid3D();
+  initModalClone();
+  initHeaderAutoHide();
+
+  // UI
+  initLoader();
+  initIntroOverlay();
+
+  // Curseur custom (si présent)
+  initCustomCursor();
+
+  // CV modal
+  initCVModal();
+
+  // NOTE:
+  // initFiltersWithScopeSwitch() et initLazyBackgrounds()
+  // sont déclenchés via window.bootstrapAfterCards(),
+  // appelé à la fin de ton fetch cards.json (dans index.html).
 });
