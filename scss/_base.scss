@@ -1,0 +1,59 @@
+/* =========================
+   BASE : reset + variables
+   ========================= */
+
+:root {
+    --bg-overlay: rgba(0, 0, 0, 0.8);
+    --text: #fff;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --shadow-card: 0px 0px 3px rgba(0, 0, 0, 0.051), 0px 0px 7.2px rgba(0, 0, 0, 0.073), 0px 0px 13.6px rgba(0, 0, 0, 0.09), 0px 0px 24.3px rgba(0, 0, 0, 0.107), 0px 0px 45.5px rgba(0, 0, 0, 0.129), 0px 0px 109px rgba(0, 0, 0, 0.18);
+    --ease-out: cubic-bezier(.2,.8,.2,1);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text);
+    height: 100%;
+    /* robustes mobile vs 100vh */
+    min-height: 100vh;
+    min-height: 100svh;
+    background-image: url("../assets/images/ui/background.jpg");
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+}
+
+    /* Empêche le scroll quand modales actives (déjà utilisé dans ton code) */
+    body.modal-open {
+        overflow: hidden;
+    }
+
+.page-content {
+  flex: 1 0 auto; /* prend l’espace restant */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Accessibilité : reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

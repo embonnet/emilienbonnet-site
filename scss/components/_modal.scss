@@ -1,0 +1,212 @@
+/* =========================
+   COMPONENT : INTRO OVERLAY + CV MODAL + HEADER ICONS
+   ========================= */
+
+/* ===== INTRO OVERLAY ===== */
+
+.intro-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(6px);
+    z-index: 6000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+    .intro-overlay.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+.intro-content {
+    max-width: 420px;
+    padding: 32px 28px;
+    text-align: center;
+    color: white;
+    animation: introFadeUp 0.6s ease;
+}
+
+@keyframes introFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.intro-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.intro-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    opacity: 0.9;
+    margin-bottom: 28px;
+}
+
+.intro-btn {
+    padding: 10px 26px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: white;
+    color: black;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+    .intro-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+/* ===== HEADER ICONS ===== */
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    transition: background 0.25s ease, transform 0.25s ease;
+    text-decoration: none;
+}
+
+    .header-icon .material-icons {
+        font-size: 20px;
+        color: white;
+    }
+
+    .header-icon:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: scale(1.1);
+    }
+
+.social-icon {
+    width: 25px;
+    height: 25px;
+    filter: invert(1); /* si ton header est sombre */
+}
+
+/* =========================
+   CV MODAL
+   ========================= */
+
+.cv-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 9000;
+}
+
+    .cv-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+.cv-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.98);
+    width: min(1200px, 96vw);
+    height: min(92vh, 980px);
+    background: rgba(20, 20, 20, 0.92);
+    backdrop-filter: blur(8px);
+    border-radius: var(--radius-md);
+    box-shadow: 0 40px 120px rgba(0,0,0,0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 9001;
+    overflow: hidden;
+}
+
+    .cv-modal.active {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+@media (max-width: 768px) {
+    .cv-modal {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        box-sizing: border-box;
+    }
+
+    .cv-frame-wrap {
+        inset: 0;
+    }
+
+    .cv-frame {
+        width: 100%;
+    }
+}
+
+.cv-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 2;
+}
+
+    .cv-close:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: scale(1.05);
+    }
+
+    .cv-close .material-icons {
+        color: white;
+        font-size: 22px;
+    }
+
+.cv-frame-wrap {
+    position: absolute;
+    inset: 0;
+    padding-top: 0;
+}
+
+.cv-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #111;
+}

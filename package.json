@@ -1,0 +1,17 @@
+{
+  "name": "v---prod",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:css": "sass --watch scss/main.scss:css/main.css",
+    "build:css": "sass scss/main.scss css/main.min.css --style=compressed"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "sass": "^1.97.2"
+  }
+}
