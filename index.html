@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio personnel d’Emilien Bonnet. Projets, expériences professionnelles, passions et références, présentés sous forme de cartes interactives." />
     <title>Emilien Bonnet</title>
 
     <!-- Google Fonts / Material Icons -->
@@ -90,14 +91,14 @@
 
         <div class="overlay"></div>
 
-        <div class="wrapper">
+        <div class="wrapper" id="main-content" role="main">
             <!-- Les cartes seront generees ici via JavaScript -->
         </div>
     </div>
 
     <!--<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>-->
     <script>
-        const wrapper = document.querySelector('.wrapper');
+        const wrapper = document.querySelector('#main-content');
 
         // melange aléatoire à chaque chargement (identique à ton code)
         function shuffleArray(array) {
