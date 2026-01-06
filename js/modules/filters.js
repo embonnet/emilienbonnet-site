@@ -12,14 +12,8 @@ function applyFilterColorsFromCSS(filtersRoot) {
 
   btns.forEach((btn) => {
     const type = btn.dataset.filter;
-
-    if (type === "all") {
-      btn.style.setProperty("--filter-color", "#fff");
-      btn.style.color = "#000";
-      return;
-    }
-
     const temp = document.createElement("div");
+    
     temp.className = type;
     temp.style.visibility = "hidden";
     document.body.appendChild(temp);
