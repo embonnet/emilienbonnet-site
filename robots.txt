@@ -1,0 +1,14 @@
+User-agent: *
+Disallow:
+
+# Pages légales (crawl autorisé, indexation bloquée via meta noindex)
+Allow: /legal/
+
+# Ressources nécessaires au rendu
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+Allow: /data/
+
+# Sitemap
+Sitemap: https://www.emilienbonnet.fr/sitemap.xml
