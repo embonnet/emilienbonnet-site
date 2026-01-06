@@ -1,0 +1,80 @@
+/* =========================
+   COMPONENT — FILTERS
+   ========================= */
+
+.filters {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    background-color: transparent;
+    border: 2px solid var(--filter-color, #666);
+    /* Important: ne pas écraser var(--filter-color) */
+    color: var(--filter-color, #666);
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+}
+
+    .filter-btn:hover {
+        filter: brightness(1.1);
+    }
+
+    .filter-btn.active {
+        background-color: var(--filter-color);
+        border-color: var(--filter-color);
+        transform: scale(1.08);
+    }
+
+    .filter-btn.disabled,
+    .filter-btn[data-disabled="true"] {
+        opacity: 0.25;
+        pointer-events: none;
+        filter: grayscale(1);
+        border-color: #888;
+        color: #888;
+    }
+
+    .filter-btn:hover:not(.active):not(.disabled) {
+        transform: scale(1.05);
+    }
+
+.filter-count {
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+
+/* =================================
+   FILTRES SCROLLABLES — MOBILE
+   ================================= */
+
+@media (max-width: 768px) {
+    .filters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 10px;
+        padding-bottom: 6px;
+        margin-left: -25px;
+        margin-right: -25px;
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+        .filters::-webkit-scrollbar {
+            display: none;
+        }
+
+    .filter-btn {
+        flex: 0 0 auto;
+    }
+}

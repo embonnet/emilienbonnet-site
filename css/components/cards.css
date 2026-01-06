@@ -1,0 +1,284 @@
+/* =========================
+   COMPONENT � CARDS (grid + clone + flip)
+   ========================= */
+
+.card {
+    backdrop-filter: blur(5px);
+    min-width: 18vh;
+    height: 25vh;
+    margin: 10px 0px;
+    background-color: #1a1a1a;
+    background-size: cover;
+    background-position: center;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    will-change: transform;
+    z-index: 1;
+    transition: transform 0.35s var(--ease-out), opacity 0.2s ease;
+    filter: grayscale(100%);
+    border-radius: 3%;
+}
+
+    .card:hover {
+        filter: grayscale(0%);
+        cursor: pointer;
+    }
+
+    .card.expanded {
+        width: 54vh;
+        height: 75vh;
+        max-width: 92vw;
+        max-height: 85vh;
+        z-index: 20;
+        box-shadow: 0 40px 120px rgba(0,0,0,0.5);
+        filter: grayscale(0%);
+        cursor: grab;
+    }
+
+@media (max-width: 768px) {
+    .card {
+        min-width: calc((100vw - 12px * 2 - 10px * 2) / 3);
+        height: calc((100vw - 12px * 2 - 10px * 2) / 3 * 1.35);
+        margin: 0;
+        will-change: auto;
+    }
+
+        .card.expanded {
+            width: clamp(280px, 90vw, 420px);
+            height: clamp(420px, 75vh, 90vh);
+        }
+
+    .card-clone {
+        will-change: transform;
+    }
+}
+
+/* interactions touch */
+@media (pointer: coarse) {
+    .card-clone {
+        touch-action: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+}
+
+.card.is-hiding {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.card.loading {
+    filter: blur(8px);
+}
+
+.card.loaded {
+    transition: filter 0.4s ease;
+}
+
+.card.disabled {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+/* Clone modal */
+.card-clone {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform;
+    background-color: transparent !important;
+}
+
+    .card-clone:hover {
+        transform: none;
+    }
+
+@media (hover: hover) {
+    .card-clone {
+        pointer-events: auto;
+    }
+}
+
+/* Anti-flicker 3D (iOS/Android) */
+.card,
+.card-clone,
+.card-inner,
+.card-face {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* ===== CARD FLIP ===== */
+.card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(.4,.2,.2,1);
+    will-change: transform;
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    outline: 1px solid transparent;
+    border-radius: 3%;
+    will-change: transform;
+}
+
+.card-front {
+    transform: rotateY(0deg);
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 3%;
+}
+
+/* voile sombre pour le texte */
+.card-back-overlay {
+    width: 100%;
+    height: 100%;
+    background: rgba(10,10,10,0.85);
+    color: white;
+    padding: 28px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 3%;
+}
+
+.pop-in {
+    animation: popIn 0.35s var(--ease-out) forwards;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* glare */
+.glare-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.glare {
+    position: absolute;
+    left: 100%;
+    bottom: -50%;
+    width: 150%;
+    height: 150%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 20%);
+    transform: rotateZ(35deg);
+    pointer-events: none;
+    filter: blur(4px);
+}
+
+/* metadata */
+.container-metadata {
+    margin: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.metadata {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+/* Couleurs types (utilis�es aussi par JS pour les filtres) */
+.jv {
+    background-color: #761DF2;
+}
+
+.cinema {
+    background-color: #F2935C;
+}
+
+.logotype {
+    background-color: #EAF2AE;
+}
+
+.associatif {
+    background-color: #17ABDA;
+}
+
+.sport {
+    background-color: #1DF251;
+}
+
+.musique {
+    background-color: #F2D31D;
+}
+
+.anime {
+    background-color: #F44C97;
+}
+
+.conference {
+    background-color: #1FE0BE;
+}
+
+.capgemini {
+    background-color: #0070AD;
+}
+
+.voyage {
+    background-color: #4AB661;
+}
+
+/* Material icon color dans pastilles */
+.material-icons {
+    font-size: 22px;
+    color: black;
+}
+
+/* optionnel : description anim (si utilis�e) */
+.card-description {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.4s ease forwards;
+    animation-delay: 0.15s;
+    color: white;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

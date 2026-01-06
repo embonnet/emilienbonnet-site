@@ -1,0 +1,13 @@
+/* =========================
+   MAIN � point d�entr�e CSS
+   (en prod: id�alement bundl�/minifi�)
+   ========================= */
+
+@import url("./base.css");
+@import url("./layout.css");
+
+@import url("./components/loader.css");
+@import url("./components/filters.css");
+@import url("./components/toggle.css");
+@import url("./components/cards.css");
+@import url("./components/modal.css");
