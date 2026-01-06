@@ -80,6 +80,10 @@
     opacity: 0.4;
 }
 
+.card-clone.tilt-active {
+  cursor: grabbing;
+}
+
 /* Clone modal */
 .card-clone {
     position: fixed;
