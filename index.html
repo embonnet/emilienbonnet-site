@@ -20,7 +20,7 @@
     <!-- introduction -->
     <div class="intro-overlay">
         <div class="intro-content">
-            <img src="assets/images/profil.jpg" alt="Photo de profil" class="intro-avatar">
+            <img src="assets/icons/ebWhite.svg" alt="Emilien Bonnet" class="intro-avatar">
 
             <p class="intro-text">
                 Bienvenue sur mon espace personnel.<br>
@@ -42,25 +42,28 @@
 
     <div class="page-content">
         <header class="main-header">
-            <div class="logo-header"><img src="assets/images/profil.jpg" alt="Photo de profil" class="header-avatar"></div>
+            <div class="logo-header"><img src="assets/icons/ebWhite.svg" alt="Emilien Bonnet"></div>
             <div class="content-infos-header">
                 <div class="header-content">
-                    <div class="logo">
-                        <span class="title">Emilien Bonnet</span>
+
+                    <div class="content-logo-toggle">
+                        <div class="logo">
+                            <span class="title">Emilien Bonnet</span>
+                        </div>
+
+                        <!-- switch pro/perso -->
+                        <label class="scope-toggle">
+                            <input id="scopeToggle"
+                                type="checkbox"
+                                role="switch"
+                                aria-label="Basculer entre les catégories Perso et Pro"
+                                aria-checked="false" />
+                            <span class="slider round"></span>
+
+                            <span class="select-left">Pro</span>
+                            <span class="select-right">Perso</span>
+                        </label>
                     </div>
-
-                    <!-- switch pro/perso -->
-                    <label class="scope-toggle">
-                        <input id="scopeToggle"
-                            type="checkbox"
-                            role="switch"
-                            aria-label="Basculer entre les catégories Perso et Pro"
-                            aria-checked="false" />
-                        <span class="slider round"></span>
-
-                        <span class="select-left">Pro</span>
-                        <span class="select-right">Perso</span>
-                    </label>
 
                     <div class="header-icons">
                         <!-- LinkedIn -->
@@ -134,13 +137,29 @@
                     // stocker les types pour le filtrage
                     card.dataset.types = meta.map(m => m.type).join(',');
 
+                    // stocker le type principal (catégorie n°1)
+                    card.dataset.primaryType = data.type;
+
                     // stocker le texte contextuel
                     if (data.text) {
                         card.dataset.text = data.text;
                     }
 
-                    // lazy load (conservé)
-                    card.dataset.bg = data.bg;
+                    // lazy load : par défaut => SM
+                    // Convention : data.bg = "assets/images/cards/xxx.webp"
+                    // => SM : "assets/images/cards/sm/xxx.webp"
+                    // => MD : "assets/images/cards/md/xxx.webp"
+                    const baseBg = data.bg || "";
+                    const bgSm = baseBg.includes("/cards/") ? baseBg.replace("/cards/", "/cards/sm/") : baseBg;
+                    const bgMd = baseBg.includes("/cards/") ? baseBg.replace("/cards/", "/cards/md/") : baseBg;
+
+                    card.dataset.bg = bgSm;     // utilisé par initLazyBackgrounds() (grille)
+                    card.dataset.bgMd = bgMd;   // utilisé uniquement dans la modale
+
+                    // stocker les infos du dos (si présentes)
+                    if (data.back) {
+                        card.dataset.back = encodeURIComponent(JSON.stringify(data.back));
+                    }
 
                     // generer les pastilles correctement
                     card.innerHTML = `
