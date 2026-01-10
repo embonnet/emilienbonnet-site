@@ -1,442 +1,625 @@
 [
   {
-    "type": "associatif",
-    "icon": "groups",
-    "type2": "logotype",
-    "icon2": "draw",
-    "bg": "assets/images/cards/kuwabara.webp"
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/michelin.webp",
+    "back": {
+      "company": {
+        "name": "Michelin",
+        "logo": "assets/images/companies/Michelin.svg"
+      },
+      "mission": {
+        "title": "Hackathon Power Platform",
+        "dates": "Déc. 2024"
+      },
+      "context": "Hackathon PowerPlatform dans les locaux de Michelin. Atelier d’idéation et accompagnement des équipes.",
+      "tech": [
+        { "name": "Power Apps", "logo": "assets/images/tech/powerapps.svg" },
+        { "name": "Power Automate", "logo": "assets/images/tech/powerautomate.svg" }
+      ],
+      "cities": ["Clermont-Ferrand"]
+    }
   },
-  {
-    "type": "associatif",
-    "icon": "groups",
-    "type2": "logotype",
-    "icon2": "draw",
-    "bg": "assets/images/cards/marathon.webp"
-  },
-  {
-    "type": "associatif",
-    "icon": "groups",
-    "type2": "logotype",
-    "icon2": "draw",
-    "bg": "assets/images/cards/tennislogo.webp"
-  },
-  {
-    "type": "associatif",
-    "icon": "groups",
-    "type2": "logotype",
-    "icon2": "draw",
-    "bg": "assets/images/cards/ultimate.webp"
-  },
-  {
-    "type": "associatif",
-    "icon": "groups",
-    "type2": "logotype",
-    "icon2": "draw",
-    "bg": "assets/images/cards/lucky.webp"
-  },
-  {
-    "type": "associatif",
-    "icon": "groups",
-    "type2": "logotype",
-    "icon2": "draw",
-    "bg": "assets/images/cards/tt.webp"
-  },
-
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/dredge.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/cs2.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/lol.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/dragonage.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/darkestdongeon.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/dispatch.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/cuphead.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/balatro.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/artisantd.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "type2": "cinema",
-    "icon2": "movie",
-    "bg": "assets/images/cards/pokemon.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/forza.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/dontstarve.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/slay.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/tekken.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/hollow.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/dragonquest.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/lifeisstrange.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/cod.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/witcher.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/portal.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/oblivion.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/gta.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/ageof.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/baldur.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/hl2.webp"
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/sc2.webp"
-  },
-
-  {
-    "type": "voyage",
-    "icon": "explore",
-    "bg": "assets/images/cards/thailande.webp"
-  },
-  {
-    "type": "voyage",
-    "icon": "explore",
-    "bg": "assets/images/cards/japon.webp"
-  },
-  {
-    "type": "voyage",
-    "icon": "explore",
-    "bg": "assets/images/cards/portugal.webp"
-  },
-  {
-    "type": "voyage",
-    "icon": "explore",
-    "bg": "assets/images/cards/italie.webp"
-  },
-
   {
     "type": "capgemini",
     "icon": "work",
     "type2": "conference",
     "icon2": "mic",
-    "bg": "assets/images/cards/salonmaire.webp",
-    "text": "Novembre 2024,<br>Sessions de démonstrations de Copilot au stand 'Capgemini' lors du Salon des Maires 2024 Porte de Versailles."
+    "bg": "assets/images/cards/SalonDesMaires.webp",
+    "back": {
+      "company": {
+        "name": "Michelin",
+        "logo": "assets/icons/companies/Capgemini.svg"
+      },
+      "mission": {
+        "title": "Salon des Maires",
+        "dates": "Nov. 2024"
+      },
+      "context": "Sessions de démonstrations de Copilot au stand 'Capgemini' lors du Salon des Maires 2024 Porte de Versailles.",
+      "tech": [
+        { "name": "Copilot", "logo": "assets/icons/tech/copilot.svg" }
+      ],
+      "cities": ["Paris"]
+    }
   },
   {
     "type": "capgemini",
     "icon": "work",
-    "bg": "assets/images/cards/michelin.webp",
-    "text": "Décembre 2024,<br>Hackathon PowerPlatform dans les locaux de Michelin.<br>Atelier d'idéation et accompagnement des équipes."
-  },
-
-  {
-    "type": "sport",
-    "icon": "directions_run",
-    "bg": "assets/images/cards/tennis.webp"
-  },
-  {
-    "type": "sport",
-    "icon": "directions_run",
-    "bg": "assets/images/cards/tennistable.webp"
-  },
-  {
-    "type": "sport",
-    "icon": "directions_run",
-    "bg": "assets/images/cards/basket.webp"
-  },
-  {
-    "type": "sport",
-    "icon": "directions_run",
-    "bg": "assets/images/cards/foot.webp"
+    "bg": "assets/images/cards/Mars.webp",
+    "back": {
+      "company": {
+        "name": "Mars",
+        "logo": "assets/icons/companies/Mars.svg"
+      },
+      "mission": {
+        "title": "xxxxxxxxxxxxxx",
+        "dates": "xxxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "Power Apps", "logo": "" },
+        { "name": "Power Automate", "logo": "" }
+      ],
+      "cities": ["Nancy"]
+    }
   },
   {
-    "type": "sport",
-    "icon": "directions_run",
-    "bg": "assets/images/cards/padel.webp"
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/Safran.webp",
+    "back": {
+      "company": {
+        "name": "Safran",
+        "logo": "assets/icons/companies/Safran.svg"
+      },
+      "mission": {
+        "title": "xxxxxxxxxxxxxx",
+        "dates": "xxxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "SharePoint", "logo": "assets/icons/tech/SharePoint.svg" }
+      ],
+      "cities": ["Nancy"]
+    }
   },
   {
-    "type": "sport",
-    "icon": "directions_run",
-    "bg": "assets/images/cards/badminton.webp"
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/Saur.webp",
+    "back": {
+      "company": {
+        "name": "Saur",
+        "logo": "assets/icons/companies/Saur.svg"
+      },
+      "mission": {
+        "title": "Saur & Moi",
+        "dates": "Déc. 2019 - Fev. 2025"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "", "logo": "" }
+      ],
+      "cities": ["Nancy", "Maurepas"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/Seb.webp",
+    "back": {
+      "company": {
+        "name": "Seb",
+        "logo": "assets/icons/companies/Seb.svg"
+      },
+      "mission": {
+        "title": "xxxxxxxxxxxxxx",
+        "dates": "xxxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "", "logo": "" }
+      ],
+      "cities": ["Nancy"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/Total.webp",
+    "back": {
+      "company": {
+        "name": "Total",
+        "logo": "assets/icons/companies/Total.svg"
+      },
+      "mission": {
+        "title": "xxxxxxxxxxxxxx",
+        "dates": "xxxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "", "logo": "" }
+      ],
+      "cities": ["Nancy"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/Unibail.webp",
+    "back": {
+      "company": {
+        "name": "Unibail Rodamco",
+        "logo": "assets/icons/companies/Unibail.svg"
+      },
+      "mission": {
+        "title": "xxxxxxxxxxxxxx",
+        "dates": "xxxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "", "logo": "" }
+      ],
+      "cities": ["Nancy", "Paris"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/Unibail.webp",
+    "back": {
+      "company": {
+        "name": "Unibail Rodamco",
+        "logo": "assets/icons/companies/Unibail.svg"
+      },
+      "mission": {
+        "title": "xxxxxxxxxxxxxx",
+        "dates": "xxxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "", "logo": "" }
+      ],
+      "cities": ["Nancy", "Paris"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/CreditAgricole.webp",
+    "back": {
+      "company": {
+        "name": "Credit Agricole",
+        "logo": "assets/icons/companies/CreditAgricole.svg"
+      },
+      "mission": {
+        "title": "xxxxxxxxxxxxxx",
+        "dates": "xxxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "", "logo": "" }
+      ],
+      "cities": ["Nancy", "Paris"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/Edf.webp",
+    "back": {
+      "company": {
+        "name": "EDF",
+        "logo": "assets/icons/companies/Edf.svg"
+      },
+      "mission": {
+        "title": "xxxxxxxxxxxxxx",
+        "dates": "xxxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "", "logo": "" }
+      ],
+      "cities": ["Nancy"]
+    }
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/",
+    "back": {
+      "company": {
+        "name": "Association Kuwabara",
+        "logo": "assets/images/companies/.svg"
+      },
+      "mission": {
+        "title": "Charte graphique Kuwabara",
+        "dates": "2008 à 2016"
+      },
+      "context": "Fan de culture japonaise depuis ma tendre enfance, j'ai été bercé par des animes comme DragonBall Z ou Shaman king. A la fin de mon adolescence, j'ai intégré l'association Kuwabara où j'ai aidé à l'organisation d'événements ouverts au public ainsi que sur des conventions comme Anim'Est. Membre du CA de l'association plusieurs années, j'ai remodelé l'intégralité de leur charte graphique avec une nouvelle idéntité visuelle. Ce Logotype en est le symbole",
+      "tech": [
+        { "name": "Inscape", "logo": "assets/images/tech/inscape.svg" },
+        { "name": "Illustrator", "logo": "assets/images/tech/illustrator.svg" }
+      ],
+      "cities": ["Clermont-Ferrand"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/AgeOfMythology.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Age Of Mythology",
+        "dates": "2002"
+      },
+      "context": "RTS mythologique original et accessible.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+      ],
+      "cities": ["RTS"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/CounterStrike.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Counter-Strike 2",
+        "dates": "2023"
+      },
+      "context": "FPS compétitif tactique multijoueur, pilier de l’e-sport sur PC.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+      ],
+      "cities": ["FPS", "Multijoueur"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/LeagueOfLegends.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "League of Legends",
+        "dates": "2009"
+      },
+      "context": "MOBA stratégique en équipe devenu une référence mondiale.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+      ],
+      "cities": ["MOBA", "Stratégie"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/ApexLegends.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Apex",
+        "dates": "2019"
+      },
+      "context": "Battle royale nerveux et tactique par équipes.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
+        { "name": "Xbox", "logo": "assets/icons/tech/Xbox.svg" }
+      ],
+      "cities": ["Battle Royale", "FPS"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/Dredge.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Dredge",
+        "dates": "2023"
+      },
+      "context": "Aventure de pêche sombre mêlant exploration et horreur lovecraftienne.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
+        { "name": "PS5", "logo": "assets/icons/tech/PS5.svg" },
+        { "name": "Xbox", "logo": "assets/icons/tech/Xbox.svg" },
+        { "name": "Switch", "logo": "assets/icons/tech/Switch.svg" }
+      ],
+      "cities": ["Aventure", "Simulation", "Horreur"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/DragonQuest.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Dragon Quest VIII",
+        "dates": "2005"
+      },
+      "context": "RPG japonais classique à l’univers riche et narratif.",
+      "tech": [
+        { "name": "PS2", "logo": "assets/icons/tech/PS2.svg" }
+      ],
+      "cities": ["RPG", "Aventure"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/DropDuchy.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Drop Duchy",
+        "dates": "2018"
+      },
+      "context": "Jeu stratégique de deck-building apprécié pour son gameplay original.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+      ],
+      "cities": ["Stratégie", "Deck-builder"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/FinalFantasyXII.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Final Fantasy XII",
+        "dates": "2006"
+      },
+      "context": "RPG emblématique avec un système de combat au tour par tour et une histoire marquante.",
+      "tech": [
+        { "name": "PS2", "logo": "assets/icons/tech/PS2.svg" }
+      ],
+      "cities": ["RPG"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/DarkSouls.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Dark Souls",
+        "dates": "2011"
+      },
+      "context": "Action-RPG exigeant, célèbre pour sa difficulté et son univers sombre.",
+      "tech": [
+        { "name": "PS3", "logo": "assets/icons/tech/PS3.svg" },
+        { "name": "Xbox 360", "logo": "assets/icons/tech/Xbox360.svg" },
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+      ],
+      "cities": ["Action", "RPG"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/Oblivion.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Oblivion",
+        "dates": "2006"
+      },
+      "context": "Open-world RPG fantasy, liberté totale, quêtes et exploration.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PS3", "logo": "assets/icons/tech/PS3.svg" },
+        { "name": "Xbox 360", "logo": "assets/icons/tech/Xbox360.svg" }
+      ],
+      "cities": ["RPG", "Open-world"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/TheWitcher.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "The Witcher 3",
+        "dates": "2015"
+      },
+      "context": "RPG narratif en monde ouvert, quêtes très écrites et ambiance mature.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
+        { "name": "Xbox One", "logo": "assets/icons/tech/XboxOne.svg" },
+        { "name": "Switch", "logo": "assets/icons/tech/Switch.svg" }
+      ],
+      "cities": ["RPG", "Open-world"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/Hades.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Hades",
+        "dates": "2020"
+      },
+      "context": "Rogue-like d’action nerveux, progression addictive et narration dynamique.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "Switch", "logo": "assets/icons/tech/Switch.svg" },
+        { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
+        { "name": "Xbox", "logo": "assets/icons/tech/Xbox.svg" }
+      ],
+      "cities": ["Rogue-like", "Action"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/Portal.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Portal",
+        "dates": "2007"
+      },
+      "context": "Puzzle en vue subjective brillant, humour et level design exceptionnels.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PS3", "logo": "assets/icons/tech/PS3.svg" },
+        { "name": "Xbox 360", "logo": "assets/icons/tech/Xbox360.svg" }
+      ],
+      "cities": ["Puzzle", "FPS"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/HollowKnight.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Hollow Knight",
+        "dates": "2017"
+      },
+      "context": "Metroidvania exigeant, direction artistique superbe et exploration profonde.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "Switch", "logo": "assets/icons/tech/Switch.svg" },
+        { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
+        { "name": "Xbox", "logo": "assets/icons/tech/Xbox.svg" }
+      ],
+      "cities": ["Metroidvania", "Action"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/StarCraft.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "StarCraft II",
+        "dates": "2010"
+      },
+      "context": "RTS compétitif emblématique, équilibrage et e-sport au sommet.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+      ],
+      "cities": ["RTS", "Compétitif"]
+    }
+  },
+  {
+    "type": "anime",
+    "icon": "ramen_dining",
+    "bg": "assets/images/cards/DragonballZ.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Dragon Ball Z",
+        "dates": "xxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "xxx", "logo": "assets/icons/tech/PC.svg" }
+      ],
+      "cities": ["Akira Toriyama"]
+    }
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/TheRevenant.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "The Revenant",
+        "dates": "xxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "xxx", "logo": "assets/icons/tech/PC.svg" }
+      ],
+      "cities": ["xxxxxxxx"]
+    }
   },
   {
     "type": "sport",
     "icon": "directions_run",
     "bg": "assets/images/cards/parachute.webp"
   },
-
-  {
-    "type": "musique",
-    "icon": "music_note",
-    "bg": "assets/images/cards/orelsan.webp"
-  },
-  {
-    "type": "musique",
-    "icon": "music_note",
-    "bg": "assets/images/cards/stromae.webp"
-  },
-  {
-    "type": "musique",
-    "icon": "music_note",
-    "bg": "assets/images/cards/rammsteim.webp"
-  },
-  {
-    "type": "musique",
-    "icon": "music_note",
-    "bg": "assets/images/cards/queen.webp"
-  },
-  {
-    "type": "musique",
-    "icon": "music_note",
-    "bg": "assets/images/cards/john.webp"
-  },
-  {
-    "type": "musique",
-    "icon": "music_note",
-    "bg": "assets/images/cards/hans.webp"
-  },
-  {
-    "type": "musique",
-    "icon": "music_note",
-    "bg": "assets/images/cards/jameshorner.webp"
-  },
   {
     "type": "musique",
     "icon": "music_note",
     "bg": "assets/images/cards/jeremysoule.webp"
   },
-
-  {
-    "type": "anime",
-    "icon": "ramen_dining",
-    "bg": "assets/images/cards/naruto.webp"
-  },
-  {
-    "type": "anime",
-    "icon": "ramen_dining",
-    "bg": "assets/images/cards/hunter.webp"
-  },
-  {
-    "type": "anime",
-    "icon": "ramen_dining",
-    "bg": "assets/images/cards/deathnote.webp"
-  },
-  {
-    "type": "anime",
-    "icon": "ramen_dining",
-    "bg": "assets/images/cards/frieren.webp"
-  },
-  {
-    "type": "anime",
-    "icon": "ramen_dining",
-    "bg": "assets/images/cards/dragonball.webp"
-  },
-
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/starwars.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/starwars.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/lotr.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/jurassicpark.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/dune.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/harrypotter.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/socialnetwork.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/shutter.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/grantorino.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/birdman.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/million.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/drive.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/django.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/catchme.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/bladerunner.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/gladiator.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/prestige.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/parasite.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/interstellar.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/titanic.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/avatar.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/batman.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/silence.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/inception.webp"
-  },
-  {
-    "type": "cinema",
-    "icon": "movie",
-    "bg": "assets/images/cards/seven.webp"
+   {
+    "type": "voyage",
+    "icon": "explore",
+    "bg": "assets/images/cards/italie.webp"
   }
 ]
