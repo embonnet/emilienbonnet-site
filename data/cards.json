@@ -2,7 +2,7 @@
   {
     "type": "capgemini",
     "icon": "work",
-    "bg": "assets/images/cards/michelin.webp",
+    "bg": "assets/images/cards/Michelin.webp",
     "back": {
       "company": {
         "name": "Michelin",
@@ -14,10 +14,116 @@
       },
       "context": "Hackathon PowerPlatform dans les locaux de Michelin. Atelier d’idéation et accompagnement des équipes.",
       "tech": [
-        { "name": "Power Apps", "logo": "assets/images/tech/powerapps.svg" },
-        { "name": "Power Automate", "logo": "assets/images/tech/powerautomate.svg" }
+        { "name": "Power Apps", "logo": "assets/icons/tech/powerapps.svg" },
+        { "name": "Power Automate", "logo": "assets/icons/tech/powerautomate.svg" }
       ],
       "cities": ["Clermont-Ferrand"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "type2": "BA",
+    "icon2": "article",
+    "bg": "assets/images/cards/Stellantis.webp",
+    "back": {
+      "company": {
+        "name": "Stellantis",
+        "logo": ""
+      },
+      "mission": {
+        "title": "xxxxxxxx",
+        "dates": "xxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "Power Apps", "logo": "assets/icons/tech/powerapps.svg" }
+      ],
+      "cities": ["Dijon", "Nancy"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/Somfy.webp",
+    "back": {
+      "company": {
+        "name": "Somfy",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Refonte SharePoint Online",
+        "dates": "xxxxxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "SharePoint", "logo": "assets/icons/tech/SharePoint.svg" }
+      ],
+      "cities": ["Cluses", "Nancy"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "bg": "assets/images/cards/LOreal.webp",
+    "back": {
+      "company": {
+        "name": "L'Oréal",
+        "logo": ""
+      },
+      "mission": {
+        "title": "xxxxxxxxx",
+        "dates": "xxxxxxxx"
+      },
+      "context": "xxxxxxxxxxxxxxxxxxxxxxxx",
+      "tech": [
+        { "name": "", "logo": "" }
+      ],
+      "cities": ["Nancy"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "type2": "change",
+    "icon2": "school",
+    "bg": "assets/images/cards/Covea.webp",
+    "back": {
+      "company": {
+        "name": "Covéa",
+        "logo": ""
+      },
+      "mission": {
+        "title": "xxxxxxxx",
+        "dates": "xxxxxx"
+      },
+      "context": "xxxxxxxxxxx",
+      "tech": [
+        { "name": "M365", "logo": "assets/icons/tech/M365.svg" }
+      ],
+      "cities": ["Paris", "Nancy"]
+    }
+  },
+  {
+    "type": "capgemini",
+    "icon": "work",
+    "type2": "audit",
+    "icon2": "plagiarism",
+    "bg": "assets/images/cards/ADIS.webp",
+    "back": {
+      "company": {
+        "name": "Adis",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Audit espace adhérent AGIPI",
+        "dates": "Nov. à Dec. 2025"
+      },
+      "context": "Dans le cadre d’une future refonte de l’espace adhérent, Capgemini a été sélectionné pour réaliser un audit complet : technique, fonctionnel et UX/UI, afin d’identifier les principaux axes d’amélioration et de définir les éléments clés nécessaires à la réussite du projet. J’étais en charge de l’audit UX/UI et ai produit un rapport fondé sur des ateliers utilisateurs ainsi que sur l’application des heuristiques de Jakob Nielsen, couvrant l’ensemble de l’espace adhérent. Ce travail a permis de formuler des recommandations structurantes et prioritaires pour la refonte à venir. La mission s’est conclue avec succès par une soutenance dans leux locaux et la refonte nous a été confiée dans la continuité de cet audit.",
+      "tech": [
+        { "name": "DevTools", "logo": "assets/icons/tech/powerapps.svg" }
+      ],
+      "cities": ["Strasbourg", "Nancy"]
     }
   },
   {
@@ -293,10 +399,8 @@
     }
   },
   {
-    "type": "associatif",
-    "icon": "groups",
-    "type2": "logotype",
-    "icon2": "draw",
+    "type": "logotype",
+    "icon": "draw",
     "bg": "assets/images/cards/PoleSante.webp",
     "back": {
       "company": {
@@ -373,12 +477,12 @@
       },
       "context": "Depuis ma première Game Boy à l’âge de six ans, je me suis passionné pour l’univers du jeu vidéo, au point d’envisager, vingt ans plus tard, d’en faire mon métier en tant que game designer. Ce parcours, marqué par un échec fondateur, a néanmoins constitué le terreau qui m’a conduit là où je suis aujourd’hui, dans un domaine connexe. À travers cette catégorie, je souhaite partager les jeux qui m’ont profondément marqué et que je recommande vivement de découvrir.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" },
         { "name": "Game Boy", "logo": "assets/icons/tech/GameBoy.svg" },
         { "name": "Game Boy Advance", "logo": "assets/icons/tech/GameBoyAdvance.svg" },
         { "name": "PS1", "logo": "assets/icons/tech/PS1.svg" },
         { "name": "PS2", "logo": "assets/icons/tech/PS2.svg" },
-        { "name": "Xbox360", "logo": "assets/icons/tech/Xbox360.svg" }
+        { "name": "Xbox360", "logo": "assets/icons/tech/Xbox.svg" }
       ],
       "cities": [""]
     }
@@ -398,7 +502,7 @@
       },
       "context": "RTS mythologique original et accessible.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" }
       ],
       "cities": ["RTS"]
     }
@@ -418,7 +522,7 @@
       },
       "context": "FPS compétitif tactique multijoueur, pilier de l’e-sport sur PC.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" }
       ],
       "cities": ["FPS", "Multijoueur"]
     }
@@ -438,7 +542,7 @@
       },
       "context": "MOBA stratégique en équipe devenu une référence mondiale.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" }
       ],
       "cities": ["MOBA", "Stratégie"]
     }
@@ -458,7 +562,7 @@
       },
       "context": "Battle royale nerveux et tactique par équipes.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" },
         { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
         { "name": "Xbox", "logo": "assets/icons/tech/Xbox.svg" }
       ],
@@ -480,7 +584,7 @@
       },
       "context": "Aventure de pêche sombre mêlant exploration et horreur lovecraftienne.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" },
         { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
         { "name": "PS5", "logo": "assets/icons/tech/PS5.svg" },
         { "name": "Xbox", "logo": "assets/icons/tech/Xbox.svg" },
@@ -524,7 +628,7 @@
       },
       "context": "Jeu stratégique de deck-building apprécié pour son gameplay original.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" }
       ],
       "cities": ["Stratégie", "Deck-builder"]
     }
@@ -565,8 +669,8 @@
       "context": "Action-RPG exigeant, célèbre pour sa difficulté et son univers sombre.",
       "tech": [
         { "name": "PS3", "logo": "assets/icons/tech/PS3.svg" },
-        { "name": "Xbox 360", "logo": "assets/icons/tech/Xbox360.svg" },
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+        { "name": "Xbox 360", "logo": "assets/icons/tech/Xbox.svg" },
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" }
       ],
       "cities": ["Action", "RPG"]
     }
@@ -586,9 +690,9 @@
       },
       "context": "Open-world RPG fantasy, liberté totale, quêtes et exploration.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" },
         { "name": "PS3", "logo": "assets/icons/tech/PS3.svg" },
-        { "name": "Xbox 360", "logo": "assets/icons/tech/Xbox360.svg" }
+        { "name": "Xbox 360", "logo": "assets/icons/tech/Xbox.svg" }
       ],
       "cities": ["RPG", "Open-world"]
     }
@@ -608,7 +712,7 @@
       },
       "context": "RPG narratif en monde ouvert, quêtes très écrites et ambiance mature.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" },
         { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
         { "name": "Xbox One", "logo": "assets/icons/tech/XboxOne.svg" },
         { "name": "Switch", "logo": "assets/icons/tech/Switch.svg" }
@@ -631,7 +735,7 @@
       },
       "context": "Rogue-like d’action nerveux, progression addictive et narration dynamique.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" },
         { "name": "Switch", "logo": "assets/icons/tech/Switch.svg" },
         { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
         { "name": "Xbox", "logo": "assets/icons/tech/Xbox.svg" }
@@ -654,9 +758,9 @@
       },
       "context": "Puzzle en vue subjective brillant, humour et level design exceptionnels.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" },
         { "name": "PS3", "logo": "assets/icons/tech/PS3.svg" },
-        { "name": "Xbox 360", "logo": "assets/icons/tech/Xbox360.svg" }
+        { "name": "Xbox 360", "logo": "assets/icons/tech/Xbox.svg" }
       ],
       "cities": ["Puzzle", "FPS"]
     }
@@ -676,7 +780,7 @@
       },
       "context": "Metroidvania exigeant, direction artistique superbe et exploration profonde.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" },
         { "name": "Switch", "logo": "assets/icons/tech/Switch.svg" },
         { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
         { "name": "Xbox", "logo": "assets/icons/tech/Xbox.svg" }
@@ -699,7 +803,7 @@
       },
       "context": "RTS compétitif emblématique, équilibrage et e-sport au sommet.",
       "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/PC.svg" }
+        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" }
       ],
       "cities": ["RTS", "Compétitif"]
     }
@@ -719,7 +823,7 @@
       },
       "context": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
       "tech": [
-        { "name": "xxx", "logo": "assets/icons/tech/PC.svg" }
+        { "name": "xxx", "logo": "assets/icons/tech/Steam.svg" }
       ],
       "cities": ["Akira Toriyama"]
     }
@@ -771,7 +875,7 @@
       },
       "context": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
       "tech": [
-        { "name": "xxx", "logo": "assets/icons/tech/PC.svg" }
+        { "name": "xxx", "logo": "assets/icons/tech/Steam.svg" }
       ],
       "cities": ["xxxxxxxx"]
     }
