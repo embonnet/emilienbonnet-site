@@ -6,7 +6,7 @@
     "back": {
       "company": {
         "name": "Michelin",
-        "logo": "assets/images/companies/Michelin.svg"
+        "logo": ""
       },
       "mission": {
         "title": "Hackathon Power Platform",
@@ -28,8 +28,8 @@
     "bg": "assets/images/cards/SalonDesMaires.webp",
     "back": {
       "company": {
-        "name": "Michelin",
-        "logo": "assets/icons/companies/Capgemini.svg"
+        "name": "Capgemini",
+        "logo": ""
       },
       "mission": {
         "title": "Salon des Maires",
@@ -49,7 +49,7 @@
     "back": {
       "company": {
         "name": "Mars",
-        "logo": "assets/icons/companies/Mars.svg"
+        "logo": ""
       },
       "mission": {
         "title": "xxxxxxxxxxxxxx",
@@ -70,7 +70,7 @@
     "back": {
       "company": {
         "name": "Safran",
-        "logo": "assets/icons/companies/Safran.svg"
+        "logo": ""
       },
       "mission": {
         "title": "xxxxxxxxxxxxxx",
@@ -90,7 +90,7 @@
     "back": {
       "company": {
         "name": "Saur",
-        "logo": "assets/icons/companies/Saur.svg"
+        "logo": ""
       },
       "mission": {
         "title": "Saur & Moi",
@@ -110,7 +110,7 @@
     "back": {
       "company": {
         "name": "Seb",
-        "logo": "assets/icons/companies/Seb.svg"
+        "logo": ""
       },
       "mission": {
         "title": "xxxxxxxxxxxxxx",
@@ -130,7 +130,7 @@
     "back": {
       "company": {
         "name": "Total",
-        "logo": "assets/icons/companies/Total.svg"
+        "logo": ""
       },
       "mission": {
         "title": "xxxxxxxxxxxxxx",
@@ -150,27 +150,7 @@
     "back": {
       "company": {
         "name": "Unibail Rodamco",
-        "logo": "assets/icons/companies/Unibail.svg"
-      },
-      "mission": {
-        "title": "xxxxxxxxxxxxxx",
-        "dates": "xxxxxxx"
-      },
-      "context": "xxxxxxxxxxxxxxxxxxxx",
-      "tech": [
-        { "name": "", "logo": "" }
-      ],
-      "cities": ["Nancy", "Paris"]
-    }
-  },
-  {
-    "type": "capgemini",
-    "icon": "work",
-    "bg": "assets/images/cards/Unibail.webp",
-    "back": {
-      "company": {
-        "name": "Unibail Rodamco",
-        "logo": "assets/icons/companies/Unibail.svg"
+        "logo": ""
       },
       "mission": {
         "title": "xxxxxxxxxxxxxx",
@@ -190,7 +170,7 @@
     "back": {
       "company": {
         "name": "Credit Agricole",
-        "logo": "assets/icons/companies/CreditAgricole.svg"
+        "logo": ""
       },
       "mission": {
         "title": "xxxxxxxxxxxxxx",
@@ -210,7 +190,7 @@
     "back": {
       "company": {
         "name": "EDF",
-        "logo": "assets/icons/companies/Edf.svg"
+        "logo": ""
       },
       "mission": {
         "title": "xxxxxxxxxxxxxx",
@@ -228,11 +208,11 @@
     "icon": "groups",
     "type2": "logotype",
     "icon2": "draw",
-    "bg": "assets/images/cards/",
+    "bg": "assets/images/cards/Kuwabara.webp",
     "back": {
       "company": {
         "name": "Association Kuwabara",
-        "logo": "assets/images/companies/.svg"
+        "logo": ""
       },
       "mission": {
         "title": "Charte graphique Kuwabara",
@@ -240,10 +220,167 @@
       },
       "context": "Fan de culture japonaise depuis ma tendre enfance, j'ai été bercé par des animes comme DragonBall Z ou Shaman king. A la fin de mon adolescence, j'ai intégré l'association Kuwabara où j'ai aidé à l'organisation d'événements ouverts au public ainsi que sur des conventions comme Anim'Est. Membre du CA de l'association plusieurs années, j'ai remodelé l'intégralité de leur charte graphique avec une nouvelle idéntité visuelle. Ce Logotype en est le symbole",
       "tech": [
-        { "name": "Inscape", "logo": "assets/images/tech/inscape.svg" },
-        { "name": "Illustrator", "logo": "assets/images/tech/illustrator.svg" }
+        { "name": "Inscape", "logo": "assets/icons/tech/Inkscape.svg" },
+        { "name": "Illustrator", "logo": "assets/icons/tech/Illustrator.svg" }
       ],
-      "cities": ["Clermont-Ferrand"]
+      "cities": ["Nancy"]
+    }
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/Tennis.webp",
+    "back": {
+      "company": {
+        "name": "Pole Tennis Nancy",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Proposition Logotype",
+        "dates": "2022"
+      },
+      "context": "xxxxxxxx",
+      "tech": [
+        { "name": "Illustrator", "logo": "assets/icons/tech/Illustrator.svg" }
+      ],
+      "cities": ["Nancy"]
+    }
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/ClubTT.webp",
+    "back": {
+      "company": {
+        "name": "Tennis de Table Essey Seichamps",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Proposition Logotype",
+        "dates": "2024"
+      },
+      "context": "xxxxxxxx",
+      "tech": [
+        { "name": "Illustrator", "logo": "assets/icons/tech/Illustrator.svg" }
+      ],
+      "cities": ["Nancy"]
+    }
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/Ultimate.webp",
+    "back": {
+      "company": {
+        "name": "Ultimate Troopers - Liverdun",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Proposition Logotype",
+        "dates": "2024"
+      },
+      "context": "xxxxxxxx",
+      "tech": [
+        { "name": "Illustrator", "logo": "assets/icons/tech/Illustrator.svg" }
+      ],
+      "cities": ["Liverdun"]
+    }
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/PoleSante.webp",
+    "back": {
+      "company": {
+        "name": "Pôle Santé Heillecourt Village",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Proposition Charte graphique",
+        "dates": "2024"
+      },
+      "context": "xxxxxxxx",
+      "tech": [
+        { "name": "Illustrator", "logo": "assets/icons/tech/Illustrator.svg" }
+      ],
+      "cities": ["Heillcourt"]
+    }
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/LuckyChallenge.webp",
+    "back": {
+      "company": {
+        "name": "Lucky Challenge",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Proposition Logotype",
+        "dates": "2024"
+      },
+      "context": "xxxxxxxx",
+      "tech": [
+        { "name": "Illustrator", "logo": "assets/icons/tech/Illustrator.svg" }
+      ],
+      "cities": ["Heillcourt"]
+    }
+  },
+  {
+    "type": "associatif",
+    "icon": "groups",
+    "type2": "logotype",
+    "icon2": "draw",
+    "bg": "assets/images/cards/Marathon.webp",
+    "back": {
+      "company": {
+        "name": "Marathon Paris 2022",
+        "logo": ""
+      },
+      "mission": {
+        "title": "T-shirt Marathon Paris",
+        "dates": "2022"
+      },
+      "context": "xxxxxxxx",
+      "tech": [
+        { "name": "Illustrator", "logo": "assets/icons/tech/Illustrator.svg" }
+      ],
+      "cities": ["Nancy"]
+    }
+  },
+  {
+    "type": "jv",
+    "icon": "sports_esports",
+    "bg": "assets/images/cards/JeuxVideoCategorie.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Jeux vidéo",
+        "dates": "Depuis 1997"
+      },
+      "context": "Depuis ma première Game Boy à l’âge de six ans, je me suis passionné pour l’univers du jeu vidéo, au point d’envisager, vingt ans plus tard, d’en faire mon métier en tant que game designer. Ce parcours, marqué par un échec fondateur, a néanmoins constitué le terreau qui m’a conduit là où je suis aujourd’hui, dans un domaine connexe. À travers cette catégorie, je souhaite partager les jeux qui m’ont profondément marqué et que je recommande vivement de découvrir.",
+      "tech": [
+        { "name": "PC", "logo": "assets/icons/tech/PC.svg" },
+        { "name": "Game Boy", "logo": "assets/icons/tech/GameBoy.svg" },
+        { "name": "Game Boy Advance", "logo": "assets/icons/tech/GameBoyAdvance.svg" },
+        { "name": "PS1", "logo": "assets/icons/tech/PS1.svg" },
+        { "name": "PS2", "logo": "assets/icons/tech/PS2.svg" },
+        { "name": "Xbox360", "logo": "assets/icons/tech/Xbox360.svg" }
+      ],
+      "cities": [""]
     }
   },
   {
@@ -585,6 +722,38 @@
         { "name": "xxx", "logo": "assets/icons/tech/PC.svg" }
       ],
       "cities": ["Akira Toriyama"]
+    }
+  },
+  {
+    "type": "cinema",
+    "icon": "movie",
+    "bg": "assets/images/cards/CinemaCategorie.webp",
+    "back": {
+      "company": {
+        "name": "",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Le cinéma",
+        "dates": "Depuis 1996"
+      },
+      "context": "Amoureux du grand écran comme du plus intime, j’ai découvert le cinéma à l’âge de cinq ans lors de ma première séance, devant Le Roi Lion. Ce moment fondateur a marqué le début d’une passion durable pour l’animation et, plus largement, pour le cinéma. Animé par le désir de comprendre les métiers et les intentions qui s’expriment à travers ces vingt-quatre images par seconde, je m’intéresse tout particulièrement aux rôles de scénariste, de réalisateur et de directeur de la photographie. Je présente ici, pour chaque réalisateur, l’œuvre qui m’a le plus marqué et qui nourrit encore aujourd’hui mon attachement à ce médium. Je ne peux que vous en recommander la découverte.",
+      "tech": [
+        { "name": "Denis Villeneuve", "logo": "" },
+        { "name": "Christopher Nolan", "logo": "" },
+        { "name": "Steven Spielberg", "logo": "" },
+        { "name": "Martin Scorsese", "logo": "" },
+        { "name": "Ridley Scott", "logo": "" },
+        { "name": "James Cameron", "logo": "" },
+        { "name": "Guillermo del Toro", "logo": "" },
+        { "name": "Bong Joon-ho", "logo": "" },
+        { "name": "Alejandro González Iñárritu", "logo": "" },
+        { "name": "George Lucas", "logo": "" },
+        { "name": "Clint Eastwood", "logo": "" },
+        { "name": "Tim Burton", "logo": "" },
+        { "name": "Quentin Tarantino", "logo": "" }
+      ],
+      "cities": [""]
     }
   },
   {
