@@ -21,8 +21,8 @@ export const CONFIG = {
 
   // Filtres (mapping type -> scope)
   scopeTypes: {
-    pro: new Set(["capgemini", "conference", "logotype"]),
-    perso: new Set(["jv", "voyage", "sport", "musique", "anime", "cinema", "associatif"]),
+    pro: new Set(["capgemini", "conference", "logotype", "associatif"]),
+    perso: new Set(["jv", "voyage", "sport", "musique", "anime", "cinema"]),
   },
 
   // Animation hide cards
