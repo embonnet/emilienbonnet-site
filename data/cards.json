@@ -60,7 +60,7 @@
       },
       "context": "Capgemini a accompagné Stellantis dans la transformation de fichiers Excel en applications Power Apps. L'équipe était constitué d'un chef de projet, d'une développeuse junior et de moi même. Je devais, en quelques heures par semaine, l'aider au maximum en lui apportant conseil et expertise sur la technologie. Mon intervention visait notamment à garantir la conception d’écrans cohérents et alignés avec les besoins du client. Je suis également intervenu de manière ponctuelle pour répondre à ses questions et échanger directement avec le client afin de clarifier et affiner les besoins fonctionnels.",
       "tech": [
-        { "name": "Power Apps", "logo": "assets/icons/tech/powerapps.svg" }
+        { "name": "Power Apps", "logo": "assets/icons/tech/PowerApps.svg" }
       ],
       "cities": ["Dijon", "Nancy"]
     }
@@ -102,7 +102,7 @@
       },
       "context": "Dans le cadre d’une future refonte de l’espace adhérent, Capgemini a été sélectionné pour réaliser un audit complet : technique, fonctionnel et UX/UI, afin d’identifier les principaux axes d’amélioration et de définir les éléments clés nécessaires à la réussite du projet. J’étais en charge de l’audit UX/UI et ai produit un rapport fondé sur des ateliers utilisateurs ainsi que sur l’application des heuristiques de Jakob Nielsen, couvrant l’ensemble de l’espace adhérent. Ce travail a permis de formuler des recommandations structurantes et prioritaires pour la refonte à venir. La mission s’est conclue avec succès par une soutenance dans leux locaux et la refonte nous a été confiée dans la continuité de cet audit.",
       "tech": [
-        { "name": "DevTools", "logo": "assets/icons/tech/powerapps.svg" }
+        { "name": "DevTools", "logo": "assets/icons/companies/Google.svg" }
       ],
       "cities": ["Strasbourg", "Nancy"]
     }
@@ -124,7 +124,7 @@
       },
       "context": "En tant que porteur de l’offre IA de Sogeti France en 2024, j’ai participé au Salon des Maires de cette même année afin de présenter l’outil Microsoft Copilot sur notre stand Capgemini, lors de deux sessions dédiées au cours de la journée. Ces interventions, d’une durée d’environ 30 minutes, avaient pour objectif d’être à la fois pertinentes, attractives et pragmatiques, afin de démontrer efficacement tout le potentiel de Copilot et de capter l’attention du public. À l’issue de ces présentations, plusieurs prises de contact ont été établies avec différentes collectivités.",
       "tech": [
-        { "name": "Copilot", "logo": "assets/icons/tech/copilot.svg" }
+        { "name": "Copilot", "logo": "assets/icons/tech/Copilot.svg" }
       ],
       "cities": ["Paris"]
     }
