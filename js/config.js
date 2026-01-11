@@ -21,7 +21,7 @@ export const CONFIG = {
 
   // Filtres (mapping type -> scope)
   scopeTypes: {
-    pro: new Set(["capgemini", "conference", "logotype", "associatif"]),
+    pro: new Set(["AI", "logotype", "associatif", "uxui", "change", "scrum-master", "BA", "expert-M365"]),
     perso: new Set(["jv", "voyage", "sport", "musique", "anime", "cinema"]),
   },
 
