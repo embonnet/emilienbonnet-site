@@ -229,7 +229,7 @@
   {
     "type": "uxui",
     "icon": "border_style",
-    "bg": "assets/images/cards/EDF.webp",
+    "bg": "assets/images/cards/Edf.webp",
     "back": {
       "company": {
         "name": "EDF",
