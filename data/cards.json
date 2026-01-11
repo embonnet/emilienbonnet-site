@@ -1,8 +1,10 @@
 [
   {
-    "type": "capgemini",
-    "icon": "work",
-    "bg": "assets/images/cards/Michelin.webp",
+    "type": "expert-M365",
+    "icon": "grid_view",
+    "type2": "uxui",
+    "icon2": "border_style",
+    "bg": "assets/images/cards/MichelinHackathon.webp",
     "back": {
       "company": {
         "name": "Michelin",
@@ -12,19 +14,40 @@
         "title": "Hackathon Power Platform",
         "dates": "Déc. 2024"
       },
-      "context": "Hackathon PowerPlatform dans les locaux de Michelin. Atelier d’idéation et accompagnement des équipes.",
+      "context": "Capgemini a accompagné Michelin dans une vaste campagne d’adoption de la Power Platform visant à structurer et développer une communauté de Citizen Developers à l’échelle de l’entreprise. L’objectif était de permettre à des collaborateurs non issus de l’informatique de concevoir des applications et des solutions numériques répondant à des besoins métiers simples, afin d’améliorer la productivité globale. Dans ce cadre, j’étais en charge de l’animation des ateliers d’idéation, en lien avec les formations techniques et en amont du hackathon. Enfin, j’ai accompagné les équipes sur site le jour J, aux côtés de l’ensemble des intervenants, afin de répondre à leurs questions et de faciliter la mise en œuvre de leurs solutions.",
       "tech": [
-        { "name": "Power Apps", "logo": "assets/icons/tech/powerapps.svg" },
-        { "name": "Power Automate", "logo": "assets/icons/tech/powerautomate.svg" }
+        { "name": "Power Apps", "logo": "assets/icons/tech/PowerApps.svg" },
+        { "name": "Power Automate", "logo": "assets/icons/tech/PowerAutomate.svg" },
+        { "name": "Power BI", "logo": "assets/icons/tech/PowerBI.svg" },
+        { "name": "SharePoint", "logo": "assets/icons/tech/SharePoint.svg" },
+        { "name": "Miro", "logo": "assets/icons/tech/Miro.svg" }
       ],
       "cities": ["Clermont-Ferrand"]
     }
   },
   {
-    "type": "capgemini",
-    "icon": "work",
-    "type2": "BA",
-    "icon2": "article",
+    "type": "expert-M365",
+    "icon": "grid_view",
+    "bg": "assets/images/cards/Michelin.webp",
+    "back": {
+      "company": {
+        "name": "Michelin",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Value Capture",
+        "dates": "Mar. 2020 - Jui. 2020"
+      },
+      "context": "Capgemini a accompagné Michelin dans la transformation de son outil d’aide à la décision, baptisé Value Capture. Intégrée à leur environnement Office 365 et développée sous PowerApps, cette application a fait l’objet, pour mon périmètre, d’un travail étroit avec les équipes métiers afin de recueillir et formaliser leurs besoins, dans le but de concevoir les maquettes fonctionnelles et UI de l’application.",
+      "tech": [
+        { "name": "Power Apps", "logo": "assets/icons/tech/PowerApps.svg" }
+      ],
+      "cities": ["Clermont-Ferrand", "Nancy"]
+    }
+  },
+  {
+    "type": "expert-M365",
+    "icon": "grid_view",
     "bg": "assets/images/cards/Stellantis.webp",
     "back": {
       "company": {
@@ -32,10 +55,10 @@
         "logo": ""
       },
       "mission": {
-        "title": "xxxxxxxx",
-        "dates": "xxxxxx"
+        "title": "Migration fichiers Excel en Power Apps",
+        "dates": "Avr. 2024 - Sept. 2024"
       },
-      "context": "xxxxxxxxxxxxxxxxx",
+      "context": "Capgemini a accompagné Stellantis dans la transformation de fichiers Excel en applications Power Apps. L'équipe était constitué d'un chef de projet, d'une développeuse junior et de moi même. Je devais, en quelques heures par semaine, l'aider au maximum en lui apportant conseil et expertise sur la technologie. Mon intervention visait notamment à garantir la conception d’écrans cohérents et alignés avec les besoins du client. Je suis également intervenu de manière ponctuelle pour répondre à ses questions et échanger directement avec le client afin de clarifier et affiner les besoins fonctionnels.",
       "tech": [
         { "name": "Power Apps", "logo": "assets/icons/tech/powerapps.svg" }
       ],
@@ -43,72 +66,30 @@
     }
   },
   {
-    "type": "capgemini",
-    "icon": "work",
-    "bg": "assets/images/cards/Somfy.webp",
-    "back": {
-      "company": {
-        "name": "Somfy",
-        "logo": ""
-      },
-      "mission": {
-        "title": "Refonte SharePoint Online",
-        "dates": "xxxxxxxxx"
-      },
-      "context": "xxxxxxxxxxxxxxxxxxxxx",
-      "tech": [
-        { "name": "SharePoint", "logo": "assets/icons/tech/SharePoint.svg" }
-      ],
-      "cities": ["Cluses", "Nancy"]
-    }
-  },
-  {
-    "type": "capgemini",
-    "icon": "work",
-    "bg": "assets/images/cards/LOreal.webp",
-    "back": {
-      "company": {
-        "name": "L'Oréal",
-        "logo": ""
-      },
-      "mission": {
-        "title": "xxxxxxxxx",
-        "dates": "xxxxxxxx"
-      },
-      "context": "xxxxxxxxxxxxxxxxxxxxxxxx",
-      "tech": [
-        { "name": "", "logo": "" }
-      ],
-      "cities": ["Nancy"]
-    }
-  },
-  {
-    "type": "capgemini",
-    "icon": "work",
-    "type2": "change",
-    "icon2": "school",
-    "bg": "assets/images/cards/Covea.webp",
+    "type": "change",
+    "icon": "school",
+    "bg": "assets/images/cards/CoveaParis.webp",
     "back": {
       "company": {
         "name": "Covéa",
         "logo": ""
       },
       "mission": {
-        "title": "xxxxxxxx",
-        "dates": "xxxxxx"
+        "title": "Accompagnement Teams",
+        "dates": "Dec. 2023 - Fev. 2024"
       },
-      "context": "xxxxxxxxxxx",
+      "context": "À la suite de la crise sanitaire liée au COVID-19, le groupe COVEA a généralisé le télétravail pour l’ensemble de ses collaborateurs. Faute d’équipements et d’accompagnement adaptés, les équipes ont dû adopter des outils tels que Microsoft Teams sans formation ni conduite du changement structurée. Deux ans plus tard, Capgemini a été sollicité pour former une soixantaine de managers à l’utilisation de Microsoft Teams, afin de leur permettre d’en exploiter pleinement les fonctionnalités, d’adopter les bonnes pratiques et de les diffuser au sein de leurs équipes. Cette mission courte a impliqué des déplacements sur plusieurs sites, notamment à New York, au Mans et à Paris.À la suite de la crise sanitaire liée au COVID-19, le groupe COVEA a généralisé le télétravail pour l’ensemble de ses collaborateurs. Faute d’équipements et d’accompagnement adaptés, les équipes ont dû adopter des outils tels que Microsoft Teams sans formation ni conduite du changement structurée. Deux ans plus tard, Capgemini a été sollicité pour former une soixantaine de managers à l’utilisation de Microsoft Teams, afin de leur permettre d’en exploiter pleinement les fonctionnalités, d’adopter les bonnes pratiques et de les diffuser au sein de leurs équipes. Cette mission, menée en binôme, avec une grande satisfaction client à la clef, a impliqué les formations en présentiel sur leurs différents sites",
       "tech": [
-        { "name": "M365", "logo": "assets/icons/tech/M365.svg" }
+        { "name": "Teams", "logo": "assets/icons/tech/Teams.svg" },
+        { "name": "One Drive", "logo": "assets/icons/tech/OneDrive.svg" },
+        { "name": "SharePoint", "logo": "assets/icons/tech/SharePoint.svg" }
       ],
-      "cities": ["Paris", "Nancy"]
+      "cities": ["Paris", "Niort", "LeMans", "Nancy"]
     }
   },
   {
-    "type": "capgemini",
-    "icon": "work",
-    "type2": "audit",
-    "icon2": "plagiarism",
+    "type": "uxui",
+    "icon": "border_style",
     "bg": "assets/images/cards/ADIS.webp",
     "back": {
       "company": {
@@ -127,21 +108,21 @@
     }
   },
   {
-    "type": "capgemini",
-    "icon": "work",
-    "type2": "conference",
-    "icon2": "mic",
+    "type": "AI",
+    "icon": "memory",
+    "type2": "change",
+    "icon2": "school",
     "bg": "assets/images/cards/SalonDesMaires.webp",
     "back": {
       "company": {
-        "name": "Capgemini",
+        "name": "uxui",
         "logo": ""
       },
       "mission": {
         "title": "Salon des Maires",
         "dates": "Nov. 2024"
       },
-      "context": "Sessions de démonstrations de Copilot au stand 'Capgemini' lors du Salon des Maires 2024 Porte de Versailles.",
+      "context": "En tant que porteur de l’offre IA de Sogeti France en 2024, j’ai participé au Salon des Maires de cette même année afin de présenter l’outil Microsoft Copilot sur notre stand Capgemini, lors de deux sessions dédiées au cours de la journée. Ces interventions, d’une durée d’environ 30 minutes, avaient pour objectif d’être à la fois pertinentes, attractives et pragmatiques, afin de démontrer efficacement tout le potentiel de Copilot et de capter l’attention du public. À l’issue de ces présentations, plusieurs prises de contact ont été établies avec différentes collectivités.",
       "tech": [
         { "name": "Copilot", "logo": "assets/icons/tech/copilot.svg" }
       ],
@@ -149,29 +130,8 @@
     }
   },
   {
-    "type": "capgemini",
-    "icon": "work",
-    "bg": "assets/images/cards/Mars.webp",
-    "back": {
-      "company": {
-        "name": "Mars",
-        "logo": ""
-      },
-      "mission": {
-        "title": "xxxxxxxxxxxxxx",
-        "dates": "xxxxxxx"
-      },
-      "context": "xxxxxxxxxxxxxxxxxxxx",
-      "tech": [
-        { "name": "Power Apps", "logo": "" },
-        { "name": "Power Automate", "logo": "" }
-      ],
-      "cities": ["Nancy"]
-    }
-  },
-  {
-    "type": "capgemini",
-    "icon": "work",
+    "type": "uxui",
+    "icon": "border_style",
     "bg": "assets/images/cards/Safran.webp",
     "back": {
       "company": {
@@ -179,19 +139,23 @@
         "logo": ""
       },
       "mission": {
-        "title": "xxxxxxxxxxxxxx",
-        "dates": "xxxxxxx"
+        "title": "Mission Sp@ce",
+        "dates": "Oct. 2019 - Mai 2020"
       },
-      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "context": "Safran Aircraft Engines a engagé un projet de refonte des sites internes de sa DSI, avec pour ambition de proposer des plateformes simples, intuitives et rapides à déployer, tout en garantissant une maintenance maîtrisée et peu coûteuse. Cette démarche vise à moderniser l’image de la DSI à travers une approche centrée sur l’UX design, à améliorer significativement l’expérience utilisateur, à faciliter la navigation entre les différents sites et à offrir une utilisation plus fluide et intuitive. J'ai pris en charge la partie UX, en créant des sondages aux différentes populations ainsi que des persona jusqu'à la partie UI finale avec les maquettes interactives brandées",
       "tech": [
-        { "name": "SharePoint", "logo": "assets/icons/tech/SharePoint.svg" }
+        { "name": "SharePoint On-Premises 2016", "logo": "assets/icons/tech/SharePoint.svg" },
+        { "name": "AdobeXD", "logo": "assets/icons/tech/XD.svg" },
+        { "name": "Mural", "logo": "assets/icons/tech/Mural.svg" }
       ],
       "cities": ["Nancy"]
     }
   },
   {
-    "type": "capgemini",
-    "icon": "work",
+    "type": "uxui",
+    "icon": "border_style",
+    "type2": "scrum-master",
+    "icon2": "chat",
     "bg": "assets/images/cards/Saur.webp",
     "back": {
       "company": {
@@ -202,111 +166,85 @@
         "title": "Saur & Moi",
         "dates": "Déc. 2019 - Fev. 2025"
       },
-      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "context": "Le groupe SAUR a fait appel à Capgemini pour l’accompagner dans la mise en place d’un Data & Digital Center (DDC), dédié à l’industrialisation et à l’accélération de ses projets digitaux. La mission s’inscrivait dans une méthodologie SAFe, au sein de laquelle j’occupais le rôle de Scrum Master de l’équipe UX/UI, en parallèle de mes responsabilités de designer. J’ai animé des ateliers avec les Product Owners de chaque projet afin de recueillir, analyser et challenger les besoins métiers, puis conçu les maquettes UX et UI après validation. J’ai également contribué à l’alimentation et à l’évolution du design system tout au long de la mission. Les projets couvraient un large périmètre fonctionnel, incluant un dictionnaire de données en remplacement d’outils Excel, un site web B2C et son application mobile associée, des tableaux de bord Power BI, des applications métiers lourdes de paramétrage ainsi que des applications mobiles à destination des techniciens SAUR.",
       "tech": [
-        { "name": "", "logo": "" }
+        { "name": "Sketch", "logo": "assets/icons/tech/Sketch.svg" },
+        { "name": "Marvel App", "logo": "assets/icons/tech/Marvel.svg" },
+        { "name": "ZeroHeight", "logo": "assets/icons/tech/ZeroHeight.svg" },
+        { "name": "Azure DevOps", "logo": "assets/icons/tech/AzureDevOps.svg" }
       ],
       "cities": ["Nancy", "Maurepas"]
     }
   },
   {
-    "type": "capgemini",
-    "icon": "work",
-    "bg": "assets/images/cards/Seb.webp",
-    "back": {
-      "company": {
-        "name": "Seb",
-        "logo": ""
-      },
-      "mission": {
-        "title": "xxxxxxxxxxxxxx",
-        "dates": "xxxxxxx"
-      },
-      "context": "xxxxxxxxxxxxxxxxxxxx",
-      "tech": [
-        { "name": "", "logo": "" }
-      ],
-      "cities": ["Nancy"]
-    }
-  },
-  {
-    "type": "capgemini",
-    "icon": "work",
-    "bg": "assets/images/cards/Total.webp",
-    "back": {
-      "company": {
-        "name": "Total",
-        "logo": ""
-      },
-      "mission": {
-        "title": "xxxxxxxxxxxxxx",
-        "dates": "xxxxxxx"
-      },
-      "context": "xxxxxxxxxxxxxxxxxxxx",
-      "tech": [
-        { "name": "", "logo": "" }
-      ],
-      "cities": ["Nancy"]
-    }
-  },
-  {
-    "type": "capgemini",
-    "icon": "work",
-    "bg": "assets/images/cards/Unibail.webp",
-    "back": {
-      "company": {
-        "name": "Unibail Rodamco",
-        "logo": ""
-      },
-      "mission": {
-        "title": "xxxxxxxxxxxxxx",
-        "dates": "xxxxxxx"
-      },
-      "context": "xxxxxxxxxxxxxxxxxxxx",
-      "tech": [
-        { "name": "", "logo": "" }
-      ],
-      "cities": ["Nancy", "Paris"]
-    }
-  },
-  {
-    "type": "capgemini",
-    "icon": "work",
+    "type": "uxui",
+    "icon": "border_style",
+    "type2": "BA",
+    "icon2": "article",
     "bg": "assets/images/cards/CreditAgricole.webp",
     "back": {
       "company": {
-        "name": "Credit Agricole",
+        "name": "Credit Agricole Assurance",
         "logo": ""
       },
       "mission": {
-        "title": "xxxxxxxxxxxxxx",
-        "dates": "xxxxxxx"
+        "title": "Maintenances applicatives SharePoint & Evolutions",
+        "dates": "Fev. 2025 - Nov. 2025"
       },
-      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "context": "J’ai intégré une équipe interne en charge de la maintenance et de l’évolution de plusieurs applications SharePoint destinées aux collaborateurs de CAAS. Dans ce cadre, j’ai assuré la rédaction de la rétro-documentation de formulaires InfoPath, ainsi que la modification et le paramétrage de ces derniers. J’ai également animé des ateliers dédiés aux évolutions de workflows et d’applications, participé à la rédaction des user stories, et réalisé le maquettage de wireframes et de maquettes UI. En parallèle, j’ai fourni une assistance fonctionnelle sur SharePoint On-Premise 2016, comprenant la gestion des groupes de droits, le paramétrage des listes SharePoint et de leurs vues, ainsi que le support aux utilisateurs.",
       "tech": [
-        { "name": "", "logo": "" }
+        { "name": "SharePoint On-Premises 2016", "logo": "assets/icons/tech/SharePoint.svg" },
+        { "name": "Azure DevOps", "logo": "assets/icons/tech/AzureDevOps.svg" },
+        { "name": "Figma", "logo": "assets/icons/tech/Figma.svg" }
       ],
       "cities": ["Nancy", "Paris"]
     }
   },
   {
-    "type": "capgemini",
-    "icon": "work",
-    "bg": "assets/images/cards/Edf.webp",
+    "type": "uxui",
+    "icon": "border_style",
+    "type2": "expert-M365",
+    "icon2": "grid_view",
+    "bg": "assets/images/cards/HackathonEDF.webp",
+    "back": {
+      "company": {
+        "name": "EDF & Microsoft",
+        "logo": ""
+      },
+      "mission": {
+        "title": "Power UP",
+        "dates": "Avr. 2023 - Jui. 2023"
+      },
+      "context": "Capgemini, en partenariat avec Microsoft, a accompagné EDF dans l’adoption de la Power Platform au sein de ses différentes directions. Cette montée en compétence s’est concrétisée par des accompagnements techniques, l’animation d’ateliers App in a Day (Power Apps) et Dashboard in a Day (Power BI), et s’est conclue par l’organisation d’un hackathon. Les équipes d’EDF ont ainsi imaginé et développé des applications concrètes à forte valeur ajoutée, répondant à des problématiques métier identifiées en amont. Mon rôle a consisté à les accompagner tout au long de ces étapes, et à intervenir le jour J, dans les locaux de Microsoft, pour optimiser la fluidité ergonomique et fonctionnelle de leurs applications.",
+      "tech": [
+        { "name": "PowerApps", "logo": "assets/icons/tech/PowerApps.svg" },
+        { "name": "PowerAutomate", "logo": "assets/icons/tech/PowerAutomate.svg" },
+        { "name": "PowerBI", "logo": "assets/icons/tech/PowerBI.svg" },
+        { "name": "Dataverse", "logo": "assets/icons/tech/Dataverse.svg" },
+        { "name": "SharePoint", "logo": "assets/icons/tech/SharePoint.svg" }
+      ],
+      "cities": ["Nancy", "Paris"]
+    }
+  },
+  {
+    "type": "uxui",
+    "icon": "border_style",
+    "bg": "assets/images/cards/EDF.webp",
     "back": {
       "company": {
         "name": "EDF",
         "logo": ""
       },
       "mission": {
-        "title": "xxxxxxxxxxxxxx",
-        "dates": "xxxxxxx"
+        "title": "Gemodo",
+        "dates": "Mai 2017 - Jui. 2017"
       },
-      "context": "xxxxxxxxxxxxxxxxxxxx",
+      "context": "Ce projet consiste au développement d’un outil de gestion des modifications de données permettant, via un portail métier, de piloter de manière pérenne et fluide les évolutions des données au sein du Système d’Information Nucléaire. En parallèle, nous devions créer un portail Intranet sous SharePoint On-Premise 2013 connecté à ses données, incluant la définition d’une nouvelle charte graphique ainsi que le développement de fonctionnalités spécifiques adaptées aux besoins métiers. C'est pour cette dernière partie que je suis intervenu en tant qu'UXUI.",
       "tech": [
-        { "name": "", "logo": "" }
+        { "name": "SharePoint On-Premises 2013", "logo": "assets/icons/tech/SharePoint.svg" },
+        { "name": "Adobe XD", "logo": "assets/icons/tech/XD.svg" }
       ],
-      "cities": ["Nancy"]
+      "cities": ["Nancy", "Lyon"]
     }
   },
   {
