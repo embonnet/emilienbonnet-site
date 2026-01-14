@@ -78,7 +78,7 @@
         "title": "Accompagnement Teams",
         "dates": "Dec. 2023 - Fev. 2024"
       },
-      "context": "À la suite de la crise sanitaire liée au COVID-19, le groupe COVEA a généralisé le télétravail pour l’ensemble de ses collaborateurs. Faute d’équipements et d’accompagnement adaptés, les équipes ont dû adopter des outils tels que Microsoft Teams sans formation ni conduite du changement structurée. Deux ans plus tard, Capgemini a été sollicité pour former une soixantaine de managers à l’utilisation de Microsoft Teams, afin de leur permettre d’en exploiter pleinement les fonctionnalités, d’adopter les bonnes pratiques et de les diffuser au sein de leurs équipes. Cette mission courte a impliqué des déplacements sur plusieurs sites, notamment à New York, au Mans et à Paris.À la suite de la crise sanitaire liée au COVID-19, le groupe COVEA a généralisé le télétravail pour l’ensemble de ses collaborateurs. Faute d’équipements et d’accompagnement adaptés, les équipes ont dû adopter des outils tels que Microsoft Teams sans formation ni conduite du changement structurée. Deux ans plus tard, Capgemini a été sollicité pour former une soixantaine de managers à l’utilisation de Microsoft Teams, afin de leur permettre d’en exploiter pleinement les fonctionnalités, d’adopter les bonnes pratiques et de les diffuser au sein de leurs équipes. Cette mission, menée en binôme, avec une grande satisfaction client à la clef, a impliqué les formations en présentiel sur leurs différents sites",
+      "context": "À la suite de la crise sanitaire liée au COVID-19, le groupe COVEA a généralisé le télétravail pour l’ensemble de ses collaborateurs. Faute d’équipements et d’accompagnement adaptés, les équipes ont dû adopter de nouveaux outils sans formation ni conduite du changement structurée. Deux ans plus tard, Capgemini a été sollicité pour former une soixantaine de managers à l’utilisation de Microsoft Teams et comprendre l'éco-système avec SharePoint et OneDrive, afin de leur permettre d’en exploiter pleinement les fonctionnalités, d’adopter les bonnes pratiques et de les diffuser au sein de leurs équipes. Cette mission, menée en binôme, avec une grande satisfaction client à la clef, a impliqué les formations en présentiel sur leurs différents sites.",
       "tech": [
         { "name": "Teams", "logo": "assets/icons/tech/Teams.svg" },
         { "name": "One Drive", "logo": "assets/icons/tech/OneDrive.svg" },
@@ -108,14 +108,14 @@
     }
   },
   {
-    "type": "AI",
+    "type": "IA",
     "icon": "memory",
     "type2": "change",
     "icon2": "school",
     "bg": "assets/images/cards/SalonDesMaires.webp",
     "back": {
       "company": {
-        "name": "uxui",
+        "name": "Capgemini",
         "logo": ""
       },
       "mission": {
@@ -166,7 +166,7 @@
         "title": "Saur & Moi",
         "dates": "Déc. 2019 - Fev. 2025"
       },
-      "context": "Le groupe SAUR a fait appel à Capgemini pour l’accompagner dans la mise en place d’un Data & Digital Center (DDC), dédié à l’industrialisation et à l’accélération de ses projets digitaux. La mission s’inscrivait dans une méthodologie SAFe, au sein de laquelle j’occupais le rôle de Scrum Master de l’équipe UX/UI, en parallèle de mes responsabilités de designer. J’ai animé des ateliers avec les Product Owners de chaque projet afin de recueillir, analyser et challenger les besoins métiers, puis conçu les maquettes UX et UI après validation. J’ai également contribué à l’alimentation et à l’évolution du design system tout au long de la mission. Les projets couvraient un large périmètre fonctionnel, incluant un dictionnaire de données en remplacement d’outils Excel, un site web B2C et son application mobile associée, des tableaux de bord Power BI, des applications métiers lourdes de paramétrage ainsi que des applications mobiles à destination des techniciens SAUR.",
+      "context": "Le groupe SAUR a fait appel à Capgemini pour l’accompagner à l’industrialisation et à l’accélération de ses projets digitaux. La mission s’inscrivait dans une méthodologie SAFe, où j'occupais les rôles de Scrum master et Lead UXUI dans notre équipe transverse. J’ai animé des ateliers avec les Product Owners de chaque projet afin de recueillir, analyser et challenger les besoins métiers, puis conçu les maquettes UX et UI après validation. J’ai contribué à l’alimentation du design system tout au long de la mission. Les projets couvraient un large périmètre fonctionnel, incluant un dictionnaire de données, un site web B2C et son application mobile, des tableaux de bord Power BI, des applications métiers lourdes de paramétrage ainsi que des applications mobiles à destination des techniciens SAUR.",
       "tech": [
         { "name": "Sketch", "logo": "assets/icons/tech/Sketch.svg" },
         { "name": "Marvel App", "logo": "assets/icons/tech/Marvel.svg" },
@@ -656,29 +656,6 @@
         { "name": "Switch", "logo": "assets/icons/tech/Switch.svg" }
       ],
       "cities": ["RPG", "Open-world"]
-    }
-  },
-  {
-    "type": "jv",
-    "icon": "sports_esports",
-    "bg": "assets/images/cards/Hades.webp",
-    "back": {
-      "company": {
-        "name": "",
-        "logo": ""
-      },
-      "mission": {
-        "title": "Hades",
-        "dates": "2020"
-      },
-      "context": "Rogue-like d’action nerveux, progression addictive et narration dynamique.",
-      "tech": [
-        { "name": "PC", "logo": "assets/icons/tech/Steam.svg" },
-        { "name": "Switch", "logo": "assets/icons/tech/Switch.svg" },
-        { "name": "PS4", "logo": "assets/icons/tech/PS4.svg" },
-        { "name": "Xbox", "logo": "assets/icons/tech/Xbox.svg" }
-      ],
-      "cities": ["Rogue-like", "Action"]
     }
   },
   {
