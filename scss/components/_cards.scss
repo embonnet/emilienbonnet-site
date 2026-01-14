@@ -51,6 +51,7 @@
     .card-clone {
         will-change: transform;
     }
+
 }
 
 /* interactions touch */
@@ -210,6 +211,34 @@
   opacity:0.95;
 }
 
+@media (max-width: 768px) {
+    .back-desc {
+        line-height:1.5;
+        font-size: 0.9rem;
+    }
+
+    .back-section{
+        margin-top:8px;
+        padding-top:8px;
+    }
+
+    .card-back-overlay {
+        padding: 18px;
+    }
+
+    .back-tech {
+        gap : 6px;
+    }
+
+    .tech-chip {
+        padding: 5px;
+    }
+
+    .tech-name {
+        display: none;
+    }
+}
+
 .back-tech{
   display:flex;
   flex-wrap:wrap;
@@ -335,7 +364,7 @@
     background-color: #F44C97;
 }
 
-.AI {
+.IA {
     background-color: #1FE0BE;
 }
 
