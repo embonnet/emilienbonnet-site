@@ -413,3 +413,39 @@
         transform: translateY(0);
     }
 }
+
+.modal-close-hint {
+  position: fixed;
+  left: 50%;
+  top: calc(50% + 75vh / 2 + 24px); /* sous la carte */
+  transform: translateX(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 21;
+  pointer-events: none; /* pure indication */
+  opacity: 0;
+  animation: fadeInCloseHint 0.35s ease forwards;
+}
+
+.modal-close-hint .material-icons {
+  font-size: 22px;
+  color: #fff;
+  opacity: 0.9;
+}
+
+@keyframes fadeInCloseHint {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
