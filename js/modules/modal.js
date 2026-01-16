@@ -360,6 +360,15 @@ export function initModalClone() {
 
     document.body.appendChild(clone);
 
+    const closeHint = document.createElement("div");
+    closeHint.className = "modal-close-hint";
+    closeHint.innerHTML = `
+      <span class="material-icons">close</span>
+    `;
+
+    document.body.appendChild(closeHint);
+    STATE.activeCloseHint = closeHint;
+
     overlay.classList.add("active");
     document.body.classList.add("modal-open");
 
@@ -375,6 +384,11 @@ export function initModalClone() {
     if (!STATE.activeClone) return;
 
     qsa(".card.disabled").forEach((c) => c.classList.remove("disabled"));
+
+    if (STATE.activeCloseHint) {
+      STATE.activeCloseHint.remove();
+      STATE.activeCloseHint = null;
+    }
 
     resetCard(STATE.activeClone);
     STATE.activeClone.remove();
