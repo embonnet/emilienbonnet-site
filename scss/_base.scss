@@ -33,6 +33,7 @@ body {
     background-image: url("../assets/images/ui/background.webp");
     background-position: center;
     background-size: cover;
+    background-attachment: fixed;
     display: flex;
     flex-direction: column;
 }
