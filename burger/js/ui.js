@@ -14,6 +14,8 @@
     introRulesList: document.getElementById("introRulesList")
   };
 
+  let serveOverlay = null;
+
   function setMessage(text, type = "neutral") {
     // Met a jour la zone de feedback en bas du plateau.
     els.messageBox.textContent = text;
@@ -272,6 +274,7 @@
     imageCell.className = "bun-cell";
     imageCell.style.gridColumn = "2";
     imageCell.style.gridRow = `${row}`;
+    imageCell.dataset.servePiece = row === 1 ? "top-bun" : "bottom-bun";
 
     const img = document.createElement("img");
     img.src = imagePath;
@@ -312,6 +315,110 @@
 
       onDropActivity(payload, slotId);
     });
+  }
+
+  async function playServeAnimation() {
+    clearServeAnimation();
+
+    const grid = els.agendaGrid;
+    const topBun = grid.querySelector('[data-serve-piece="top-bun"]');
+    const bottomBun = grid.querySelector('[data-serve-piece="bottom-bun"]');
+    const ingredientCells = Array.from(grid.querySelectorAll(".content-cell"))
+      .filter((cell) => !cell.classList.contains("free"))
+      .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+
+    if (!topBun || !bottomBun) {
+      return;
+    }
+
+    const pieces = [topBun, ...ingredientCells, bottomBun];
+    serveOverlay = document.createElement("div");
+    serveOverlay.className = "serve-overlay";
+    document.body.appendChild(serveOverlay);
+
+    const clones = pieces.map((piece) => {
+      const rect = piece.getBoundingClientRect();
+      const clone = piece.cloneNode(true);
+      clone.classList.add("serve-piece");
+      clone.style.left = `${rect.left}px`;
+      clone.style.top = `${rect.top}px`;
+      clone.style.width = `${rect.width}px`;
+      clone.style.height = `${rect.height}px`;
+      serveOverlay.appendChild(clone);
+
+      return {
+        kind: piece.dataset.servePiece || "ingredient",
+        node: clone,
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height
+      };
+    });
+
+    grid.classList.add("is-serving");
+
+    const bottomClone = clones[clones.length - 1];
+    let nextTop = bottomClone.top;
+
+    for (let index = clones.length - 2; index >= 0; index -= 1) {
+      nextTop -= clones[index].height;
+      clones[index].targetTop = nextTop;
+    }
+
+    bottomClone.targetTop = bottomClone.top;
+
+    const assembleAnimations = clones.map((piece, index) => {
+      const distance = (piece.targetTop ?? piece.top) - piece.top;
+      const delay = Math.min(index * 70, 280);
+      return piece.node.animate(
+        [
+          {
+            transform: "translate3d(0, 0, 0)"
+          },
+          {
+            transform: `translate3d(0, ${distance}px, 0)`
+          }
+        ],
+        {
+          duration: 520,
+          delay,
+          easing: "cubic-bezier(0.2, 0.9, 0.22, 1)",
+          fill: "forwards"
+        }
+      ).finished;
+    });
+
+    await Promise.all(assembleAnimations);
+
+    const stackLeft = Math.min(...clones.map((piece) => piece.left));
+    const stackRight = Math.max(...clones.map((piece) => piece.left + piece.width));
+    const exitDistance = window.innerWidth - stackLeft + (stackRight - stackLeft) + 80;
+
+    await serveOverlay.animate(
+      [
+        {
+          transform: "translate3d(0, 0, 0)"
+        },
+        {
+          transform: `translate3d(${exitDistance}px, 0, 0)`
+        }
+      ],
+      {
+        duration: 700,
+        easing: "cubic-bezier(0.25, 0.8, 0.25, 1)",
+        fill: "forwards"
+      }
+    ).finished;
+  }
+
+  function clearServeAnimation() {
+    els.agendaGrid.classList.remove("is-serving");
+
+    if (serveOverlay) {
+      serveOverlay.remove();
+      serveOverlay = null;
+    }
   }
 
   function getTypeMeta(type) {
@@ -363,6 +470,8 @@
   }
 
   window.UI = {
+    clearServeAnimation,
+    playServeAnimation,
     setMessage,
     renderLevelMeta,
     renderActivities,

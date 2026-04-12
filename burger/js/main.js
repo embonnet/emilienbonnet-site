@@ -23,11 +23,13 @@
     victoryTitle: document.getElementById("victoryTitle"),
     victoryText: document.getElementById("victoryText"),
     victoryNextBtn: document.getElementById("victoryNextBtn"),
+    failureList: document.getElementById("failureList"),
     introStartBtn: document.getElementById("introStartBtn"),
     levelsList: document.getElementById("levelsList"),
     resetLevelsBtn: document.getElementById("resetLevelsBtn"),
     closeButtons: {
       victory: document.getElementById("victoryCloseBtn"),
+      failure: document.getElementById("failureCloseBtn"),
       intro: document.getElementById("introCloseBtn"),
       settings: document.getElementById("settingsCloseBtn"),
       credits: document.getElementById("creditsCloseBtn"),
@@ -38,6 +40,7 @@
 
   const modals = {
     victory: createModalController("victoryModal"),
+    failure: createModalController("failureModal"),
     intro: createModalController("levelIntroModal"),
     settings: createModalController("settingsModal"),
     credits: createModalController("creditsModal"),
@@ -53,11 +56,14 @@
   const sound = new SoundManager({
     bgmElement: dom.bgm,
     successPath: "./audio/success.mp3",
-    resetPath: "./audio/trash.mp3"
+    resetPath: "./audio/trash.mp3",
+    ringPath: "./audio/ring.mp3",
+    errorPath: "./audio/error.mp3"
   });
 
   let currentLevel = LEVELS[1];
   let state = Engine.createEmptyState(currentLevel);
+  let isServingAnimationRunning = false;
 
   function boot() {
     sound.init();
@@ -83,14 +89,16 @@
     document.addEventListener("pointerdown", handleFirstInteraction, { once: true });
     document.addEventListener("keydown", handleFirstInteraction, { once: true });
 
-    dom.closeButtons.victory.addEventListener("click", () => modals.victory.close());
+    dom.closeButtons.victory.addEventListener("click", handleCloseVictoryModal);
+    dom.closeButtons.failure.addEventListener("click", handleCloseFailureModal);
     dom.closeButtons.intro.addEventListener("click", () => modals.intro.close());
     dom.closeButtons.settings.addEventListener("click", () => modals.settings.close());
     dom.closeButtons.credits.addEventListener("click", () => modals.credits.close());
     dom.closeButtons.levels.addEventListener("click", () => modals.levels.close());
     dom.closeButtons.completion.addEventListener("click", handleCloseCompletionModal);
 
-    modals.victory.backdrop.addEventListener("click", () => modals.victory.close());
+    modals.victory.backdrop.addEventListener("click", handleCloseVictoryModal);
+    modals.failure.backdrop.addEventListener("click", handleCloseFailureModal);
     modals.intro.backdrop.addEventListener("click", () => modals.intro.close());
     modals.settings.backdrop.addEventListener("click", () => modals.settings.close());
     modals.credits.backdrop.addEventListener("click", () => modals.credits.close());
@@ -145,28 +153,44 @@
   }
 
   async function handleValidateBoard() {
+    if (isServingAnimationRunning) {
+      return;
+    }
+
     const result = Engine.validateState(currentLevel, state);
 
     if (!result.ok) {
       UI.setMessage(result.errors.join(" "), "error");
-      await sound.playDropError();
-      return;
     }
 
-    progression.markCompleted(currentLevel.id);
-    refreshLevelsUI();
-    UI.setMessage("Burger reussi. Cette organisation est valide.", "success");
-    sound.playPuzzleSuccess();
+    sound.playRing();
+    isServingAnimationRunning = true;
 
-    if (progression.areAllCompleted()) {
-      await openCompletionModal();
-      return;
+    try {
+      await UI.playServeAnimation();
+
+      if (!result.ok) {
+        openFailureModal(result.errors);
+        return;
+      }
+
+      progression.markCompleted(currentLevel.id);
+      refreshLevelsUI();
+      UI.setMessage("Burger reussi. Cette organisation est valide.", "success");
+
+      if (progression.areAllCompleted()) {
+        await openCompletionModal();
+        return;
+      }
+
+      openVictoryModal();
+    } finally {
+      isServingAnimationRunning = false;
     }
-
-    openVictoryModal();
   }
 
   function renderAll() {
+    UI.clearServeAnimation();
     UI.renderLevelMeta(currentLevel);
     UI.renderActivities(currentLevel, state, {
       onToggleSplit: handleToggleSplit
@@ -222,13 +246,31 @@
       : "Cette organisation respecte toutes les contraintes. Tu peux passer au niveau suivant.";
     dom.victoryNextBtn.textContent = isLastLevel ? "Fermer" : "Niveau suivant";
 
+    sound.playPuzzleSuccess();
     modals.victory.open();
+  }
+
+  function openFailureModal(errors) {
+    closeSecondaryModals();
+    modals.intro.close();
+    modals.victory.close();
+    dom.failureList.innerHTML = "";
+
+    errors.forEach((error) => {
+      const li = document.createElement("li");
+      li.textContent = error;
+      dom.failureList.appendChild(li);
+    });
+
+    sound.playValidationError();
+    modals.failure.open();
   }
 
   async function openCompletionModal() {
     closeSecondaryModals();
     modals.intro.close();
     modals.victory.close();
+    sound.playPuzzleSuccess();
     modals.completion.open();
     await sound.setMusicTrack("./audio/credit.mp3", { forcePlay: true });
     syncAudioButtons();
@@ -236,15 +278,26 @@
 
   async function handleCloseCompletionModal() {
     modals.completion.close();
+    UI.clearServeAnimation();
     await sound.transitionToDefaultMusic();
     syncAudioButtons();
+  }
+
+  function handleCloseVictoryModal() {
+    modals.victory.close();
+    UI.clearServeAnimation();
+  }
+
+  function handleCloseFailureModal() {
+    modals.failure.close();
+    UI.clearServeAnimation();
   }
 
   function handleVictoryNext() {
     const nextLevelId = getNextLevelId(currentLevel.id);
 
     if (!nextLevelId) {
-      modals.victory.close();
+      handleCloseVictoryModal();
       return;
     }
 

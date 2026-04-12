@@ -190,9 +190,6 @@ body.header-collapsed .header-toggle-btn {
   min-height: 0;
   padding: 18px;
   border-radius: 30px;
-  background: linear-gradient(180deg, rgba(255, 248, 239, 0.95) 0%, rgba(252, 244, 234, 0.92) 100%);
-  border: 1px solid rgba(146, 104, 68, 0.18);
-  box-shadow: var(--shadow);
   overflow: hidden;
 }
 

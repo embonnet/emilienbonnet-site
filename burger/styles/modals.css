@@ -224,7 +224,8 @@
 }
 
 .credits-modal-content,
-.completion-modal-content {
+.completion-modal-content,
+.failure-modal-content {
   max-width: 760px;
 }
 
@@ -240,6 +241,22 @@
 
 .completion-text {
   max-width: 640px;
+}
+
+.failure-text {
+  max-width: 640px;
+}
+
+.failure-list {
+  width: 100%;
+  max-width: 640px;
+  margin: 0;
+  text-align: left;
+  color: #8a4b4b;
+}
+
+.failure-list li + li {
+  margin-top: 12px;
 }
 
 .credits-name {

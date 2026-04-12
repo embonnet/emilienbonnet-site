@@ -5,6 +5,7 @@
   grid-template-rows: var(--bun-height) repeat(8, var(--slot-height)) var(--bun-height);
   gap: 8px 12px;
   align-items: stretch;
+  position: relative;
 }
 
 .time-cell,
@@ -18,7 +19,7 @@
   align-items: center;
   justify-content: center;
   padding: 8px 10px;
-  background: linear-gradient(180deg, rgba(251, 242, 230, 0.92) 0%, rgba(244, 231, 215, 0.92) 100%);
+  background: linear-gradient(180deg, rgba(251, 242, 230, 0.99) 0%, rgba(244, 231, 215, 0.99) 100%);
   border: 1px solid rgba(146, 104, 68, 0.12);
   color: var(--ink-2);
   font-weight: 700;
@@ -26,14 +27,14 @@
 }
 
 .content-cell {
-  background: rgba(255, 252, 248, 0.92);
-  border: 1px solid rgba(146, 104, 68, 0.1);
+  background: rgba(255, 252, 248, 0.99);
+  border: 1px solid rgba(146, 104, 68, 0.5);
   min-height: 0;
   position: relative;
 }
 
 .content-cell.free {
-  background: rgba(255, 251, 246, 0.82);
+  background: rgba(255, 251, 246, 0.99);
 }
 
 .content-cell.fixed {
@@ -91,6 +92,38 @@
   display: block;
   pointer-events: none;
   user-select: none;
+}
+
+.agenda-grid.is-serving {
+  pointer-events: none;
+}
+
+.agenda-grid.is-serving > .time-cell,
+.agenda-grid.is-serving > .bun-label-cell,
+.agenda-grid.is-serving > .bun-time-cell,
+.agenda-grid.is-serving > .content-cell,
+.agenda-grid.is-serving > .bun-cell {
+  opacity: 0;
+}
+
+.serve-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: visible;
+}
+
+.serve-piece {
+  position: absolute;
+  left: 0;
+  will-change: transform, opacity;
+}
+
+.serve-piece .bun-img,
+.serve-piece .placed-block {
+  width: 100%;
+  height: 100%;
 }
 
 .placed-block {

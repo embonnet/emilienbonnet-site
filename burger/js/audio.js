@@ -4,7 +4,9 @@
     constructor({
       bgmElement,
       successPath = "./audio/success.mp3",
-      resetPath = "./audio/reset.mp3"
+      resetPath = "./audio/reset.mp3",
+      ringPath = "./audio/ring.mp3",
+      errorPath = "./audio/error.mp3"
     } = {}) {
       this.bgm = bgmElement || null;
       this.defaultBgmPath = this.bgm ? this.bgm.getAttribute("src") || this.bgm.src : "";
@@ -15,6 +17,12 @@
 
       this.resetAudio = new Audio(resetPath);
       this.resetAudio.preload = "auto";
+
+      this.ringAudio = new Audio(ringPath);
+      this.ringAudio.preload = "auto";
+
+      this.errorAudio = new Audio(errorPath);
+      this.errorAudio.preload = "auto";
 
       this.audioEnabled = false;
       this.userPausedAudio = false;
@@ -31,6 +39,8 @@
 
       this.successAudio.volume = 0.5;
       this.resetAudio.volume = 0.45;
+      this.ringAudio.volume = 0.45;
+      this.errorAudio.volume = 0.5;
     }
 
     async tryAutoStartMusic() {
@@ -199,6 +209,22 @@
       try {
         this.resetAudio.currentTime = 0;
         this.resetAudio.play().catch(() => {});
+      } catch {}
+    }
+
+    playRing() {
+      try {
+        this.ringAudio.pause();
+        this.ringAudio.currentTime = 0;
+        this.ringAudio.play().catch(() => {});
+      } catch {}
+    }
+
+    playValidationError() {
+      try {
+        this.errorAudio.pause();
+        this.errorAudio.currentTime = 0;
+        this.errorAudio.play().catch(() => {});
       } catch {}
     }
 

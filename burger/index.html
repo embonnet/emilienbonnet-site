@@ -121,7 +121,7 @@
           <div class="overlay-content">
             <div class="modal-close-row">
               <button id="victoryCloseBtn" class="ghost-btn modal-close-btn" type="button">
-                <span class="modal-close-icon">✕</span>
+                <span class="modal-close-icon">&times;</span>
                 <span>Fermer</span>
               </button>
             </div>
@@ -141,6 +141,29 @@
         </div>
       </div>
 
+      <div id="failureModal" class="overlay-modal hidden" aria-hidden="true">
+        <div class="overlay-backdrop"></div>
+
+        <div class="overlay-panel">
+          <div class="overlay-content utility-modal-content failure-modal-content">
+            <div class="modal-close-row">
+              <button id="failureCloseBtn" class="ghost-btn modal-close-btn" type="button">
+                <span class="modal-close-icon">&times;</span>
+                <span>Fermer</span>
+              </button>
+            </div>
+
+            <p class="overlay-eyebrow">Commande refusee</p>
+            <h2>Erreur de validation</h2>
+            <p class="overlay-text failure-text">
+              Ce burger ne respecte pas toutes les contraintes de composition.
+            </p>
+
+            <ul id="failureList" class="rules-list failure-list"></ul>
+          </div>
+        </div>
+      </div>
+
       <div id="levelIntroModal" class="overlay-modal hidden" aria-hidden="true">
         <div class="overlay-backdrop"></div>
 
@@ -148,7 +171,7 @@
           <div class="overlay-content intro-content">
             <div class="modal-close-row">
               <button id="introCloseBtn" class="ghost-btn modal-close-btn" type="button">
-                <span class="modal-close-icon">✕</span>
+                <span class="modal-close-icon">&times;</span>
                 <span>Fermer</span>
               </button>
             </div>
@@ -178,7 +201,7 @@
           <div class="overlay-content utility-modal-content">
             <div class="modal-close-row">
               <button id="settingsCloseBtn" class="ghost-btn modal-close-btn" type="button">
-                <span class="modal-close-icon">✕</span>
+                <span class="modal-close-icon">&times;</span>
                 <span>Fermer</span>
               </button>
             </div>
@@ -229,7 +252,7 @@
           <div class="overlay-content utility-modal-content credits-modal-content">
             <div class="modal-close-row">
               <button id="creditsCloseBtn" class="ghost-btn modal-close-btn" type="button">
-                <span class="modal-close-icon">✕</span>
+                <span class="modal-close-icon">&times;</span>
                 <span>Fermer</span>
               </button>
             </div>
@@ -251,7 +274,7 @@
           <div class="overlay-content utility-modal-content">
             <div class="modal-close-row">
               <button id="levelsCloseBtn" class="ghost-btn modal-close-btn" type="button">
-                <span class="modal-close-icon">✕</span>
+                <span class="modal-close-icon">&times;</span>
                 <span>Fermer</span>
               </button>
             </div>
@@ -280,7 +303,7 @@
           <div class="overlay-content utility-modal-content completion-modal-content">
             <div class="modal-close-row">
               <button id="completionCloseBtn" class="ghost-btn modal-close-btn" type="button">
-                <span class="modal-close-icon">✕</span>
+                <span class="modal-close-icon">&times;</span>
                 <span>Fermer</span>
               </button>
             </div>
