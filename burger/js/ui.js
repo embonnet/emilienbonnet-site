@@ -54,13 +54,11 @@
       const logical = window.Engine.getLogicalActivityById(level, activity.logicalId);
       const isPlaced = Boolean(state.placed[activity.id]);
       const typeMeta = getTypeMeta(activity.type);
-      const showRequirementBadge = !level.hideRequirementBadges;
+      const showRequirementBadge = !level.hideRequirementBadges && activity.required;
       const showTypeHint = !(level.hideNeutralTypeHints && safeType(activity.type) === "neutre");
       const placementMarkers = renderPlacementMarkers(activity.duration);
       const requirementBadge = showRequirementBadge
-        ? `<span class="badge ${activity.required ? "required" : "optional"} small">
-            ${activity.required ? "Obligatoire" : "Optionnel"}
-          </span>`
+        ? `<span class="badge required small">Obligatoire</span>`
         : "";
       const typeHint = showTypeHint
         ? `<span class="activity-type-icon">${typeMeta.icon}</span>`
@@ -186,7 +184,7 @@
       const activity = window.Engine.getPlaceableById(level, state, assignedId);
       const span = placed.slots.length;
       const typeMeta = getTypeMeta(activity.type);
-      const showRequirementBadge = !level.hideRequirementBadges;
+      const showRequirementBadge = !level.hideRequirementBadges && activity.required;
       const showTypeHint = !(level.hideNeutralTypeHints && safeType(activity.type) === "neutre");
       const typeBadge = showTypeHint
         ? `<span class="type-badge type-${safeType(activity.type)} compact">
@@ -197,7 +195,7 @@
         : "";
       const placementText = formatPlacement(activity, { withLabel: false });
       const requirementRow = showRequirementBadge
-        ? `<div class="placed-subtitle">${activity.required ? "Obligatoire" : "Optionnel"}</div>`
+        ? `<div class="placed-subtitle">Obligatoire</div>`
         : "";
 
       const placedCell = document.createElement("div");

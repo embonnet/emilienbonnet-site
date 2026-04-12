@@ -20,7 +20,8 @@ const FOOD_NAMES = {
   F: "Cornichon",
   G: "Ketchup",
   H: "Moutarde",
-  I: "Tomate"
+  I: "Tomate",
+  J: "Oeuf"
 };
 
 const FOOD_COLORS = {
@@ -32,7 +33,8 @@ const FOOD_COLORS = {
   F: "#6FAF45",
   G: "#C62828",
   H: "#D7B300",
-  I: "#D94A4A"
+  I: "#D94A4A",
+  J: "#e2c62b"
 };
 
 window.LEVELS = {
@@ -41,7 +43,7 @@ window.LEVELS = {
     id: 1,
     title: "Burger 1",
     description:
-      "Premier burger. Le client a certaines contraintes dans l'ordre de sa composition.",
+      "Tu veux me rejoindre en cuisine ? Montre moi ce que tu sais faire.",
     hideRequirementBadges: true,
     hideNeutralTypeHints: true,
     showAllPlacedRule: true,
@@ -104,7 +106,7 @@ window.LEVELS = {
     id: 2,
     title: "Burger 2",
     description:
-      "Plus exigeant. Le client a certaines contraintes dans l'ordre de sa composition.",
+      "Si je te donne quelques consignes en plus, tu peux t'en sortir ?",
     hideNeutralTypeHints: true,
     showAllPlacedRule: false,
     fillAgenda: false,
@@ -188,7 +190,7 @@ window.LEVELS = {
     id: 3,
     title: "Burger 3",
     description:
-      "Un niveau difficile avec très peu de placements imposés : seule la position du steak est contrainte.",
+      "Je te prends en période d'essai. Tu peux prendre la prochaine commande mais attention aux types des aliments.",
     showAllPlacedRule: false,
     fillAgenda: true,
     displayRules: [
@@ -296,7 +298,7 @@ window.LEVELS = {
     id: 4,
     title: "Burger 4",
     description:
-      "Un burger complexe avec très peu de placements imposés. Le cheddar prend de la place et la structure du burger rend certaines combinaisons trompeuses.",
+      "Le client n'aime pas quand trop d'ingrédients sont trop gros, il digère mal.",
     showAllPlacedRule: false,
     fillAgenda: true,
     displayRules: [
@@ -435,17 +437,17 @@ window.LEVELS = {
   },
 
   5: {
-    // Niveau expert : meme base que le niveau 4, mais la composition doit etre symetrique.
+    // Niveau expert : la symetrie porte sur les types, avec plusieurs faux appats.
     id: 5,
     title: "Burger 5",
     description:
-      "Un burger expert a la structure miroir. Les positions se repondent de haut en bas : chaque choix doit avoir son equivalent symetrique.",
+      "Le client est très à cheval sur la symetrie des types qui composent son burger. je compte sur vous !",
     showAllPlacedRule: false,
     fillAgenda: true,
-    requireMirrorSymmetry: true,
+    requireMirrorTypeSymmetry: true,
     displayRules: [
       "Les 8 emplacements doivent etre remplis.",
-      "Le burger doit etre parfaitement symetrique.",
+      "Le burger doit etre symetrique par type : 1=8, 2=7, 3=6 et 4=5.",
       "Un ingredient chaud ne peut pas etre a cote d'un froid.",
       "Un ingredient fondant doit etre adjacent a au moins un chaud.",
       "Certains ingredients peuvent etre joues en bloc ou decoupes."
@@ -459,19 +461,29 @@ window.LEVELS = {
         name: FOOD_NAMES.A,
         duration: 2,
         color: FOOD_COLORS.A,
-        required: true,
+        required: false,
         type: "chaud",
         splittable: true,
         allowedPositionSets: [
           [4, 5]
         ],
-        splitAllowedPositionSets: [
-          [3, 6],
-          [2, 7]
-        ],
         splitParts: [
-          { id: "A_1", name: "Steak 1", duration: 1, type: "chaud" },
-          { id: "A_2", name: "Steak 2", duration: 1, type: "chaud" }
+          {
+            id: "A_1",
+            name: "Steak 1",
+            duration: 1,
+            type: "chaud",
+            required: false,
+            allowedPositions: [4, 5]
+          },
+          {
+            id: "A_2",
+            name: "Steak 2",
+            duration: 1,
+            type: "chaud",
+            required: false,
+            allowedPositions: [1, 7, 8]
+          }
         ]
       },
       {
@@ -479,19 +491,24 @@ window.LEVELS = {
         name: FOOD_NAMES.D,
         duration: 2,
         color: FOOD_COLORS.D,
-        required: true,
+        required: false,
         type: "fondant",
         splittable: true,
         allowedPositionSets: [
-          [4, 5]
+          [4, 5],
+          [5, 6]
         ],
         splitAllowedPositionSets: [
+          [1, 2],
+          [1, 7],
+          [1, 8],
           [2, 7],
-          [1, 8]
+          [2, 8],
+          [7, 8]
         ],
         splitParts: [
-          { id: "D_1", name: "Cheddar 1", duration: 1, type: "fondant" },
-          { id: "D_2", name: "Cheddar 2", duration: 1, type: "fondant" }
+          { id: "D_1", name: "Cheddar 1", duration: 1, type: "fondant", required: false },
+          { id: "D_2", name: "Cheddar 2", duration: 1, type: "fondant", required: false }
         ]
       },
       {
@@ -499,9 +516,9 @@ window.LEVELS = {
         name: FOOD_NAMES.E,
         duration: 1,
         color: FOOD_COLORS.E,
-        required: false,
+        required: true,
         type: "chaud",
-        allowedPositions: [1, 2, 3, 4, 5, 6, 7, 8]
+        allowedPositions: [4, 5, 6]
       },
       {
         id: "B",
@@ -510,8 +527,7 @@ window.LEVELS = {
         color: FOOD_COLORS.B,
         required: false,
         type: "froid",
-        symmetryKey: "fresh-edge",
-        allowedPositions: [1, 2, 3, 4]
+        allowedPositions: [1]
       },
       {
         id: "C",
@@ -520,8 +536,7 @@ window.LEVELS = {
         color: FOOD_COLORS.C,
         required: false,
         type: "froid",
-        symmetryKey: "fresh-crunch",
-        allowedPositions: [1, 2, 3, 4]
+        allowedPositions: [1, 8]
       },
       {
         id: "F",
@@ -530,18 +545,16 @@ window.LEVELS = {
         color: FOOD_COLORS.F,
         required: false,
         type: "froid",
-        symmetryKey: "fresh-crunch",
-        allowedPositions: [5, 6, 7, 8]
+        allowedPositions: [6, 8]
       },
       {
         id: "G",
         name: FOOD_NAMES.G,
         duration: 1,
         color: FOOD_COLORS.G,
-        required: false,
+        required: true,
         type: "neutre",
-        symmetryKey: "sauce-pair",
-        allowedPositions: [1, 2, 3, 4]
+        allowedPositions: [1, 3, 4]
       },
       {
         id: "H",
@@ -550,8 +563,7 @@ window.LEVELS = {
         color: FOOD_COLORS.H,
         required: false,
         type: "neutre",
-        symmetryKey: "sauce-pair",
-        allowedPositions: [5, 6, 7, 8]
+        allowedPositions: [6, 7]
       },
       {
         id: "I",
@@ -560,10 +572,20 @@ window.LEVELS = {
         color: FOOD_COLORS.I,
         required: false,
         type: "froid",
-        symmetryKey: "fresh-edge",
-        allowedPositions: [5, 6, 7, 8]
+        allowedPositions: [2, 7]
+      },
+      {
+        id: "J",
+        name: FOOD_NAMES.J,
+        duration: 1,
+        color: FOOD_COLORS.J,
+        required: false,
+        type: "chaud",
+        allowedPositions: [2, 3, 4]
       }
     ],
-    globalRules: []
+    globalRules: [
+      { type: "before", first: "G", second: "H" }
+    ]
   }
 };

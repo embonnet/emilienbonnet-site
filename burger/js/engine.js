@@ -95,9 +95,15 @@
       const isSplit = activity.splittable && state.splitMap[activity.id];
 
       if (isSplit) {
-        const allAllowedPositions = uniqueFlat(activity.splitAllowedPositionSets || []);
+        const splitGroupConstraint = normalizePositionSets(activity.splitAllowedPositionSets);
+        const fallbackAllowedPositions = splitGroupConstraint
+          ? uniqueFlat(splitGroupConstraint)
+          : null;
 
         activity.splitParts.forEach((part) => {
+          const partAllowedPositions = normalizePositions(part.allowedPositions);
+          const partAllowedPositionSets = normalizePositionSets(part.allowedPositionSets);
+
           result.push({
             id: part.id,
             logicalId: activity.id,
@@ -106,14 +112,14 @@
             color: part.color || activity.color,
             required: part.required != null ? part.required : (activity.required != null ? activity.required : true),
             type: part.type || activity.type || "neutre",
-            allowedPositions: allAllowedPositions,
-            allowedPositionSets: null,
-          logicalSplitPositionSets: activity.splitAllowedPositionSets || [],
-          splitGroupIds: activity.splitParts.map((p) => p.id),
-          symmetryKey: part.symmetryKey || activity.symmetryKey || activity.id,
-          isSplitPart: true
+            allowedPositions: partAllowedPositions || fallbackAllowedPositions,
+            allowedPositionSets: partAllowedPositionSets,
+            logicalSplitPositionSets: splitGroupConstraint,
+            splitGroupIds: activity.splitParts.map((p) => p.id),
+            symmetryKey: part.symmetryKey || activity.symmetryKey || activity.id,
+            isSplitPart: true
+          });
         });
-      });
       } else {
         result.push({
           id: activity.id,
@@ -123,8 +129,8 @@
           color: activity.color,
           required: activity.required != null ? activity.required : true,
           type: activity.type || "neutre",
-          allowedPositions: activity.allowedPositions || null,
-          allowedPositionSets: activity.allowedPositionSets || null,
+          allowedPositions: normalizePositions(activity.allowedPositions),
+          allowedPositionSets: normalizePositionSets(activity.allowedPositionSets),
           logicalSplitPositionSets: null,
           splitGroupIds: null,
           symmetryKey: activity.symmetryKey || activity.id,
@@ -165,6 +171,22 @@
       });
     });
     return values;
+  }
+
+  function normalizePositions(positions) {
+    if (!Array.isArray(positions) || positions.length === 0) {
+      return null;
+    }
+
+    return positions;
+  }
+
+  function normalizePositionSets(positionSets) {
+    if (!Array.isArray(positionSets) || positionSets.length === 0) {
+      return null;
+    }
+
+    return positionSets.filter((group) => Array.isArray(group) && group.length > 0);
   }
 
   function normalizeSlotIds(slotIds) {
@@ -215,13 +237,13 @@
 
   function fitsAllowedPositions(placeable, targetSlotIds) {
     // Valide les positions simples ou les combinaisons exactes definies dans les donnees.
-    if (placeable.allowedPositions) {
+    if (placeable.allowedPositions && placeable.allowedPositions.length > 0) {
       if (targetSlotIds.length !== 1) return false;
       const pos = slotIdToPosition(targetSlotIds[0]);
       return placeable.allowedPositions.includes(pos);
     }
 
-    if (placeable.allowedPositionSets) {
+    if (placeable.allowedPositionSets && placeable.allowedPositionSets.length > 0) {
       const allowedSlotSets = placeable.allowedPositionSets.map((group) =>
         group.map(positionToSlotId)
       );
@@ -234,7 +256,11 @@
 
   function fitsSplitCombination(placeable, state, targetSlotIds) {
     // Controle qu'un morceau scinde reste compatible avec la combinaison complete autorisee.
-    if (!placeable.isSplitPart || !placeable.logicalSplitPositionSets) {
+    if (
+      !placeable.isSplitPart ||
+      !placeable.logicalSplitPositionSets ||
+      placeable.logicalSplitPositionSets.length === 0
+    ) {
       return { ok: true };
     }
 
@@ -405,6 +431,12 @@
       .every((activity) => isPlaceablePlaced(state, activity.id));
   }
 
+  function getMissingRequiredActivities(level, state) {
+    return getAvailablePlaceables(level, state)
+      .filter((activity) => activity.required)
+      .filter((activity) => !isPlaceablePlaced(state, activity.id));
+  }
+
   function areAllCurrentPlaceablesPlaced(level, state) {
     return getAvailablePlaceables(level, state)
       .every((activity) => isPlaceablePlaced(state, activity.id));
@@ -527,7 +559,7 @@
 
   function validateMirrorSymmetry(level, state) {
     // Controle que chaque paire de positions miroir respecte la symetrie attendue.
-    if (!level.requireMirrorSymmetry) {
+    if (!level.requireMirrorSymmetry && !level.requireMirrorTypeSymmetry) {
       return [];
     }
 
@@ -545,6 +577,17 @@
 
       const leftActivity = getPlaceableOrLogical(level, state, leftId);
       const rightActivity = getPlaceableOrLogical(level, state, rightId);
+
+      if (level.requireMirrorTypeSymmetry) {
+        const leftType = leftActivity ? leftActivity.type : null;
+        const rightType = rightActivity ? rightActivity.type : null;
+
+        if (leftType !== rightType) {
+          return ["Le burger doit etre symetrique par type d'ingredient."];
+        }
+
+        continue;
+      }
 
       const leftKey = leftActivity && leftActivity.symmetryKey ? leftActivity.symmetryKey : leftId;
       const rightKey = rightActivity && rightActivity.symmetryKey ? rightActivity.symmetryKey : rightId;
@@ -569,12 +612,19 @@
       errors.push("Tous les ingrédients doivent être placés.");
     }
 
-    if (!areRequiredActivitiesPlaced(level, state)) {
-      errors.push("Tous les ingrédients obligatoires doivent être placés.");
-    }
+    getMissingRequiredActivities(level, state).forEach((activity) => {
+      errors.push(`${activity.name} est obligatoire.`);
+    });
 
     (level.globalRules || []).forEach((rule) => {
       if (rule.type === "before") {
+        const firstPlaced = isPlaceablePlaced(state, rule.first);
+        const secondPlaced = isPlaceablePlaced(state, rule.second);
+
+        if (!firstPlaced || !secondPlaced) {
+          return;
+        }
+
         if (!startsBefore(state, rule.first, rule.second)) {
           const first = getPlaceableOrLogical(level, state, rule.first);
           const second = getPlaceableOrLogical(level, state, rule.second);
@@ -616,3 +666,5 @@
     validateState
   };
 })();
+
+
