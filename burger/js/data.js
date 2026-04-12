@@ -34,7 +34,7 @@ const FOOD_COLORS = {
   G: "#C62828",
   H: "#D7B300",
   I: "#D94A4A",
-  J: "#e2c62b"
+  J: "#857b42"
 };
 
 window.LEVELS = {

@@ -34,6 +34,7 @@
 }
 
 .overlay-content {
+  position: relative;
   width: 100%;
   height: 100%;
   max-width: 980px;
@@ -54,11 +55,13 @@
 }
 
 .modal-close-row {
-  width: 100%;
+  position: absolute;
+  top: 48px;
+  right: 48px;
   display: flex;
   justify-content: flex-end;
-  align-self: stretch;
   margin-bottom: 0;
+  z-index: 2;
 }
 
 .modal-close-btn {
@@ -393,7 +396,7 @@
 
 .credits-name {
   margin: 0;
-  font-family: "Pacifico", cursive;
+  font-family: "Leckerli One", cursive;
   font-size: clamp(32px, 4vw, 48px);
   color: var(--ink);
   text-align: center;

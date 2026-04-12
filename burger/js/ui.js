@@ -16,6 +16,24 @@
 
   let serveOverlay = null;
 
+  const INGREDIENT_VISUAL_BY_ID = {
+    A: "steak",
+    B: "salad",
+    C: "onion",
+    D: "cheddar",
+    E: "bacon",
+    F: "cornichon",
+    G: "ketchup",
+    H: "mustard",
+    I: "tomato",
+    J: "oeuf"
+  };
+
+  function getIngredientVisualKey(activity) {
+    if (!activity) return null;
+    return INGREDIENT_VISUAL_BY_ID[activity.logicalId] || INGREDIENT_VISUAL_BY_ID[activity.id] || null;
+  }
+
   function setMessage(text, type = "neutral") {
     // Met a jour la zone de feedback en bas du plateau.
     els.messageBox.textContent = text;
@@ -69,6 +87,10 @@
       chip.draggable = !isPlaced;
       chip.dataset.activityId = activity.id;
       chip.style.background = activity.color;
+      const visualKey = getIngredientVisualKey(activity);
+      if (visualKey) {
+        chip.dataset.ingredientVisual = visualKey;
+      }
 
       if (isPlaced) {
         chip.classList.add("used");
@@ -209,6 +231,10 @@
       block.className = `placed-block type-${safeType(activity.type)}`;
       block.draggable = true;
       block.style.background = activity.color;
+      const blockVisualKey = getIngredientVisualKey(activity);
+      if (blockVisualKey) {
+        block.dataset.ingredientVisual = blockVisualKey;
+      }
 
       block.innerHTML = `
         <div class="placed-main">

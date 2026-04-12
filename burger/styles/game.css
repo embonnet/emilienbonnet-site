@@ -127,6 +127,7 @@
 }
 
 .placed-block {
+  position: relative;
   width: 100%;
   height: 100%;
   border-radius: 18px;
@@ -139,6 +140,80 @@
   border: 1px solid rgba(80, 60, 40, 0.08);
   cursor: grab;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.activity-chip,
+.placed-block {
+  position: relative;
+  overflow: hidden;
+}
+
+.activity-chip[data-ingredient-visual]::before,
+.placed-block[data-ingredient-visual]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.activity-chip[data-ingredient-visual="salad"]::before,
+.placed-block[data-ingredient-visual="salad"]::before {
+  background-image: url("../pictures/texture/salad.png");
+}
+
+.activity-chip[data-ingredient-visual="steak"]::before,
+.placed-block[data-ingredient-visual="steak"]::before {
+  background-image: url("../pictures/texture/steak.png");
+}
+
+.activity-chip[data-ingredient-visual="onion"]::before,
+.placed-block[data-ingredient-visual="onion"]::before {
+  background-image: url("../pictures/texture/onion.png");
+}
+
+.activity-chip[data-ingredient-visual="cheddar"]::before,
+.placed-block[data-ingredient-visual="cheddar"]::before {
+  background-image: url("../pictures/texture/cheddar.png");
+}
+
+.activity-chip[data-ingredient-visual="bacon"]::before,
+.placed-block[data-ingredient-visual="bacon"]::before {
+  background-image: url("../pictures/texture/bacon.png");
+}
+
+.activity-chip[data-ingredient-visual="cornichon"]::before,
+.placed-block[data-ingredient-visual="cornichon"]::before {
+  background-image: url("../pictures/texture/cornichon.png");
+}
+
+.activity-chip[data-ingredient-visual="ketchup"]::before,
+.placed-block[data-ingredient-visual="ketchup"]::before {
+  background-image: url("../pictures/texture/ketchup.png");
+}
+
+.activity-chip[data-ingredient-visual="mustard"]::before,
+.placed-block[data-ingredient-visual="mustard"]::before {
+  background-image: url("../pictures/texture/mustard.png");
+}
+
+.activity-chip[data-ingredient-visual="tomato"]::before,
+.placed-block[data-ingredient-visual="tomato"]::before {
+  background-image: url("../pictures/texture/tomato.png");
+}
+
+.activity-chip[data-ingredient-visual="oeuf"]::before,
+.placed-block[data-ingredient-visual="oeuf"]::before {
+  background-image: url("../pictures/texture/oeuf.png");
+}
+
+.activity-chip > *,
+.placed-block > * {
+  position: relative;
+  z-index: 1;
 }
 
 .placed-block:active {
