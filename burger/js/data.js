@@ -600,7 +600,7 @@ window.LEVELS = {
     dropToLowestAvailable: true,
     displayRules: [
       "Les 8 emplacements doivent être remplis.",
-      "Quand tu poses un ingrédient, il tombe automatiquement dans l'emplacement valide le plus bas.",
+      "Quand tu poses un ingrédient, il tombe automatiquement dans l'emplacement le plus bas.",
       "Un ingrédient chaud ne peut pas être à côté d'un froid.",
       "Un ingrédient fondant doit être adjacent à au moins un chaud.",
       "Certains ingrédients peuvent être joués en bloc ou découpés."

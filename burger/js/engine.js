@@ -712,7 +712,7 @@
     const errors = [];
 
     if (level.fillAgenda && !isAgendaFull(state)) {
-      errors.push("L’agenda doit être entièrement rempli.");
+      errors.push("Le burger doit être entièrement rempli.");
     }
 
     if (level.showAllPlacedRule && !areAllCurrentPlaceablesPlaced(level, state)) {
