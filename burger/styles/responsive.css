@@ -1,0 +1,143 @@
+@media (max-width: 1180px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-center {
+    order: 1;
+  }
+
+  .panel-side {
+    order: 2;
+  }
+
+  .side-merged-panel {
+    max-width: 920px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 780px) {
+  .app-shell {
+    padding: 0 12px 12px;
+    gap: 12px;
+  }
+
+  .topbar {
+    padding: 12px;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .topbar-actions {
+    justify-content: flex-start;
+  }
+
+  .primary-btn {
+    width: 100%;
+  }
+
+  .side-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .side-column-command {
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid rgba(133, 95, 61, 0.14);
+    padding-bottom: 16px;
+  }
+
+  .side-column-reserve {
+    padding-left: 0;
+    padding-top: 4px;
+  }
+
+  .activity-pool {
+    max-height: 360px;
+  }
+
+  .agenda-grid {
+    grid-template-columns: 90px 1fr;
+    gap: 8px;
+  }
+
+  .time-cell,
+  .bun-label-cell {
+    font-size: 13px;
+    padding: 8px 6px;
+  }
+
+  .placed-actions {
+    min-width: 78px;
+  }
+
+  .trash-reset-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .status-row {
+    flex-direction: column;
+  }
+
+  .validate-btn {
+    width: 100%;
+  }
+
+  .overlay-panel {
+    inset: 2vh 2vw;
+  }
+
+  .overlay-content {
+    padding: 28px;
+  }
+
+  .utility-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .level-option-btn {
+    min-height: 58px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --slot-height: 56px;
+    --bun-height: 92px;
+  }
+
+  .agenda-card {
+    padding: 12px;
+    border-radius: 22px;
+  }
+
+  .agenda-grid {
+    grid-template-columns: 74px 1fr;
+    gap: 6px 8px;
+  }
+
+  .ghost-btn {
+    min-height: 40px;
+    padding: 8px 12px;
+  }
+
+  .activity-name {
+    font-size: 14px;
+  }
+
+  .activity-meta.compact {
+    font-size: 11px;
+  }
+
+  .placed-title {
+    font-size: 14px;
+  }
+
+  .placed-subtitle {
+    font-size: 11px;
+  }
+}

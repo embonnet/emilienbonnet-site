@@ -1,0 +1,251 @@
+.modal-stack {
+  position: relative;
+  z-index: 900;
+}
+
+.overlay-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+.overlay-modal.hidden {
+  display: none;
+}
+
+.overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(62, 50, 40, 0.46);
+  backdrop-filter: blur(4px);
+}
+
+.overlay-panel {
+  position: absolute;
+  inset: 3vh 3vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-content {
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+  background: linear-gradient(180deg, rgba(255, 250, 244, 0.98) 0%, rgba(255, 253, 249, 0.98) 100%);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: 0 30px 80px rgba(75, 57, 38, 0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  text-align: center;
+}
+
+.modal-close-row {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-self: stretch;
+  margin-bottom: 0;
+}
+
+.modal-close-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-close-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.overlay-eyebrow {
+  margin: 0 0 8px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12px;
+}
+
+.overlay-content h2 {
+  font-size: clamp(36px, 6vw, 72px);
+  margin-bottom: 16px;
+}
+
+.overlay-text {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 0 0 28px;
+}
+
+.overlay-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.levels-footer-actions {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.intro-content {
+  justify-content: center;
+  align-items: stretch;
+  text-align: left;
+}
+
+.intro-content h2,
+.intro-content .overlay-eyebrow,
+.intro-content .overlay-actions {
+  text-align: center;
+  align-self: center;
+}
+
+.intro-content .overlay-text {
+  align-self: center;
+  text-align: center;
+}
+
+.intro-rules-wrap {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto 28px;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.intro-rules-wrap h3 {
+  margin-bottom: 12px;
+}
+
+.intro-rules-list {
+  margin-top: 0;
+}
+
+.utility-modal-content {
+  max-width: 920px;
+  height: auto;
+  min-height: min(620px, 100%);
+  justify-content: center;
+  gap: 24px;
+}
+
+.utility-card {
+  width: 100%;
+  max-width: 760px;
+  padding: 24px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.58);
+  text-align: left;
+}
+
+.utility-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.utility-copy {
+  margin: 8px 0 0;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.levels-list {
+  width: 100%;
+  max-width: 760px;
+  display: grid;
+  gap: 12px;
+}
+
+.level-option-btn {
+  min-height: 64px;
+  width: 100%;
+  border: 1px solid rgba(146, 104, 68, 0.16);
+  border-radius: 20px;
+  padding: 16px 18px;
+  background: linear-gradient(180deg, rgba(255, 250, 244, 0.98) 0%, rgba(248, 239, 228, 0.98) 100%);
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.level-option-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(176, 125, 69, 0.36);
+}
+
+.level-option-btn.is-active {
+  border-color: rgba(176, 125, 69, 0.42);
+  background: linear-gradient(180deg, #fff0c9 0%, #f7ddb0 100%);
+  color: #6a4219;
+}
+
+.level-option-label {
+  min-width: 0;
+}
+
+.level-option-status {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #eff8ec;
+  border: 1px solid #bfd9b6;
+  color: #3f6a39;
+  font-size: 16px;
+  font-weight: 900;
+  flex: 0 0 auto;
+}
+
+.credits-modal-content,
+.completion-modal-content {
+  max-width: 760px;
+}
+
+.credits-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.completion-card {
+  margin-top: -4px;
+}
+
+.completion-text {
+  max-width: 640px;
+}
+
+.credits-name {
+  margin: 0;
+  font-family: "Pacifico", cursive;
+  font-size: clamp(32px, 4vw, 48px);
+  color: var(--ink);
+  text-align: center;
+}

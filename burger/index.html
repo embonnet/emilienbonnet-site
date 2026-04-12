@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <!-- Metadonnees de base et ressources globales de l'interface. -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Burger</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Coque principale du jeu. -->
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-wrap">
+          <button
+            id="headerToggleBtn"
+            class="ghost-btn header-toggle-btn"
+            type="button"
+            aria-label="Réduire ou afficher l'en-tête"
+            title="Réduire ou afficher l'en-tête"
+          >
+            <span class="header-toggle-icon" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+          <h1>Custom Burger</h1>
+        </div>
+
+        <div class="topbar-actions">
+          <button id="settingsBtn" class="ghost-btn" type="button">Paramètres</button>
+          <button id="levelsBtn" class="ghost-btn" type="button">Niveaux</button>
+        </div>
+      </header>
+
+      <div class="status-row">
+        <div id="messageBox" class="message-box neutral">
+          Place les ingrédients puis envoie.
+        </div>
+
+        <button id="validateBtn" class="primary-btn validate-btn" type="button">
+          <img src="./pictures/cloche.png" alt="" class="validate-btn-icon" />
+          <span>Envoyer en salle</span>
+        </button>
+      </div>
+
+      <main class="layout">
+        <section class="panel panel-side">
+          <div class="hud-panel side-merged-panel">
+            <div class="side-columns">
+              <div class="side-column side-column-command">
+                <div class="side-panel-header">
+                  <p class="panel-kicker">Commande</p>
+                  <h2 id="levelTitle">Burger 1</h2>
+                </div>
+
+                <p id="levelDescription" class="muted side-description"></p>
+
+                <div class="divider"></div>
+
+                <div class="rules-block">
+                  <h3>Règles</h3>
+                  <ul id="rulesList" class="rules-list"></ul>
+                </div>
+              </div>
+
+              <div class="side-column side-column-reserve">
+                <div class="ingredient-panel-header">
+                  <div>
+                    <p class="panel-kicker">Réserve</p>
+                    <h2>Ingrédients</h2>
+                  </div>
+                  <p class="muted small ingredient-help">
+                    Glisse les ingrédients dans le burger.
+                  </p>
+                </div>
+
+                <div id="activityPool" class="activity-pool"></div>
+
+                <div class="ingredient-panel-footer">
+                  <button
+                    id="resetBtn"
+                    class="trash-reset-btn"
+                    type="button"
+                    aria-label="Jeter à la poubelle"
+                    title="Jeter à la poubelle"
+                  >
+                    <span class="trash-icon">🗑️</span>
+                    <span class="trash-label">Jeter à la poubelle</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel panel-center">
+          <div class="board-shell">
+            <div class="agenda-card">
+              <p class="panel-kicker agenda-kicker">Assemblage</p>
+              <div id="agendaGrid" class="agenda-grid"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Pile de modales du jeu. -->
+    <section class="modal-stack" aria-label="Modales du jeu">
+      <div id="victoryModal" class="overlay-modal hidden" aria-hidden="true">
+        <div class="overlay-backdrop"></div>
+
+        <div class="overlay-panel">
+          <div class="overlay-content">
+            <div class="modal-close-row">
+              <button id="victoryCloseBtn" class="ghost-btn modal-close-btn" type="button">
+                <span class="modal-close-icon">✕</span>
+                <span>Fermer</span>
+              </button>
+            </div>
+
+            <p class="overlay-eyebrow">Burger réussi</p>
+            <h2 id="victoryTitle">Bravo</h2>
+            <p id="victoryText" class="overlay-text">
+              Ce burger respecte les contraintes du client.
+            </p>
+
+            <div class="overlay-actions">
+              <button id="victoryNextBtn" class="primary-btn" type="button">
+                Niveau suivant
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="levelIntroModal" class="overlay-modal hidden" aria-hidden="true">
+        <div class="overlay-backdrop"></div>
+
+        <div class="overlay-panel">
+          <div class="overlay-content intro-content">
+            <div class="modal-close-row">
+              <button id="introCloseBtn" class="ghost-btn modal-close-btn" type="button">
+                <span class="modal-close-icon">✕</span>
+                <span>Fermer</span>
+              </button>
+            </div>
+
+            <p class="overlay-eyebrow">Nouveau niveau</p>
+            <h2 id="introTitle">Niveau 1</h2>
+            <p id="introDescription" class="overlay-text"></p>
+
+            <div class="intro-rules-wrap">
+              <h3>Règles du jeu</h3>
+              <ul id="introRulesList" class="rules-list intro-rules-list"></ul>
+            </div>
+
+            <div class="overlay-actions">
+              <button id="introStartBtn" class="primary-btn" type="button">
+                C'est parti !
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="settingsModal" class="overlay-modal hidden" aria-hidden="true">
+        <div class="overlay-backdrop"></div>
+
+        <div class="overlay-panel">
+          <div class="overlay-content utility-modal-content">
+            <div class="modal-close-row">
+              <button id="settingsCloseBtn" class="ghost-btn modal-close-btn" type="button">
+                <span class="modal-close-icon">✕</span>
+                <span>Fermer</span>
+              </button>
+            </div>
+
+            <p class="overlay-eyebrow">Paramètres</p>
+            <h2>Réglages</h2>
+            <p class="overlay-text">
+              Gère ici la musique de fond pendant la partie.
+            </p>
+
+            <div class="utility-card">
+              <div class="utility-row">
+                <div>
+                  <h3>Musique</h3>
+                  <p class="muted utility-copy">
+                    Tu peux stopper ou relancer la bande-son à tout moment.
+                  </p>
+                </div>
+
+                <button id="settingsAudioBtn" class="primary-btn" type="button">
+                  Relancer la musique
+                </button>
+              </div>
+            </div>
+
+            <div class="utility-card">
+              <div class="utility-row">
+                <div>
+                  <h3>Crédit</h3>
+                  <p class="muted utility-copy">
+                    Consulte les informations de création du projet.
+                  </p>
+                </div>
+
+                <button id="creditsBtn" class="primary-btn" type="button">
+                  Voir les crédits
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="creditsModal" class="overlay-modal hidden" aria-hidden="true">
+        <div class="overlay-backdrop"></div>
+
+        <div class="overlay-panel">
+          <div class="overlay-content utility-modal-content credits-modal-content">
+            <div class="modal-close-row">
+              <button id="creditsCloseBtn" class="ghost-btn modal-close-btn" type="button">
+                <span class="modal-close-icon">✕</span>
+                <span>Fermer</span>
+              </button>
+            </div>
+
+            <p class="overlay-eyebrow">Crédits</p>
+            <h2>Création</h2>
+
+            <div class="utility-card credits-card">
+              <p class="credits-name">Emilien Bonnet</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="levelsModal" class="overlay-modal hidden" aria-hidden="true">
+        <div class="overlay-backdrop"></div>
+
+        <div class="overlay-panel">
+          <div class="overlay-content utility-modal-content">
+            <div class="modal-close-row">
+              <button id="levelsCloseBtn" class="ghost-btn modal-close-btn" type="button">
+                <span class="modal-close-icon">✕</span>
+                <span>Fermer</span>
+              </button>
+            </div>
+
+            <p class="overlay-eyebrow">Niveaux</p>
+            <h2>Liste des burgers</h2>
+            <p class="overlay-text">
+              Choisis un burger pour ouvrir directement son niveau.
+            </p>
+
+            <div id="levelsList" class="levels-list"></div>
+
+            <div class="overlay-actions levels-footer-actions">
+              <button id="resetLevelsBtn" class="ghost-btn" type="button">
+                Recommencer les niveaux
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="completionModal" class="overlay-modal hidden" aria-hidden="true">
+        <div class="overlay-backdrop"></div>
+
+        <div class="overlay-panel">
+          <div class="overlay-content utility-modal-content completion-modal-content">
+            <div class="modal-close-row">
+              <button id="completionCloseBtn" class="ghost-btn modal-close-btn" type="button">
+                <span class="modal-close-icon">✕</span>
+                <span>Fermer</span>
+              </button>
+            </div>
+
+            <p class="overlay-eyebrow">Merci</p>
+            <h2>Félicitations</h2>
+            <p class="overlay-text completion-text">
+              Tous les burgers ont été validés. Merci d'avoir joué au jeu et d'avoir
+              relevé tous les défis de composition. N'hésitez pas à me faire vos retours.
+            </p>
+
+            <div class="utility-card credits-card completion-card">
+              <p class="credits-name">Création : Emilien Bonnet</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <audio id="bgm" src="./audio/theme.mp3" loop preload="auto"></audio>
+
+    <!-- Chargement sequentiel : donnees, moteur, audio, rendu UI puis orchestration. -->
+    <script src="./js/data.js"></script>
+    <script src="./js/engine.js"></script>
+    <script src="./js/audio.js"></script>
+    <script src="./js/progression.js"></script>
+    <script src="./js/modals.js"></script>
+    <script src="./js/ui.js"></script>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
