@@ -13,11 +13,16 @@
   display: none;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .overlay-backdrop {
   position: absolute;
   inset: 0;
   background: rgba(62, 50, 40, 0.46);
   backdrop-filter: blur(4px);
+  transition: opacity 220ms ease;
 }
 
 .overlay-panel {
@@ -31,7 +36,8 @@
 .overlay-content {
   width: 100%;
   height: 100%;
-  max-width: 1200px;
+  max-width: 980px;
+  min-height: min(760px, 100%);
   background: linear-gradient(180deg, rgba(255, 250, 244, 0.98) 0%, rgba(255, 253, 249, 0.98) 100%);
   border: 1px solid var(--line);
   border-radius: 28px;
@@ -42,6 +48,9 @@
   justify-content: center;
   padding: 48px;
   text-align: center;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
 }
 
 .modal-close-row {
@@ -85,7 +94,6 @@
 }
 
 .overlay-text {
-  max-width: 760px;
   color: var(--muted);
   font-size: 18px;
   line-height: 1.5;
@@ -99,6 +107,19 @@
   flex-wrap: wrap;
 }
 
+#appIntroSpeechActions,
+#completionIntroActions {
+  min-height: 52px;
+  align-items: center;
+}
+
+#appIntroSpeechActions.hidden,
+#completionIntroActions.hidden {
+  display: flex !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .levels-footer-actions {
   width: 100%;
   margin-top: 4px;
@@ -108,6 +129,118 @@
   justify-content: center;
   align-items: stretch;
   text-align: left;
+}
+
+.app-intro-content {
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+}
+
+.completion-intro-content {
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+}
+
+.overlay-modal.modal-seamless-enter .overlay-backdrop,
+.overlay-modal.modal-seamless-enter .overlay-content,
+.overlay-modal.modal-seamless-exit .overlay-backdrop,
+.overlay-modal.modal-seamless-exit .overlay-content {
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.overlay-modal.modal-seamless-enter .overlay-backdrop {
+  opacity: 0;
+}
+
+.overlay-modal.modal-seamless-enter .overlay-content {
+  opacity: 0;
+  transform: translateY(10px) scale(0.992);
+}
+
+.overlay-modal.modal-seamless-enter.is-transition-visible .overlay-backdrop,
+.overlay-modal.modal-seamless-enter.is-transition-visible .overlay-content {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.overlay-modal.modal-seamless-exit.is-transition-hidden .overlay-backdrop {
+  opacity: 0;
+}
+
+.overlay-modal.modal-seamless-exit.is-transition-hidden .overlay-content {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.992);
+}
+
+.app-intro-image {
+  width: min(280px, 48vw);
+  height: auto;
+  object-fit: contain;
+  margin: 4px 0 12px;
+  flex: 0 0 auto;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.app-intro-image.is-visible {
+  animation: app-intro-fade-in 480ms ease-out forwards;
+}
+
+.app-intro-speech {
+  width: 100%;
+  max-width: 820px;
+  min-height: 250px;
+  align-self: center;
+}
+
+.app-intro-prompt {
+  width: 100%;
+  max-width: 820px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+.app-intro-prompt-text {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.app-intro-text {
+  text-align: center;
+  white-space: normal;
+  margin-bottom: 16px;
+  min-height: 4.5em;
+}
+
+.app-intro-text:last-child {
+  margin-bottom: 0;
+}
+
+.app-intro-word {
+  visibility: hidden;
+}
+
+.app-intro-word.is-visible {
+  visibility: visible;
+}
+
+@keyframes app-intro-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .intro-content h2,
@@ -141,9 +274,6 @@
 }
 
 .utility-modal-content {
-  max-width: 920px;
-  height: auto;
-  min-height: min(620px, 100%);
   justify-content: center;
   gap: 24px;
 }
@@ -229,12 +359,6 @@
   font-size: 16px;
   font-weight: 900;
   flex: 0 0 auto;
-}
-
-.credits-modal-content,
-.completion-modal-content,
-.failure-modal-content {
-  max-width: 760px;
 }
 
 .credits-card {

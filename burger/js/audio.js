@@ -6,6 +6,7 @@
       successPath = "./audio/success.mp3",
       resetPath = "./audio/reset.mp3",
       emptyResetPath = null,
+      doorPath = null,
       ringPath = "./audio/ring.mp3",
       errorPath = "./audio/error.mp3"
     } = {}) {
@@ -24,6 +25,11 @@
         this.emptyResetAudio.preload = "auto";
       }
 
+      this.doorAudio = doorPath ? new Audio(doorPath) : null;
+      if (this.doorAudio) {
+        this.doorAudio.preload = "auto";
+      }
+
       this.ringAudio = new Audio(ringPath);
       this.ringAudio.preload = "auto";
 
@@ -35,6 +41,9 @@
       this.audioContext = null;
       this.baseBgmVolume = 0.03;
       this.activeFadeToken = null;
+      this.lastSpeechBlipAt = 0;
+      this.speechVoiceStep = 0;
+      this.lastUiClickAt = 0;
     }
 
     init() {
@@ -47,6 +56,9 @@
       this.resetAudio.volume = 0.45;
       if (this.emptyResetAudio) {
         this.emptyResetAudio.volume = 0.45;
+      }
+      if (this.doorAudio) {
+        this.doorAudio.volume = 0.65;
       }
       this.ringAudio.volume = 0.45;
       this.errorAudio.volume = 0.5;
@@ -207,6 +219,20 @@
       ]);
     }
 
+    async playUiClick() {
+      // Joue une petite note legere pour les clics sur les boutons de l'interface.
+      const nowMs = performance.now();
+      if (nowMs - this.lastUiClickAt < 40) {
+        return;
+      }
+
+      this.lastUiClickAt = nowMs;
+
+      await this.#playToneSequence([
+        { frequency: 720, type: "triangle", duration: 0.045, gain: 0.05, delay: 0 }
+      ]);
+    }
+
     playPuzzleSuccess() {
       try {
         this.successAudio.currentTime = 0;
@@ -236,6 +262,84 @@
         this.errorAudio.currentTime = 0;
         this.errorAudio.play().catch(() => {});
       } catch {}
+    }
+
+    async playDoor() {
+      if (!this.doorAudio) {
+        return;
+      }
+
+      try {
+        this.doorAudio.pause();
+        this.doorAudio.currentTime = 0;
+        await this.doorAudio.play();
+
+        await new Promise((resolve) => {
+          const cleanup = () => {
+            this.doorAudio.removeEventListener("ended", onEnded);
+            this.doorAudio.removeEventListener("error", onError);
+          };
+
+          const onEnded = () => {
+            cleanup();
+            resolve();
+          };
+
+          const onError = () => {
+            cleanup();
+            resolve();
+          };
+
+          this.doorAudio.addEventListener("ended", onEnded, { once: true });
+          this.doorAudio.addEventListener("error", onError, { once: true });
+        });
+      } catch {}
+    }
+
+    async playSpeechBlip({ punctuation = false } = {}) {
+      // Produit un petit son synthetique "voix cartoon" pour accompagner l'apparition des mots.
+      const nowMs = performance.now();
+      const minGap = punctuation ? 42 : 26;
+
+      if (nowMs - this.lastSpeechBlipAt < minGap) {
+        return;
+      }
+
+      const ctx = await this.#getContext();
+      if (!ctx) return;
+
+      this.lastSpeechBlipAt = nowMs;
+      this.speechVoiceStep += 1;
+
+      const now = ctx.currentTime;
+      const baseFrequencies = [760, 820, 880, 940];
+      const baseFrequency = baseFrequencies[this.speechVoiceStep % baseFrequencies.length];
+      const jitter = (Math.random() * 36) - 18;
+      const attack = 0.004;
+      const duration = punctuation ? 0.042 : 0.028;
+
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      osc.type = "square";
+      osc.frequency.setValueAtTime(baseFrequency + jitter, now);
+      osc.frequency.exponentialRampToValueAtTime((baseFrequency * 0.82) + jitter, now + duration);
+
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1800, now);
+      filter.Q.setValueAtTime(2.8, now);
+
+      gainNode.gain.setValueAtTime(0.0001, now);
+      gainNode.gain.exponentialRampToValueAtTime(punctuation ? 0.065 : 0.05, now + attack);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+      osc.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + duration + 0.02);
     }
 
     async #playToneSequence(notes) {

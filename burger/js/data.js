@@ -1,4 +1,4 @@
-// Definition fixe des 8 emplacements jouables entre les deux pains du burger.
+// Définition fixe des 8 emplacements jouables entre les deux pains du burger.
 window.SLOT_DEFS = [
   { id: "s0", index: 1, fixed: false },
   { id: "s1", index: 2, fixed: false },
@@ -10,7 +10,7 @@ window.SLOT_DEFS = [
   { id: "s8", index: 8, fixed: false }
 ];
 
-// Dictionnaires de presentation reutilises dans les definitions de niveaux.
+// Dictionnaires de présentation réutilisés dans les définitions de niveaux.
 const FOOD_NAMES = {
   A: "Steak",
   B: "Salades",
@@ -21,7 +21,7 @@ const FOOD_NAMES = {
   G: "Ketchup",
   H: "Moutarde",
   I: "Tomate",
-  J: "Oeuf"
+  J: "Œuf"
 };
 
 const FOOD_COLORS = {
@@ -43,13 +43,13 @@ window.LEVELS = {
     id: 1,
     title: "Burger 1",
     description:
-      "Tu veux me rejoindre en cuisine ? Montre moi ce que tu sais faire.",
+      "Tu veux me rejoindre en cuisine ? Montre-moi ce que tu sais faire.",
     hideRequirementBadges: true,
     hideNeutralTypeHints: true,
     showAllPlacedRule: true,
     fillAgenda: false,
     displayRules: [
-      "Toutes les ingrédients doivent être placées."
+      "Tous les ingrédients doivent être placés."
     ],
     typeConflicts: [],
     activities: [
@@ -102,7 +102,7 @@ window.LEVELS = {
   },
 
   2: {
-    // Niveau intermediaire : ajoute une contrainte d'ordre entre deux ingredients.
+    // Niveau intermédiaire : ajoute une contrainte d'ordre entre deux ingrédients.
     id: 2,
     title: "Burger 2",
     description:
@@ -186,7 +186,7 @@ window.LEVELS = {
   },
 
   3: {
-    // Niveau avance : travail par types d'ingredients et remplissage complet obligatoire.
+    // Niveau avancé : travail par types d'ingrédients et remplissage complet obligatoire.
     id: 3,
     title: "Burger 3",
     description:
@@ -198,7 +198,7 @@ window.LEVELS = {
       "Un ingrédient chaud ne peut pas être à côté d’un froid.",
       "Un ingrédient fondant doit être adjacent à au moins un chaud.",
       "Salades doit être placé plus haut que le Ketchup.",
-      "Onions doivent être placé plus haut que le Cheddar."
+      "Onions doivent être placés plus haut que le Cheddar."
     ],
     typeConflicts: [
       ["chaud", "froid"]
@@ -294,7 +294,7 @@ window.LEVELS = {
   },
 
   4: {
-    // Niveau le plus complexe : ingredients scindables et contraintes plus piegeuses.
+    // Niveau le plus complexe : ingrédients scindables et contraintes plus piégeuses.
     id: 4,
     title: "Burger 4",
     description:
@@ -305,8 +305,8 @@ window.LEVELS = {
       "Les 8 emplacements doivent être remplis.",
       "Un ingrédient chaud ne peut pas être à côté d’un froid.",
       "Un ingrédient fondant doit être adjacent à au moins un chaud.",
-      "si un ingrédient prend 2 bloc, ses conditions sont sur ses 2 côtés.",
-      "Certains ingrédients peuvent être joué en bloc ou découpé.",
+      "Si un ingrédient prend 2 blocs, ses conditions s'appliquent sur ses 2 côtés.",
+      "Certains ingrédients peuvent être joués en bloc ou découpés.",
       "Ketchup doit être placé plus haut que la Moutarde."
     ],
     typeConflicts: [
@@ -437,20 +437,20 @@ window.LEVELS = {
   },
 
   5: {
-    // Niveau expert : la symetrie porte sur les types, avec plusieurs faux appats.
+    // Niveau expert : la symétrie porte sur les types, avec plusieurs faux appâts.
     id: 5,
     title: "Burger 5",
     description:
-      "Le client est très à cheval sur la symetrie des types qui composent son burger. je compte sur vous !",
+      "Le client est très à cheval sur la symétrie des types qui composent son burger. Je compte sur vous !",
     showAllPlacedRule: false,
     fillAgenda: true,
     requireMirrorTypeSymmetry: true,
     displayRules: [
-      "Les 8 emplacements doivent etre remplis.",
-      "Le burger doit etre symetrique par type : 1=8, 2=7, 3=6 et 4=5.",
-      "Un ingredient chaud ne peut pas etre a cote d'un froid.",
-      "Un ingredient fondant doit etre adjacent a au moins un chaud.",
-      "Certains ingredients peuvent etre joues en bloc ou decoupes."
+      "Les 8 emplacements doivent être remplis.",
+      "Le burger doit être symétrique par type : 1=8, 2=7, 3=6 et 4=5.",
+      "Un ingrédient chaud ne peut pas être à côté d'un froid.",
+      "Un ingrédient fondant doit être adjacent à au moins un chaud.",
+      "Certains ingrédients peuvent être joués en bloc ou découpés."
     ],
     typeConflicts: [
       ["chaud", "froid"]
@@ -590,20 +590,20 @@ window.LEVELS = {
   },
 
   6: {
-    // Niveau expert alternatif : meme roster que le niveau 5, mais avec gravite de pose.
+    // Niveau expert alternatif : même roster que le niveau 5, mais avec gravité de pose.
     id: 6,
     title: "Burger 6",
     description:
-      "Le client veut un montage millimetre : chaque ingredient tombe tout en bas, donc il faut construire le burger dans le bon ordre.",
+      "Le client veut un montage millimétré : chaque ingrédient tombe tout en bas, donc il faut construire le burger dans le bon ordre.",
     showAllPlacedRule: false,
     fillAgenda: true,
     dropToLowestAvailable: true,
     displayRules: [
-      "Les 8 emplacements doivent etre remplis.",
-      "Quand tu poses un ingredient, il tombe automatiquement dans l'emplacement valide le plus bas.",
-      "Un ingredient chaud ne peut pas etre a cote d'un froid.",
-      "Un ingredient fondant doit etre adjacent a au moins un chaud.",
-      "Certains ingredients peuvent etre joues en bloc ou decoupes."
+      "Les 8 emplacements doivent être remplis.",
+      "Quand tu poses un ingrédient, il tombe automatiquement dans l'emplacement valide le plus bas.",
+      "Un ingrédient chaud ne peut pas être à côté d'un froid.",
+      "Un ingrédient fondant doit être adjacent à au moins un chaud.",
+      "Certains ingrédients peuvent être joués en bloc ou découpés."
     ],
     typeConflicts: [
       ["chaud", "froid"]
@@ -625,7 +625,9 @@ window.LEVELS = {
         splitAllowedPositionSets: [
           [2, 3],
           [2, 6],
+          [2, 7],
           [3, 6],
+          [3, 7],
           [6, 7]
         ],
         splitParts: [
@@ -647,9 +649,15 @@ window.LEVELS = {
         ],
         splitAllowedPositionSets: [
           [1, 2],
+          [1, 6],
+          [1, 7],
+          [1, 8],
+          [2, 6],
           [2, 7],
           [2, 8],
-          [6, 7]
+          [6, 7],
+          [6, 8],
+          [7, 8]
         ],
         splitParts: [
           { id: "D_1", name: "Cheddar 1", duration: 1, type: "fondant", required: true },
@@ -693,17 +701,8 @@ window.LEVELS = {
         ],
         splitParts: [
           { id: "C_1", name: "Onions 1", duration: 1, type: "froid", required: true },
-          { id: "C_2", name: "Onions 2", duration: 1, type: "froid", required: true }
+          { id: "C_2", name: "Onions 2", duration: 1, type: "froid", required: false }
         ]
-      },
-      {
-        id: "F",
-        name: FOOD_NAMES.F,
-        duration: 1,
-        color: FOOD_COLORS.F,
-        required: false,
-        type: "froid",
-        allowedPositions: [1, 3, 4, 6]
       },
       {
         id: "G",
@@ -736,9 +735,12 @@ window.LEVELS = {
           [2, 3]
         ],
         splitAllowedPositionSets: [
-          [1, 3],
-          [2, 4],
-          [3, 4]
+          [5, 6],
+          [5, 7],
+          [5, 8],
+          [6, 7],
+          [6, 8],
+          [7, 8]
         ],
         splitParts: [
           { id: "I_1", name: "Tomate 1", duration: 1, type: "froid", required: false },

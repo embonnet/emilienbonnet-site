@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <!-- Metadonnees de base et ressources globales de l'interface. -->
+    <!-- Métadonnées de base et ressources globales de l'interface. -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Custom Burger</title>
@@ -45,7 +45,7 @@
           Place les ingrédients puis envoie.
         </div>
 
-        <button id="validateBtn" class="primary-btn validate-btn" type="button">
+        <button id="validateBtn" class="primary-btn validate-btn" type="button" data-has-own-sound="true">
           <img src="./pictures/cloche.png" alt="" class="validate-btn-icon" />
           <span>Envoyer en salle</span>
         </button>
@@ -89,6 +89,7 @@
                     id="resetBtn"
                     class="trash-reset-btn"
                     type="button"
+                    data-has-own-sound="true"
                     aria-label="Donner au chat"
                     title="Donner au chat"
                   >
@@ -154,13 +155,60 @@
               </button>
             </div>
 
-            <p class="overlay-eyebrow">Commande refusee</p>
+            <p class="overlay-eyebrow">Commande refusée</p>
             <h2>Erreur de validation</h2>
             <p class="overlay-text failure-text">
               Ce burger ne respecte pas toutes les contraintes de composition.
             </p>
 
             <ul id="failureList" class="rules-list failure-list"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="appIntroModal" class="overlay-modal hidden" aria-hidden="true">
+        <div class="overlay-backdrop"></div>
+
+        <div class="overlay-panel">
+          <div class="overlay-content app-intro-content">
+            <div class="modal-close-row">
+              <button id="appIntroCloseBtn" class="ghost-btn modal-close-btn" type="button">
+                <span class="modal-close-icon">&times;</span>
+                <span>Fermer</span>
+              </button>
+            </div>
+
+            <p class="overlay-eyebrow">Introduction</p>
+            <img src="./pictures/chef/chef-skeptical.png" alt="" id="appIntroImage" class="app-intro-image" />
+            <div id="appIntroPrompt" class="app-intro-prompt">
+              <p class="overlay-text app-intro-prompt-text">Bonjour, qui êtes-vous ?</p>
+            </div>
+            <div id="appIntroSpeech" class="app-intro-speech hidden" aria-live="polite">
+              <p
+                class="overlay-text app-intro-text"
+                data-full-text="« On ne se connaît pas. Et pour être honnête… ça m’arrange presque. Les CV, les belles paroles, ça ne m’intéresse pas ici. En cuisine, soit tu tiens la pression, soit tu dégages."
+              ></p>
+              <p
+                class="overlay-text app-intro-text"
+                data-full-text="Je cherche quelqu’un de fiable, pas quelqu’un qui me promet beaucoup. Alors voilà comment ça va se passer : tu bosses avec moi, maintenant. Pas d’engagement, pas de promesse. Tu fais tes preuves, je vois ce que tu vaux… et ensuite, peut-être qu’on parlera d’avenir."
+              ></p>
+              <p
+                class="overlay-text app-intro-text"
+                data-full-text="Ici, chaque geste compte. Alors montre-moi que tu mérites ta place. »"
+              ></p>
+            </div>
+
+            <div id="appIntroPromptActions" class="overlay-actions">
+              <button id="appIntroPromptBtn" class="primary-btn" type="button">
+                je viens pour l'annonce
+              </button>
+            </div>
+
+            <div id="appIntroSpeechActions" class="overlay-actions hidden">
+              <button id="appIntroEnterBtn" class="primary-btn" type="button" data-has-own-sound="true">
+                Entrer dans la cuisine
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -322,11 +370,49 @@
           </div>
         </div>
       </div>
+
+      <div id="completionIntroModal" class="overlay-modal hidden" aria-hidden="true">
+        <div class="overlay-backdrop"></div>
+
+        <div class="overlay-panel">
+          <div class="overlay-content completion-intro-content">
+            <div class="modal-close-row">
+              <button id="completionIntroCloseBtn" class="ghost-btn modal-close-btn" type="button">
+                <span class="modal-close-icon">&times;</span>
+                <span>Fermer</span>
+              </button>
+            </div>
+
+            <p class="overlay-eyebrow">Chef</p>
+            <img src="./pictures/chef/chef-happy.png" alt="" id="completionIntroImage" class="app-intro-image" />
+            <div id="completionIntroSpeech" class="app-intro-speech" aria-live="polite">
+              <p
+                class="overlay-text app-intro-text"
+                data-full-text="Hm… je dois l’admettre, je ne m’étais pas trompé en te gardant à l’œil. Ce que tu as fait aujourd’hui… c’est propre. Rapide, précis, sans hésitation. C’est exactement ce que j’attends en cuisine."
+              ></p>
+              <p
+                class="overlay-text app-intro-text"
+                data-full-text="Tu as compris le rythme, tu respectes les produits, et surtout… tu tiens la pression. Ça, ça ne s’apprend pas facilement."
+              ></p>
+              <p
+                class="overlay-text app-intro-text"
+                data-full-text="Continue comme ça. Avec ce niveau-là, tu ne travailles plus pour moi… tu travailles avec moi maintenant !"
+              ></p>
+            </div>
+
+            <div id="completionIntroActions" class="overlay-actions hidden">
+              <button id="completionIntroBtn" class="primary-btn" type="button" data-has-own-sound="true">
+                Merci Chef !
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <audio id="bgm" src="./audio/theme.mp3" loop preload="auto"></audio>
 
-    <!-- Chargement sequentiel : donnees, moteur, audio, rendu UI puis orchestration. -->
+    <!-- Chargement séquentiel : données, moteur, audio, rendu UI puis orchestration. -->
     <script src="./js/data.js"></script>
     <script src="./js/engine.js"></script>
     <script src="./js/audio.js"></script>
