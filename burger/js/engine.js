@@ -110,7 +110,7 @@
             name: part.name,
             duration: part.duration,
             color: part.color || activity.color,
-            required: part.required != null ? part.required : (activity.required != null ? activity.required : true),
+            required: part.required != null ? part.required : false,
             type: part.type || activity.type || "neutre",
             allowedPositions: partAllowedPositions || fallbackAllowedPositions,
             allowedPositionSets: partAllowedPositionSets,
@@ -293,8 +293,61 @@
       ? { ok: true }
       : {
           ok: false,
-          reason: "Ce placement ne correspond à aucune combinaison autorisée pour cet ingrédient découpé."
+      reason: "Ce placement ne correspond à aucune combinaison autorisée pour cet ingrédient découpé."
         };
+  }
+
+  function getGravityResolvedTargetSlots(level, state, placeable) {
+    // En mode gravite, un ingredient tombe toujours sur l'emplacement libre le plus bas.
+    if (!level.dropToLowestAvailable) {
+      return null;
+    }
+
+    for (let pos = 8; pos >= 1; pos -= 1) {
+      const startSlotId = positionToSlotId(pos);
+      if (!startSlotId) continue;
+
+      const targetSlots = getTargetSlotsFromStart(startSlotId, placeable.duration);
+      if (!targetSlots) continue;
+
+      const freeCheck = targetSlotsAreFree(state, targetSlots);
+      if (!freeCheck.ok) continue;
+
+      return {
+        ok: true,
+        startSlotId,
+        targetSlots
+      };
+    }
+
+    return {
+      ok: false,
+      reason: `Le placement de ${placeable.name} n'est pas autorisé.`
+    };
+  }
+
+  function validatePlacementConstraints(level, state) {
+    // Verifie en fin de partie que chaque ingredient respecte bien ses contraintes de pose.
+    const errors = [];
+
+    Object.keys(state.placed).forEach((placeableId) => {
+      const placeable = getPlaceableById(level, state, placeableId);
+      const placed = state.placed[placeableId];
+      if (!placeable || !placed) return;
+
+      const targetSlotIds = placed.slots.slice();
+
+      if (!fitsAllowedPositions(placeable, targetSlotIds)) {
+        errors.push(`${placeable.name} n'est pas placé au bon endroit.`);
+      }
+
+      const splitCheck = fitsSplitCombination(placeable, state, targetSlotIds);
+      if (!splitCheck.ok) {
+        errors.push(splitCheck.reason);
+      }
+    });
+
+    return uniqueStrings(errors);
   }
 
   function canPlaceActivity(level, state, placeableId, startSlotId) {
@@ -307,6 +360,11 @@
 
     if (isPlaceablePlaced(state, placeableId)) {
       return { ok: false, reason: "Cet ingrédient est déjà placé." };
+    }
+
+    const gravityPlacement = getGravityResolvedTargetSlots(level, state, placeable);
+    if (gravityPlacement) {
+      return gravityPlacement;
     }
 
     const targetSlots = getTargetSlotsFromStart(startSlotId, placeable.duration);
@@ -353,14 +411,59 @@
 
     state.placed[placeableId] = {
       activityId: placeableId,
-      startSlotId,
+      startSlotId: result.startSlotId || startSlotId,
       slots: result.targetSlots.map((slot) => slot.id)
     };
 
     return { ok: true };
   }
 
-  function removeActivity(state, placeableId) {
+  function compactPlacedActivitiesDown(level, state) {
+    // En mode gravite, tasse tous les ingredients restants vers le bas en preservant leur ordre.
+    if (!level || !level.dropToLowestAvailable) {
+      return;
+    }
+
+    const placedEntries = Object.keys(state.placed)
+      .map((placeableId) => ({
+        placeableId,
+        placed: state.placed[placeableId]
+      }))
+      .sort((a, b) => {
+        const aPos = Math.max.apply(null, a.placed.slots.map(slotIdToPosition));
+        const bPos = Math.max.apply(null, b.placed.slots.map(slotIdToPosition));
+        return bPos - aPos;
+      });
+
+    SLOT_DEFS.forEach((slot) => {
+      if (!slot.fixed) {
+        state.assignments[slot.id] = null;
+      }
+    });
+
+    let nextTopPosition = 8;
+
+    placedEntries.forEach(({ placeableId, placed }) => {
+      const duration = placed.slots.length;
+      const startPosition = nextTopPosition - duration + 1;
+      const startSlotId = positionToSlotId(startPosition);
+      const targetSlots = getTargetSlotsFromStart(startSlotId, duration) || [];
+
+      targetSlots.forEach((slot) => {
+        state.assignments[slot.id] = placeableId;
+      });
+
+      state.placed[placeableId] = {
+        activityId: placeableId,
+        startSlotId,
+        slots: targetSlots.map((slot) => slot.id)
+      };
+
+      nextTopPosition = startPosition - 1;
+    });
+  }
+
+  function removeActivity(level, state, placeableId, options = {}) {
     // Supprime un ingredient pose et libere tous ses slots.
     const placed = state.placed[placeableId];
     if (!placed) return;
@@ -370,6 +473,10 @@
     });
 
     delete state.placed[placeableId];
+
+    if (options.compact !== false) {
+      compactPlacedActivitiesDown(level, state);
+    }
   }
 
   function movePlacedActivity(level, state, placeableId, targetSlotId) {
@@ -380,7 +487,7 @@
     }
 
     const originalStart = placed.startSlotId;
-    removeActivity(state, placeableId);
+    removeActivity(level, state, placeableId, { compact: false });
 
     const moved = placeActivity(level, state, placeableId, targetSlotId);
     if (moved.ok) {
@@ -404,8 +511,8 @@
     const firstStart = state.placed[firstId].startSlotId;
     const secondStart = state.placed[secondId].startSlotId;
 
-    removeActivity(state, firstId);
-    removeActivity(state, secondId);
+    removeActivity(level, state, firstId, { compact: false });
+    removeActivity(level, state, secondId, { compact: false });
 
     const firstPlaced = placeActivity(level, state, firstId, secondStart);
     if (!firstPlaced.ok) {
@@ -416,7 +523,7 @@
 
     const secondPlaced = placeActivity(level, state, secondId, firstStart);
     if (!secondPlaced.ok) {
-      removeActivity(state, firstId);
+      removeActivity(level, state, firstId, { compact: false });
       placeActivity(level, state, firstId, firstStart);
       placeActivity(level, state, secondId, secondStart);
       return secondPlaced;
@@ -637,6 +744,7 @@
     errors.push.apply(errors, validateTypeAdjacency(level, state));
     errors.push.apply(errors, validateFondantAdjacency(level, state));
     errors.push.apply(errors, validateMirrorSymmetry(level, state));
+    errors.push.apply(errors, validatePlacementConstraints(level, state));
 
     return {
       ok: errors.length === 0,

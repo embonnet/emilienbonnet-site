@@ -405,15 +405,17 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 14px 16px;
+  padding: 5px 15px;
   color: #7b4f24;
   font-weight: 800;
   cursor: pointer;
 }
 
 .trash-icon {
-  font-size: 24px;
-  line-height: 1;
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
 
 .trash-label {

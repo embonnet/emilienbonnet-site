@@ -56,7 +56,8 @@
   const sound = new SoundManager({
     bgmElement: dom.bgm,
     successPath: "./audio/success.mp3",
-    resetPath: "./audio/trash.mp3",
+    resetPath: "./audio/cat.mp3",
+    emptyResetPath: "./audio/cat-empty.mp3",
     ringPath: "./audio/ring.mp3",
     errorPath: "./audio/error.mp3"
   });
@@ -145,11 +146,12 @@
 
   async function handleResetBoard() {
     closeAllModals();
+    const wasEmpty = Object.keys(state.placed).length === 0;
     state = Engine.createEmptyState(currentLevel);
     renderAll();
-    UI.setMessage("Liste des ingredients videe.", "neutral");
+    UI.setMessage("Liste des ingredients vide.", "neutral");
     await sound.unlockSfx();
-    sound.playReset();
+    sound.playReset({ empty: wasEmpty });
   }
 
   async function handleValidateBoard() {
@@ -240,7 +242,7 @@
     const nextLevelId = getNextLevelId(currentLevel.id);
     const isLastLevel = !nextLevelId;
 
-    dom.victoryTitle.textContent = currentLevel.title;
+    dom.victoryTitle.textContent = "Commande envoyée !";
     dom.victoryText.textContent = isLastLevel
       ? "Tu as termine le dernier burger disponible de ce POC."
       : "Cette organisation respecte toutes les contraintes. Tu peux passer au niveau suivant.";
@@ -391,7 +393,7 @@
 
     const targetStartSlotId = targetPlaced.startSlotId;
 
-    Engine.removeActivity(state, targetActivityId);
+    Engine.removeActivity(currentLevel, state, targetActivityId, { compact: false });
 
     const replaceResult = Engine.placeActivity(currentLevel, state, activityId, slotId);
     if (replaceResult.ok) {
@@ -477,7 +479,7 @@
   }
 
   async function handleRemoveActivity(activityId) {
-    Engine.removeActivity(state, activityId);
+    Engine.removeActivity(currentLevel, state, activityId);
     renderAll();
     UI.setMessage("Activite retiree.", "neutral");
     await sound.playDropError();

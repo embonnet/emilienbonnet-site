@@ -5,6 +5,7 @@
       bgmElement,
       successPath = "./audio/success.mp3",
       resetPath = "./audio/reset.mp3",
+      emptyResetPath = null,
       ringPath = "./audio/ring.mp3",
       errorPath = "./audio/error.mp3"
     } = {}) {
@@ -17,6 +18,11 @@
 
       this.resetAudio = new Audio(resetPath);
       this.resetAudio.preload = "auto";
+
+      this.emptyResetAudio = emptyResetPath ? new Audio(emptyResetPath) : null;
+      if (this.emptyResetAudio) {
+        this.emptyResetAudio.preload = "auto";
+      }
 
       this.ringAudio = new Audio(ringPath);
       this.ringAudio.preload = "auto";
@@ -39,6 +45,9 @@
 
       this.successAudio.volume = 0.5;
       this.resetAudio.volume = 0.45;
+      if (this.emptyResetAudio) {
+        this.emptyResetAudio.volume = 0.45;
+      }
       this.ringAudio.volume = 0.45;
       this.errorAudio.volume = 0.5;
     }
@@ -205,10 +214,11 @@
       } catch {}
     }
 
-    playReset() {
+    playReset({ empty = false } = {}) {
       try {
-        this.resetAudio.currentTime = 0;
-        this.resetAudio.play().catch(() => {});
+        const audio = empty && this.emptyResetAudio ? this.emptyResetAudio : this.resetAudio;
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
       } catch {}
     }
 

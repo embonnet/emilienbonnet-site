@@ -76,6 +76,14 @@
   margin-bottom: 16px;
 }
 
+.victory-hero-image {
+  width: min(220px, 42vw);
+  height: auto;
+  object-fit: contain;
+  margin: 6px 0 10px;
+  flex: 0 0 auto;
+}
+
 .overlay-text {
   max-width: 760px;
   color: var(--muted);

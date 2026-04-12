@@ -49,7 +49,7 @@ window.LEVELS = {
     showAllPlacedRule: true,
     fillAgenda: false,
     displayRules: [
-      "Toutes les activités doivent être placées."
+      "Toutes les ingrédients doivent être placées."
     ],
     typeConflicts: [],
     activities: [
@@ -582,6 +582,177 @@ window.LEVELS = {
         required: false,
         type: "chaud",
         allowedPositions: [2, 3, 4]
+      }
+    ],
+    globalRules: [
+      { type: "before", first: "G", second: "H" }
+    ]
+  },
+
+  6: {
+    // Niveau expert alternatif : meme roster que le niveau 5, mais avec gravite de pose.
+    id: 6,
+    title: "Burger 6",
+    description:
+      "Le client veut un montage millimetre : chaque ingredient tombe tout en bas, donc il faut construire le burger dans le bon ordre.",
+    showAllPlacedRule: false,
+    fillAgenda: true,
+    dropToLowestAvailable: true,
+    displayRules: [
+      "Les 8 emplacements doivent etre remplis.",
+      "Quand tu poses un ingredient, il tombe automatiquement dans l'emplacement valide le plus bas.",
+      "Un ingredient chaud ne peut pas etre a cote d'un froid.",
+      "Un ingredient fondant doit etre adjacent a au moins un chaud.",
+      "Certains ingredients peuvent etre joues en bloc ou decoupes."
+    ],
+    typeConflicts: [
+      ["chaud", "froid"]
+    ],
+    activities: [
+      {
+        id: "A",
+        name: FOOD_NAMES.A,
+        duration: 2,
+        color: FOOD_COLORS.A,
+        required: false,
+        type: "chaud",
+        splittable: true,
+        allowedPositionSets: [
+          [5, 6],
+          [6, 7],
+          [7, 8]
+        ],
+        splitAllowedPositionSets: [
+          [2, 3],
+          [2, 6],
+          [3, 6],
+          [6, 7]
+        ],
+        splitParts: [
+          { id: "A_1", name: "Steak 1", duration: 1, type: "chaud", required: false },
+          { id: "A_2", name: "Steak 2", duration: 1, type: "chaud", required: false }
+        ]
+      },
+      {
+        id: "D",
+        name: FOOD_NAMES.D,
+        duration: 2,
+        color: FOOD_COLORS.D,
+        required: true,
+        type: "fondant",
+        splittable: true,
+        allowedPositionSets: [
+          [6, 7],
+          [7, 8]
+        ],
+        splitAllowedPositionSets: [
+          [1, 2],
+          [2, 7],
+          [2, 8],
+          [6, 7]
+        ],
+        splitParts: [
+          { id: "D_1", name: "Cheddar 1", duration: 1, type: "fondant", required: true },
+          { id: "D_2", name: "Cheddar 2", duration: 1, type: "fondant", required: true }
+        ]
+      },
+      {
+        id: "E",
+        name: FOOD_NAMES.E,
+        duration: 1,
+        color: FOOD_COLORS.E,
+        required: true,
+        type: "chaud",
+        allowedPositions: [7, 8]
+      },
+      {
+        id: "B",
+        name: FOOD_NAMES.B,
+        duration: 1,
+        color: FOOD_COLORS.B,
+        required: true,
+        type: "froid",
+        allowedPositions: [1, 2]
+      },
+      {
+        id: "C",
+        name: FOOD_NAMES.C,
+        duration: 2,
+        color: FOOD_COLORS.C,
+        required: true,
+        type: "froid",
+        splittable: true,
+        allowedPositionSets: [
+          [4, 5],
+          [5, 6]
+        ],
+        splitAllowedPositionSets: [
+          [3, 4],
+          [3, 5],
+          [4, 5]
+        ],
+        splitParts: [
+          { id: "C_1", name: "Onions 1", duration: 1, type: "froid", required: true },
+          { id: "C_2", name: "Onions 2", duration: 1, type: "froid", required: true }
+        ]
+      },
+      {
+        id: "F",
+        name: FOOD_NAMES.F,
+        duration: 1,
+        color: FOOD_COLORS.F,
+        required: false,
+        type: "froid",
+        allowedPositions: [1, 3, 4, 6]
+      },
+      {
+        id: "G",
+        name: FOOD_NAMES.G,
+        duration: 1,
+        color: FOOD_COLORS.G,
+        required: true,
+        type: "neutre",
+        allowedPositions: [2, 3, 4]
+      },
+      {
+        id: "H",
+        name: FOOD_NAMES.H,
+        duration: 1,
+        color: FOOD_COLORS.H,
+        required: true,
+        type: "neutre",
+        allowedPositions: [5, 6, 7]
+      },
+      {
+        id: "I",
+        name: FOOD_NAMES.I,
+        duration: 2,
+        color: FOOD_COLORS.I,
+        required: false,
+        type: "froid",
+        splittable: true,
+        allowedPositionSets: [
+          [1, 2],
+          [2, 3]
+        ],
+        splitAllowedPositionSets: [
+          [1, 3],
+          [2, 4],
+          [3, 4]
+        ],
+        splitParts: [
+          { id: "I_1", name: "Tomate 1", duration: 1, type: "froid", required: false },
+          { id: "I_2", name: "Tomate 2", duration: 1, type: "froid", required: false }
+        ]
+      },
+      {
+        id: "J",
+        name: FOOD_NAMES.J,
+        duration: 1,
+        color: FOOD_COLORS.J,
+        required: false,
+        type: "chaud",
+        allowedPositions: [4, 5, 6, 7]
       }
     ],
     globalRules: [
