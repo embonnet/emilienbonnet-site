@@ -164,15 +164,15 @@
     document.addEventListener("keydown", handleFirstInteraction, { once: true });
     document.addEventListener("click", handleGlobalButtonClick);
 
-    dom.closeButtons.appIntro.addEventListener("click", handleCloseAppIntroModal);
-    dom.closeButtons.completionIntro.addEventListener("click", handleCloseCompletionIntroModal);
-    dom.closeButtons.victory.addEventListener("click", handleCloseVictoryModal);
-    dom.closeButtons.failure.addEventListener("click", handleCloseFailureModal);
-    dom.closeButtons.intro.addEventListener("click", () => modals.intro.close());
-    dom.closeButtons.settings.addEventListener("click", () => modals.settings.close());
-    dom.closeButtons.credits.addEventListener("click", () => modals.credits.close());
-    dom.closeButtons.levels.addEventListener("click", () => modals.levels.close());
-    dom.closeButtons.completion.addEventListener("click", handleCloseCompletionModal);
+    dom.closeButtons.appIntro?.addEventListener("click", handleCloseAppIntroModal);
+    dom.closeButtons.completionIntro?.addEventListener("click", handleCloseCompletionIntroModal);
+    dom.closeButtons.victory?.addEventListener("click", handleCloseVictoryModal);
+    dom.closeButtons.failure?.addEventListener("click", handleCloseFailureModal);
+    dom.closeButtons.intro?.addEventListener("click", () => modals.intro.close());
+    dom.closeButtons.settings?.addEventListener("click", () => modals.settings.close());
+    dom.closeButtons.credits?.addEventListener("click", () => modals.credits.close());
+    dom.closeButtons.levels?.addEventListener("click", () => modals.levels.close());
+    dom.closeButtons.completion?.addEventListener("click", handleCloseCompletionModal);
 
     modals.appIntro.backdrop.addEventListener("click", handleCloseAppIntroModal);
     modals.completionIntro.backdrop.addEventListener("click", handleCloseCompletionIntroModal);
