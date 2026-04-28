@@ -14,7 +14,7 @@ window.SLOT_DEFS = [
 const FOOD_NAMES = {
   A: "Steak",
   B: "Salades",
-  C: "Onions",
+  C: "Oignons",
   D: "Cheddar",
   E: "Bacon",
   F: "Cornichon",
@@ -198,7 +198,7 @@ window.LEVELS = {
       "Un ingrédient chaud ne peut pas être à côté d’un froid.",
       "Un ingrédient fondant doit être adjacent à au moins un chaud.",
       "Salades doit être placé plus haut que le Ketchup.",
-      "Onions doivent être placés plus haut que le Cheddar."
+      "Oignons doivent être placés plus haut que le Cheddar."
     ],
     typeConflicts: [
       ["chaud", "froid"]
@@ -700,8 +700,8 @@ window.LEVELS = {
           [4, 5]
         ],
         splitParts: [
-          { id: "C_1", name: "Onions 1", duration: 1, type: "froid", required: true },
-          { id: "C_2", name: "Onions 2", duration: 1, type: "froid", required: false }
+          { id: "C_1", name: "Oignons 1", duration: 1, type: "froid", required: true },
+          { id: "C_2", name: "Oignons 2", duration: 1, type: "froid", required: false }
         ]
       },
       {

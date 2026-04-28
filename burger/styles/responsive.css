@@ -93,6 +93,50 @@
     padding: 28px;
   }
 
+  .tutorial-demo {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 20px;
+  }
+
+  .tutorial-demo-placement {
+    grid-template-columns: 1fr;
+  }
+
+  .tutorial-demo-reset {
+    grid-template-columns: 1fr;
+  }
+
+  .tutorial-pool,
+  .tutorial-burger {
+    min-height: 180px;
+  }
+
+  .tutorial-path {
+    min-height: 56px;
+  }
+
+  .tutorial-path::before {
+    width: 8px;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(223, 159, 45, 0.12), rgba(223, 159, 45, 0.44));
+  }
+
+  .tutorial-path-arrow {
+    right: auto;
+    bottom: 8px;
+    --tutorial-arrow-rotation: 135deg;
+  }
+
+  .tutorial-burger-stack {
+    width: min(220px, 100%);
+  }
+
+  .tutorial-reset-btn {
+    width: 100%;
+    max-width: 260px;
+  }
+
   .utility-row {
     flex-direction: column;
     align-items: stretch;
@@ -139,5 +183,14 @@
 
   .placed-subtitle {
     font-size: 11px;
+  }
+
+  .tutorial-ingredient {
+    width: 132px;
+  }
+
+  .tutorial-ingredient-steak {
+    width: 100%;
+    max-width: 220px;
   }
 }

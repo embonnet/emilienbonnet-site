@@ -162,6 +162,12 @@ body.header-collapsed .header-toggle-btn {
   gap: 10px;
 }
 
+.rules-actions {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 6px;
+}
+
 .rules-block h3 {
   font-family: "Leckerli One", cursive;
   font-weight: 400;

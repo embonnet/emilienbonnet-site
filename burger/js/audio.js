@@ -219,6 +219,13 @@
       ]);
     }
 
+    async playRemoveIngredient() {
+      await this.#playToneSequence([
+        { frequency: 420, type: "triangle", duration: 0.07, gain: 0.18, delay: 0 },
+        { frequency: 320, type: "triangle", duration: 0.09, gain: 0.16, delay: 0.045 }
+      ]);
+    }
+
     async playUiClick() {
       // Joue une petite note legere pour les clics sur les boutons de l'interface.
       const nowMs = performance.now();

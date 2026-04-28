@@ -6,7 +6,8 @@
     levelTitle: document.getElementById("levelTitle"),
     levelDescription: document.getElementById("levelDescription"),
     rulesList: document.getElementById("rulesList"),
-    activityPool: document.getElementById("activityPool"),
+    activityPool: document.getElementById("ingredientReserveArea"),
+    ingredientReserveArea: document.getElementById("ingredientReserveArea"),
     agendaGrid: document.getElementById("agendaGrid"),
     messageBox: document.getElementById("messageBox"),
     introTitle: document.getElementById("introTitle"),
@@ -15,6 +16,10 @@
   };
 
   let serveOverlay = null;
+  let trackedPointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  let trackingFrameId = null;
+  let topBunErrorReactionTimeout = null;
+  let currentDragPayload = null;
 
   const INGREDIENT_VISUAL_BY_ID = {
     A: "steak",
@@ -65,6 +70,7 @@
   function renderActivities(level, state, handlers) {
     // Recompose la reserve d'ingredients disponible selon l'etat courant.
     els.activityPool.innerHTML = "";
+    bindReserveDropTarget(handlers.onDropToReserve);
 
     const placeables = window.Engine.getAvailablePlaceables(level, state);
 
@@ -124,13 +130,19 @@
           return;
         }
 
+        currentDragPayload = {
+          source: "pool",
+          activityId: activity.id
+        };
+
         e.dataTransfer.setData(
           "text/plain",
-          JSON.stringify({
-            source: "pool",
-            activityId: activity.id
-          })
+          JSON.stringify(currentDragPayload)
         );
+      });
+
+      chip.addEventListener("dragend", () => {
+        currentDragPayload = null;
       });
 
       const actionsEl = chip.querySelector(".activity-actions");
@@ -152,6 +164,65 @@
 
       els.activityPool.appendChild(chip);
     });
+
+    syncReserveDropMinHeight();
+  }
+
+  function bindReserveDropTarget(onDropToReserve) {
+    const reserveArea = els.ingredientReserveArea;
+    if (!reserveArea || reserveArea.dataset.dropBound === "true") {
+      return;
+    }
+
+    reserveArea.dataset.dropBound = "true";
+
+      const clearHighlight = () => {
+        reserveArea.classList.remove("drag-over");
+      };
+
+    reserveArea.addEventListener("dragover", (e) => {
+      const payload = getCurrentDragPayload(e);
+      if (payload?.source !== "placed") {
+        return;
+      }
+
+      e.preventDefault();
+      reserveArea.classList.add("drag-over");
+    });
+
+    reserveArea.addEventListener("dragleave", (e) => {
+      const nextTarget = e.relatedTarget;
+      if (nextTarget instanceof Node && reserveArea.contains(nextTarget)) {
+        return;
+      }
+
+      clearHighlight();
+    });
+
+    reserveArea.addEventListener("drop", (e) => {
+      clearHighlight();
+      e.preventDefault();
+
+      const payload = getCurrentDragPayload(e);
+      currentDragPayload = null;
+
+      if (payload?.source !== "placed" || !payload.activityId || typeof onDropToReserve !== "function") {
+        return;
+      }
+
+      onDropToReserve(payload.activityId);
+    });
+  }
+
+  function syncReserveDropMinHeight() {
+    const reserveArea = els.ingredientReserveArea;
+    if (!reserveArea) {
+      return;
+    }
+
+    reserveArea.style.minHeight = "0px";
+    const contentHeight = reserveArea.scrollHeight;
+    reserveArea.style.minHeight = `${contentHeight}px`;
   }
 
   function renderAgenda(level, state, handlers) {
@@ -254,13 +325,19 @@
       `;
 
       block.addEventListener("dragstart", (e) => {
+        currentDragPayload = {
+          source: "placed",
+          activityId: activity.id
+        };
+
         e.dataTransfer.setData(
           "text/plain",
-          JSON.stringify({
-            source: "placed",
-            activityId: activity.id
-          })
+          JSON.stringify(currentDragPayload)
         );
+      });
+
+      block.addEventListener("dragend", () => {
+        currentDragPayload = null;
       });
 
       block.addEventListener("dblclick", () => {
@@ -279,6 +356,7 @@
     });
 
     renderBurgerImageRow("pictures/bottom_bun.png", currentRow);
+    scheduleTopBunFaceTracking();
   }
 
   function renderBurgerImageRow(imagePath, row) {
@@ -306,11 +384,91 @@
     img.className = "bun-img";
     img.draggable = false;
 
-    imageCell.appendChild(img);
+    const bunCharacter = document.createElement("div");
+    bunCharacter.className = `bun-character${isTop ? " bun-character-top" : " bun-character-bottom"}`;
+    bunCharacter.setAttribute("aria-hidden", "true");
+    bunCharacter.appendChild(img);
+
+    if (isTop) {
+      const eyes = document.createElement("div");
+      eyes.className = "bun-eyes";
+      eyes.innerHTML = `
+        <span class="bun-eye bun-eye-left">
+          <span class="bun-eye-shine bun-eye-shine-primary"></span>
+          <span class="bun-eye-shine bun-eye-shine-secondary"></span>
+          <span class="bun-pupil"></span>
+          <span class="bun-eye-lid"></span>
+        </span>
+        <span class="bun-eye bun-eye-right">
+          <span class="bun-eye-shine bun-eye-shine-primary"></span>
+          <span class="bun-eye-shine bun-eye-shine-secondary"></span>
+          <span class="bun-pupil"></span>
+          <span class="bun-eye-lid"></span>
+        </span>
+      `;
+
+      bunCharacter.appendChild(eyes);
+    } else {
+      const mouth = document.createElement("div");
+      mouth.className = "bun-mouth";
+      mouth.innerHTML = `
+        <span class="bun-mouth-inner"></span>
+        <span class="bun-mouth-tongue"></span>
+      `;
+      bunCharacter.appendChild(mouth);
+    }
+
+    imageCell.appendChild(bunCharacter);
 
     els.agendaGrid.appendChild(leftCell);
     els.agendaGrid.appendChild(imageCell);
   }
+
+  function scheduleTopBunFaceTracking() {
+    if (trackingFrameId !== null) {
+      return;
+    }
+
+    trackingFrameId = window.requestAnimationFrame(() => {
+      trackingFrameId = null;
+      updateTopBunFaceTracking();
+    });
+  }
+
+  function updateTopBunFaceTracking() {
+    const topBun = els.agendaGrid.querySelector(".bun-character-top");
+    if (!topBun) {
+      return;
+    }
+
+    const rect = topBun.getBoundingClientRect();
+    const eyeAnchorX = rect.left + rect.width / 2;
+    const eyeAnchorY = rect.top + rect.height * 0.28;
+    const deltaX = trackedPointer.x - eyeAnchorX;
+    const deltaY = trackedPointer.y - eyeAnchorY;
+    const maxEyeOffset = 3;
+    const maxPupilOffset = 7;
+    const eyeLookX = Math.max(-maxEyeOffset, Math.min(maxEyeOffset, deltaX / 42));
+    const eyeLookY = Math.max(-maxEyeOffset * 0.8, Math.min(maxEyeOffset * 0.8, deltaY / 54));
+    const pupilLookX = Math.max(-maxPupilOffset, Math.min(maxPupilOffset, deltaX / 18));
+    const pupilLookY = Math.max(-maxPupilOffset * 0.6, Math.min(maxPupilOffset * 0.6, deltaY / 28));
+
+    topBun.style.setProperty("--bun-eye-look-x", `${eyeLookX.toFixed(2)}px`);
+    topBun.style.setProperty("--bun-eye-look-y", `${eyeLookY.toFixed(2)}px`);
+    topBun.style.setProperty("--bun-look-x", `${pupilLookX.toFixed(2)}px`);
+    topBun.style.setProperty("--bun-look-y", `${pupilLookY.toFixed(2)}px`);
+  }
+
+  function handlePointerTracking(event) {
+    trackedPointer = {
+      x: event.clientX,
+      y: event.clientY
+    };
+    scheduleTopBunFaceTracking();
+  }
+
+  window.addEventListener("pointermove", handlePointerTracking);
+  window.addEventListener("resize", scheduleTopBunFaceTracking);
 
   function attachDropEvents(targetEl, slotId, onDropActivity, visualContainer) {
     // Centralise les evenements drag and drop et le feedback visuel associe.
@@ -327,18 +485,29 @@
       e.preventDefault();
       visualContainer.classList.remove("drag-over");
 
-      const raw = e.dataTransfer.getData("text/plain");
-      if (!raw) return;
-
-      let payload = null;
-      try {
-        payload = JSON.parse(raw);
-      } catch {
-        return;
-      }
+      const payload = getCurrentDragPayload(e);
+      currentDragPayload = null;
+      if (!payload) return;
 
       onDropActivity(payload, slotId);
     });
+  }
+
+  function getCurrentDragPayload(event) {
+    if (currentDragPayload) {
+      return currentDragPayload;
+    }
+
+    const raw = event?.dataTransfer?.getData("text/plain");
+    if (!raw) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
   }
 
   async function playServeAnimation() {
@@ -445,6 +614,26 @@
     }
   }
 
+  function triggerTopBunErrorReaction() {
+    const topBun = els.agendaGrid.querySelector(".bun-character-top");
+    if (!topBun) {
+      return;
+    }
+
+    topBun.classList.remove("is-error-reacting");
+    void topBun.offsetWidth;
+    topBun.classList.add("is-error-reacting");
+
+    if (topBunErrorReactionTimeout) {
+      window.clearTimeout(topBunErrorReactionTimeout);
+    }
+
+    topBunErrorReactionTimeout = window.setTimeout(() => {
+      topBun.classList.remove("is-error-reacting");
+      topBunErrorReactionTimeout = null;
+    }, 560);
+  }
+
   function getTypeMeta(type) {
     // Metadonnees d'affichage associees a chaque type d'ingredient.
     switch (type) {
@@ -499,6 +688,7 @@
     setMessage,
     renderLevelMeta,
     renderActivities,
-    renderAgenda
+    renderAgenda,
+    triggerTopBunErrorReaction
   };
 })();

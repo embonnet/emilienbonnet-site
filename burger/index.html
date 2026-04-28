@@ -44,11 +44,6 @@
         <div id="messageBox" class="message-box neutral">
           Place les ingrédients puis envoie.
         </div>
-
-        <button id="validateBtn" class="primary-btn validate-btn" type="button" data-has-own-sound="true">
-          <img src="./pictures/cloche.png" alt="" class="validate-btn-icon" />
-          <span>Envoyer en salle</span>
-        </button>
       </div>
 
       <main class="layout">
@@ -68,6 +63,11 @@
                 <div class="rules-block">
                   <h2>Règles</h2>
                   <ul id="rulesList" class="rules-list"></ul>
+                  <div class="rules-actions">
+                    <button id="howToCookBtn" class="ghost-btn" type="button">
+                      Comment cuisiner ?
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -82,7 +82,7 @@
                   </p>
                 </div>
 
-                <div id="activityPool" class="activity-pool"></div>
+                <div id="ingredientReserveArea" class="activity-pool"></div>
 
                 <div class="ingredient-panel-footer">
                   <button
@@ -95,6 +95,11 @@
                   >
                     <img src="./pictures/cat.png" alt="" class="trash-icon" />
                     <span class="trash-label">Donner au chat</span>
+                  </button>
+
+                  <button id="validateBtn" class="primary-btn validate-btn" type="button" data-has-own-sound="true">
+                    <img src="./pictures/cloche.png" alt="" class="validate-btn-icon" />
+                    <span>Envoyer en salle</span>
                   </button>
                 </div>
               </div>
@@ -230,6 +235,138 @@
             <div class="overlay-actions">
               <button id="introStartBtn" class="primary-btn" type="button">
                 C'est parti !
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="howToCookModal" class="overlay-modal hidden" aria-hidden="true">
+        <div class="overlay-backdrop"></div>
+
+        <div class="overlay-panel">
+          <div class="overlay-content utility-modal-content how-to-cook-content">
+            <p class="overlay-eyebrow">Aide</p>
+            <h2>Comment cuisiner ?</h2>
+
+            <div class="tutorial-step" data-tutorial-step="1">
+              <div class="tutorial-demo" aria-hidden="true">
+                <div class="tutorial-pool">
+                  <span class="tutorial-panel-label">Réserve</span>
+                  <div class="tutorial-ingredient">
+                    <span class="tutorial-ingredient-name">Salade</span>
+                  </div>
+                </div>
+
+                <div class="tutorial-path">
+                  <span class="tutorial-path-arrow"></span>
+                </div>
+
+                <div class="tutorial-burger">
+                  <span class="tutorial-panel-label">Burger</span>
+                  <img src="./pictures/top_bun.png" alt="" class="tutorial-bun tutorial-bun-top" />
+                  <div class="tutorial-slot">
+                    <div class="tutorial-slot-highlight"></div>
+                  </div>
+                  <img src="./pictures/bottom_bun.png" alt="" class="tutorial-bun tutorial-bun-bottom" />
+                </div>
+              </div>
+
+              <p class="overlay-text tutorial-text">
+                Pour composer son burger, vous pouvez glisser&amp;déposer un ingrédient de gauche dans le burger.
+              </p>
+            </div>
+
+            <div class="tutorial-step hidden" data-tutorial-step="2">
+              <div class="tutorial-demo tutorial-demo-placement" aria-hidden="true">
+                <div class="tutorial-pool">
+                  <div class="tutorial-error-badge">Erreur de placement</div>
+                  <span class="tutorial-panel-label">Réserve</span>
+                  <div class="tutorial-ingredient tutorial-ingredient-steak">
+                    <div class="tutorial-ingredient-topline">
+                      <div class="tutorial-ingredient-copy">
+                        <span class="tutorial-ingredient-name">Steak</span>
+                        <span class="tutorial-ingredient-rule">Placement : 3, 4</span>
+                      </div>
+                    </div>
+                    <span class="tutorial-placement-markers">
+                      <span class="tutorial-placement-marker"></span>
+                      <span class="tutorial-placement-marker"></span>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="tutorial-path">
+                  <span class="tutorial-path-arrow"></span>
+                </div>
+
+                <div class="tutorial-burger tutorial-burger-placement">
+                  <span class="tutorial-panel-label">Burger</span>
+                  <img src="./pictures/top_bun.png" alt="" class="tutorial-bun tutorial-bun-top" />
+                  <div class="tutorial-burger-stack">
+                    <div class="tutorial-slot tutorial-slot-occupied">
+                      <span class="tutorial-slot-index">1</span>
+                    </div>
+                    <div class="tutorial-slot tutorial-slot-occupied">
+                      <span class="tutorial-slot-index">2</span>
+                      <div class="tutorial-slot-highlight tutorial-slot-highlight-steak"></div>
+                    </div>
+                    <div class="tutorial-slot tutorial-slot-occupied">
+                      <span class="tutorial-slot-index">3</span>
+                      <div class="tutorial-slot-highlight tutorial-slot-highlight-steak"></div>
+                    </div>
+                    <div class="tutorial-slot">
+                      <span class="tutorial-slot-index">4</span>
+                    </div>
+                  </div>
+                  <img src="./pictures/bottom_bun.png" alt="" class="tutorial-bun tutorial-bun-bottom" />
+                </div>
+              </div>
+
+              <p class="overlay-text tutorial-text">
+                Les ingrédients peuvent prendre 1 ou 2 emplacements, signalés par le nombre de pastille. Certains ingrédients ont aussi des conditions d'emplacement dans le burger.
+              </p>
+            </div>
+
+            <div class="tutorial-step hidden" data-tutorial-step="3">
+              <div class="tutorial-demo tutorial-demo-reset" aria-hidden="true">
+                <div class="tutorial-pool tutorial-pool-reset">
+                  <span class="tutorial-panel-label">Actions</span>
+                  <button class="trash-reset-btn tutorial-reset-btn" type="button" tabindex="-1" aria-hidden="true">
+                    <img src="./pictures/cat.png" alt="" class="trash-icon" />
+                    <span class="trash-label">Donner au chat</span>
+                  </button>
+                </div>
+
+                <div class="tutorial-path tutorial-path-reset">
+                  <span class="tutorial-path-arrow"></span>
+                </div>
+
+                <div class="tutorial-burger tutorial-burger-reset">
+                  <span class="tutorial-panel-label">Burger</span>
+                  <img src="./pictures/top_bun.png" alt="" class="tutorial-bun tutorial-bun-top" />
+                  <div class="tutorial-burger-stack tutorial-burger-stack-reset">
+                    <div class="tutorial-slot tutorial-slot-occupied">
+                      <span class="tutorial-slot-index">1</span>
+                      <div class="tutorial-slot-highlight tutorial-slot-highlight-reset"></div>
+                    </div>
+                    <div class="tutorial-slot tutorial-slot-occupied">
+                      <span class="tutorial-slot-index">2</span>
+                      <div class="tutorial-slot-highlight tutorial-slot-highlight-reset"></div>
+                    </div>
+                  </div>
+                  <img src="./pictures/bottom_bun.png" alt="" class="tutorial-bun tutorial-bun-bottom" />
+                </div>
+              </div>
+
+              <p class="overlay-text tutorial-text">
+                Si vous voulez annuler un ingrédient, vous pouvlez le supprimer en cliquant le bouton du même non une fois l'ingrédient placé. Pour tout réinitialiser, pas de gâchis, donner au chat !
+              </p>
+            </div>
+
+            <div class="overlay-actions">
+              <button id="howToCookNextBtn" class="primary-btn" type="button">
+                Suivant
               </button>
             </div>
           </div>

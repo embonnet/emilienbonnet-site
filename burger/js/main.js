@@ -15,6 +15,7 @@
     settingsBtn: document.getElementById("settingsBtn"),
     levelsBtn: document.getElementById("levelsBtn"),
     headerToggleBtn: document.getElementById("headerToggleBtn"),
+    howToCookBtn: document.getElementById("howToCookBtn"),
     resetBtn: document.getElementById("resetBtn"),
     validateBtn: document.getElementById("validateBtn"),
     bgm: document.getElementById("bgm"),
@@ -38,6 +39,8 @@
     completionIntroBtn: document.getElementById("completionIntroBtn"),
     completionIntroTextEls: Array.from(document.querySelectorAll("#completionIntroSpeech .app-intro-text")),
     introStartBtn: document.getElementById("introStartBtn"),
+    howToCookNextBtn: document.getElementById("howToCookNextBtn"),
+    howToCookSteps: Array.from(document.querySelectorAll("[data-tutorial-step]")),
     levelsList: document.getElementById("levelsList"),
     resetLevelsBtn: document.getElementById("resetLevelsBtn"),
     closeButtons: {
@@ -46,6 +49,7 @@
       victory: document.getElementById("victoryCloseBtn"),
       failure: document.getElementById("failureCloseBtn"),
       intro: document.getElementById("introCloseBtn"),
+      howToCook: document.getElementById("howToCookCloseBtn"),
       settings: document.getElementById("settingsCloseBtn"),
       credits: document.getElementById("creditsCloseBtn"),
       levels: document.getElementById("levelsCloseBtn"),
@@ -59,6 +63,7 @@
     victory: createModalController("victoryModal"),
     failure: createModalController("failureModal"),
     intro: createModalController("levelIntroModal"),
+    howToCook: createModalController("howToCookModal"),
     settings: createModalController("settingsModal"),
     credits: createModalController("creditsModal"),
     levels: createModalController("levelsModal"),
@@ -84,6 +89,7 @@
   let state = Engine.createEmptyState(currentLevel);
   let isServingAnimationRunning = false;
   let appIntroStage = "prompt";
+  let howToCookStep = 1;
 
   const speechScenes = {
     appIntro: {
@@ -149,6 +155,7 @@
     dom.settingsBtn.addEventListener("click", openSettingsFlow);
     dom.levelsBtn.addEventListener("click", openLevelsFlow);
     dom.headerToggleBtn.addEventListener("click", toggleHeaderCompactMode);
+    dom.howToCookBtn.addEventListener("click", openHowToCookFlow);
     dom.resetBtn.addEventListener("click", handleResetBoard);
     dom.validateBtn.addEventListener("click", handleValidateBoard);
     dom.settingsAudioBtn.addEventListener("click", handleAudioToggle);
@@ -158,6 +165,7 @@
     dom.appIntroEnterBtn.addEventListener("click", handleEnterKitchen);
     dom.completionIntroBtn.addEventListener("click", handleCompletionIntroContinue);
     dom.introStartBtn.addEventListener("click", () => modals.intro.close());
+    dom.howToCookNextBtn.addEventListener("click", handleHowToCookNext);
     dom.resetLevelsBtn.addEventListener("click", handleResetCompletedLevels);
 
     document.addEventListener("pointerdown", handleFirstInteraction, { once: true });
@@ -169,6 +177,7 @@
     dom.closeButtons.victory?.addEventListener("click", handleCloseVictoryModal);
     dom.closeButtons.failure?.addEventListener("click", handleCloseFailureModal);
     dom.closeButtons.intro?.addEventListener("click", () => modals.intro.close());
+    dom.closeButtons.howToCook?.addEventListener("click", closeHowToCookModal);
     dom.closeButtons.settings?.addEventListener("click", () => modals.settings.close());
     dom.closeButtons.credits?.addEventListener("click", () => modals.credits.close());
     dom.closeButtons.levels?.addEventListener("click", () => modals.levels.close());
@@ -179,6 +188,7 @@
     modals.victory.backdrop.addEventListener("click", handleCloseVictoryModal);
     modals.failure.backdrop.addEventListener("click", handleCloseFailureModal);
     modals.intro.backdrop.addEventListener("click", () => modals.intro.close());
+    modals.howToCook.backdrop.addEventListener("click", closeHowToCookModal);
     modals.settings.backdrop.addEventListener("click", () => modals.settings.close());
     modals.credits.backdrop.addEventListener("click", () => modals.credits.close());
     modals.levels.backdrop.addEventListener("click", () => modals.levels.close());
@@ -405,6 +415,27 @@
     modals.credits.open();
   }
 
+  function openHowToCookFlow() {
+    closeSecondaryModals();
+    resetHowToCookTutorial();
+    modals.howToCook.open();
+  }
+
+  function setHowToCookStep(step) {
+    howToCookStep = step;
+
+    dom.howToCookSteps.forEach((section) => {
+      const isActive = Number(section.dataset.tutorialStep) === step;
+      section.classList.toggle("hidden", !isActive);
+    });
+
+    dom.howToCookNextBtn.textContent = step < 3 ? "Suivant" : "Fermer";
+  }
+
+  function resetHowToCookTutorial() {
+    setHowToCookStep(1);
+  }
+
   async function handleResetBoard() {
     closeAllModals();
     const wasEmpty = Object.keys(state.placed).length === 0;
@@ -424,6 +455,7 @@
 
     if (!result.ok) {
       UI.setMessage(result.errors.join(" "), "error");
+      UI.triggerTopBunErrorReaction();
     }
 
     sound.playRing();
@@ -456,7 +488,8 @@
     UI.clearServeAnimation();
     UI.renderLevelMeta(currentLevel);
     UI.renderActivities(currentLevel, state, {
-      onToggleSplit: handleToggleSplit
+      onToggleSplit: handleToggleSplit,
+      onDropToReserve: handleDropToReserve
     });
     UI.renderAgenda(currentLevel, state, {
       onDropActivity: handleDropActivity,
@@ -578,6 +611,25 @@
     UI.clearServeAnimation();
   }
 
+  function handleHowToCookNext() {
+    if (howToCookStep === 1) {
+      setHowToCookStep(2);
+      return;
+    }
+
+    if (howToCookStep === 2) {
+      setHowToCookStep(3);
+      return;
+    }
+
+    closeHowToCookModal();
+  }
+
+  function closeHowToCookModal() {
+    resetHowToCookTutorial();
+    modals.howToCook.close();
+  }
+
   function handleVictoryNext() {
     const nextLevelId = getNextLevelId(currentLevel.id);
 
@@ -606,6 +658,7 @@
     resetSpeechScene("completionIntro");
     modals.appIntro.close();
     modals.completionIntro.close();
+    modals.howToCook.close();
     modals.settings.close();
     modals.credits.close();
     modals.levels.close();
@@ -659,6 +712,7 @@
 
     if (!result.ok) {
       UI.setMessage(result.reason, "error");
+      UI.triggerTopBunErrorReaction();
       await sound.playDropError();
       return;
     }
@@ -722,6 +776,7 @@
 
     if (!placeResult.ok) {
       UI.setMessage(placeResult.reason, "error");
+      UI.triggerTopBunErrorReaction();
       await sound.playDropError();
       return;
     }
@@ -744,6 +799,7 @@
 
       if (!swapResult.ok) {
         UI.setMessage(swapResult.reason, "error");
+        UI.triggerTopBunErrorReaction();
         await sound.playDropError();
         return;
       }
@@ -758,6 +814,7 @@
 
     if (!moveResult.ok) {
       UI.setMessage(moveResult.reason, "error");
+      UI.triggerTopBunErrorReaction();
       await sound.playDropError();
       return;
     }
@@ -771,7 +828,11 @@
     Engine.removeActivity(currentLevel, state, activityId);
     renderAll();
     UI.setMessage("Activité retirée.", "neutral");
-    await sound.playDropError();
+    await sound.playRemoveIngredient();
+  }
+
+  async function handleDropToReserve(activityId) {
+    await handleRemoveActivity(activityId);
   }
 
   boot();
