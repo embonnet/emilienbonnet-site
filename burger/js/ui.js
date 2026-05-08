@@ -78,14 +78,20 @@
       const logical = window.Engine.getLogicalActivityById(level, activity.logicalId);
       const isPlaced = Boolean(state.placed[activity.id]);
       const typeMeta = getTypeMeta(activity.type);
+      const spiceMeta = getSpiceMeta(activity.spice);
       const showRequirementBadge = !level.hideRequirementBadges && activity.required;
-      const showTypeHint = !(level.hideNeutralTypeHints && safeType(activity.type) === "neutre");
+      const useSpiceHints = typeof level.maxSpice === "number";
+      const showTypeHint = !useSpiceHints && !(level.hideNeutralTypeHints && safeType(activity.type) === "neutre");
+      const showSpiceHint = useSpiceHints && !level.hideSpiceHints && activity.spice > 0;
       const placementMarkers = renderPlacementMarkers(activity.duration);
       const requirementBadge = showRequirementBadge
         ? `<span class="badge required small">Obligatoire</span>`
         : "";
+      const spiceHint = showSpiceHint
+        ? `<span class="activity-type-icon" title="${spiceMeta.label}">${spiceMeta.icon}</span>`
+        : "";
       const typeHint = showTypeHint
-        ? `<span class="activity-type-icon">${typeMeta.icon}</span>`
+        ? `<span class="activity-type-icon" title="${typeMeta.label}">${typeMeta.icon}</span>`
         : "";
 
       const chip = document.createElement("div");
@@ -113,6 +119,7 @@
 
             <div class="activity-header-meta">
               ${typeHint}
+              ${spiceHint}
             </div>
           </div>
 
@@ -277,13 +284,22 @@
       const activity = window.Engine.getPlaceableById(level, state, assignedId);
       const span = placed.slots.length;
       const typeMeta = getTypeMeta(activity.type);
+      const spiceMeta = getSpiceMeta(activity.spice);
       const showRequirementBadge = !level.hideRequirementBadges && activity.required;
-      const showTypeHint = !(level.hideNeutralTypeHints && safeType(activity.type) === "neutre");
+      const useSpiceHints = typeof level.maxSpice === "number";
+      const showTypeHint = !useSpiceHints && !(level.hideNeutralTypeHints && safeType(activity.type) === "neutre");
+      const showSpiceHint = useSpiceHints && !level.hideSpiceHints && activity.spice > 0;
       const typeBadge = showTypeHint
         ? `<span class="type-badge type-${safeType(activity.type)} compact">
             <span class="type-dot"></span>
             <span class="type-icon">${typeMeta.icon}</span>
             <span class="type-label">${typeMeta.label}</span>
+          </span>`
+        : "";
+      const spiceBadge = showSpiceHint
+        ? `<span class="spice-badge compact">
+            <span class="type-icon">${spiceMeta.icon}</span>
+            <span class="type-label">${spiceMeta.label}</span>
           </span>`
         : "";
       const placementText = formatPlacement(activity, { withLabel: false });
@@ -314,6 +330,7 @@
             <div class="placed-title-meta">
               <span class="placed-placement-text">${placementText}</span>
               ${typeBadge}
+              ${spiceBadge}
             </div>
           </div>
           ${requirementRow}
@@ -652,6 +669,19 @@
     // Garde uniquement les types connus pour eviter de casser les classes CSS.
     const allowed = ["chaud", "froid", "fondant", "neutre"];
     return allowed.includes(type) ? type : "neutre";
+  }
+
+  function getSpiceMeta(spice) {
+    const value = Math.max(0, Math.min(3, Number(spice) || 0));
+
+    if (value === 0) {
+      return { label: "0 piment", icon: "" };
+    }
+
+    return {
+      label: `${value} piment${value > 1 ? "s" : ""}`,
+      icon: "🌶️".repeat(value)
+    };
   }
 
   function formatPlacement(activity, { withLabel = true } = {}) {

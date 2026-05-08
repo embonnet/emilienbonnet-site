@@ -717,7 +717,25 @@
   color: var(--ink);
 }
 
+.spice-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid rgba(156, 45, 28, 0.16);
+  background: rgba(255, 244, 232, 0.84);
+  color: #7a2e18;
+}
+
 .type-badge.compact {
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.spice-badge.compact {
   padding: 4px 8px;
   font-size: 11px;
 }

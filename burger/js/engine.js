@@ -112,6 +112,7 @@
             color: part.color || activity.color,
             required: part.required != null ? part.required : false,
             type: part.type || activity.type || "neutre",
+            spice: part.spice != null ? part.spice : activity.spice || 0,
             allowedPositions: partAllowedPositions || fallbackAllowedPositions,
             allowedPositionSets: partAllowedPositionSets,
             logicalSplitPositionSets: splitGroupConstraint,
@@ -129,6 +130,7 @@
           color: activity.color,
           required: activity.required != null ? activity.required : true,
           type: activity.type || "neutre",
+          spice: activity.spice || 0,
           allowedPositions: normalizePositions(activity.allowedPositions),
           allowedPositionSets: normalizePositionSets(activity.allowedPositionSets),
           logicalSplitPositionSets: null,
@@ -571,6 +573,22 @@
     return a < b;
   }
 
+  function areAdjacent(state, firstId, secondId) {
+    const a = getPlacedStartPosition(state, firstId);
+    const b = getPlacedStartPosition(state, secondId);
+
+    if (a == null || b == null) return false;
+    return Math.abs(a - b) === 1;
+  }
+
+  function startsImmediatelyBefore(state, firstId, secondId) {
+    const a = getPlacedStartPosition(state, firstId);
+    const b = getPlacedStartPosition(state, secondId);
+
+    if (a == null || b == null) return false;
+    return b - a === 1;
+  }
+
   function getPlaceableOrLogical(level, state, id) {
     return (
       getPlaceableById(level, state, id) ||
@@ -660,6 +678,25 @@
     return uniqueStrings(errors);
   }
 
+  function validateSpiceLimit(level, state) {
+    const errors = [];
+
+    if (typeof level.maxSpice !== "number") {
+      return errors;
+    }
+
+    const total = Object.keys(state.placed).reduce((sum, placeableId) => {
+      const activity = getPlaceableOrLogical(level, state, placeableId);
+      return sum + (activity ? activity.spice || 0 : 0);
+    }, 0);
+
+    if (total > level.maxSpice) {
+      errors.push(`Le burger contient ${total} piments, mais le maximum est ${level.maxSpice}.`);
+    }
+
+    return errors;
+  }
+
   function uniqueStrings(list) {
     return list.filter((value, index) => list.indexOf(value) === index);
   }
@@ -739,9 +776,58 @@
           errors.push(`${first.name} doit être placé au dessus ${second.name}.`);
         }
       }
+
+      if (rule.type === "adjacent") {
+        const firstPlaced = isPlaceablePlaced(state, rule.first);
+        const secondPlaced = isPlaceablePlaced(state, rule.second);
+
+        if (!firstPlaced || !secondPlaced) {
+          return;
+        }
+
+        if (!areAdjacent(state, rule.first, rule.second)) {
+          const first = getPlaceableOrLogical(level, state, rule.first);
+          const second = getPlaceableOrLogical(level, state, rule.second);
+
+          errors.push(`${first.name} doit toucher ${second.name}.`);
+        }
+      }
+
+      if (rule.type === "notAdjacent") {
+        const firstPlaced = isPlaceablePlaced(state, rule.first);
+        const secondPlaced = isPlaceablePlaced(state, rule.second);
+
+        if (!firstPlaced || !secondPlaced) {
+          return;
+        }
+
+        if (areAdjacent(state, rule.first, rule.second)) {
+          const first = getPlaceableOrLogical(level, state, rule.first);
+          const second = getPlaceableOrLogical(level, state, rule.second);
+
+          errors.push(`${first.name} ne doit pas toucher ${second.name}.`);
+        }
+      }
+
+      if (rule.type === "immediatelyBefore") {
+        const firstPlaced = isPlaceablePlaced(state, rule.first);
+        const secondPlaced = isPlaceablePlaced(state, rule.second);
+
+        if (!firstPlaced || !secondPlaced) {
+          return;
+        }
+
+        if (!startsImmediatelyBefore(state, rule.first, rule.second)) {
+          const first = getPlaceableOrLogical(level, state, rule.first);
+          const second = getPlaceableOrLogical(level, state, rule.second);
+
+          errors.push(`${first.name} doit etre juste au dessus de ${second.name}.`);
+        }
+      }
     });
 
     errors.push.apply(errors, validateTypeAdjacency(level, state));
+    errors.push.apply(errors, validateSpiceLimit(level, state));
     errors.push.apply(errors, validateFondantAdjacency(level, state));
     errors.push.apply(errors, validateMirrorSymmetry(level, state));
     errors.push.apply(errors, validatePlacementConstraints(level, state));

@@ -190,7 +190,7 @@ window.LEVELS = {
     id: 3,
     title: "Burger 3",
     description:
-      "Je te prends en période d'essai. Tu peux prendre la prochaine commande mais attention aux types des aliments.",
+      "Je te prends en période d'essai. Tu peux prendre la prochaine commande, mais attention aux consignes du client.",
     showAllPlacedRule: false,
     fillAgenda: true,
     displayRules: [
@@ -759,6 +759,130 @@ window.LEVELS = {
     ],
     globalRules: [
       { type: "before", first: "G", second: "H" }
+    ]
+  },
+
+  7: {
+    // Niveau final : contrainte de piments et ordre relatif serre, avec deux leurres trop epices.
+    id: 7,
+    title: "Burger 7",
+    description:
+      "Le client veut du piquant, mais pas un incendie. Chaque ingredient compte.",
+    hideRequirementBadges: true,
+    showAllPlacedRule: false,
+    fillAgenda: true,
+    maxSpice: 10,
+    displayRules: [
+      "Les 8 emplacements doivent etre remplis.",
+      "Le burger ne doit pas depasser 10 piments au total.",
+      "Ketchup doit etre place plus haut que Salades.",
+      "Salades doit etre place plus haut que Oeuf.",
+      "Oeuf doit etre juste au-dessus de Steak.",
+      "Steak doit etre juste au-dessus de Cheddar.",
+      "Cheddar doit etre place plus haut que Cornichon.",
+      "Cornichon doit etre juste au-dessus de Moutarde.",
+      "Moutarde doit etre juste au-dessus de Tomate."
+    ],
+    activities: [
+      {
+        id: "G",
+        name: FOOD_NAMES.G,
+        duration: 1,
+        color: FOOD_COLORS.G,
+        required: true,
+        type: "neutre",
+        spice: 1
+      },
+      {
+        id: "B",
+        name: FOOD_NAMES.B,
+        duration: 1,
+        color: FOOD_COLORS.B,
+        required: true,
+        type: "neutre",
+        spice: 1
+      },
+      {
+        id: "J",
+        name: FOOD_NAMES.J,
+        duration: 1,
+        color: FOOD_COLORS.J,
+        required: true,
+        type: "neutre",
+        spice: 1
+      },
+      {
+        id: "A",
+        name: FOOD_NAMES.A,
+        duration: 1,
+        color: FOOD_COLORS.A,
+        required: true,
+        type: "neutre",
+        spice: 2
+      },
+      {
+        id: "D",
+        name: FOOD_NAMES.D,
+        duration: 1,
+        color: FOOD_COLORS.D,
+        required: true,
+        type: "neutre",
+        spice: 2
+      },
+      {
+        id: "F",
+        name: FOOD_NAMES.F,
+        duration: 1,
+        color: FOOD_COLORS.F,
+        required: true,
+        type: "neutre",
+        spice: 1
+      },
+      {
+        id: "H",
+        name: FOOD_NAMES.H,
+        duration: 1,
+        color: FOOD_COLORS.H,
+        required: true,
+        type: "neutre",
+        spice: 1
+      },
+      {
+        id: "I",
+        name: FOOD_NAMES.I,
+        duration: 1,
+        color: FOOD_COLORS.I,
+        required: true,
+        type: "neutre",
+        spice: 1
+      },
+      {
+        id: "C",
+        name: FOOD_NAMES.C,
+        duration: 1,
+        color: FOOD_COLORS.C,
+        required: false,
+        type: "neutre",
+        spice: 3
+      },
+      {
+        id: "E",
+        name: FOOD_NAMES.E,
+        duration: 1,
+        color: FOOD_COLORS.E,
+        required: false,
+        type: "neutre",
+        spice: 3
+      }
+    ],
+    globalRules: [
+      { type: "before", first: "G", second: "B" },
+      { type: "before", first: "B", second: "J" },
+      { type: "immediatelyBefore", first: "J", second: "A" },
+      { type: "immediatelyBefore", first: "A", second: "D" },
+      { type: "before", first: "D", second: "F" },
+      { type: "immediatelyBefore", first: "F", second: "H" },
+      { type: "immediatelyBefore", first: "H", second: "I" }
     ]
   }
 };
